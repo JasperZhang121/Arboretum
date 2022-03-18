@@ -9,7 +9,9 @@ Everyone: create application skeleton - meeting 14:00 19 Mar
 
 ## Week 5
 
-Zhang San: Task 3 isPlayerStateWellFormed - 23 Mar
+Vincent: Task 2
+Hao: Task 3
+Sam: Task 4
 
 Jane Bloggs: Task 5 drawTileFromBag - 23 Mar
 
