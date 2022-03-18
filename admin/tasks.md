@@ -5,7 +5,7 @@ Use the entries below as an example.
 
 ## Week 4
 
-Everyone: create application skeleton - meeting 14:00 19 Mar
+Everyone: create application skeleton - meeting 17:00 19 Mar
 
 ## Week 5
 
@@ -13,9 +13,6 @@ Vincent: Task 2
 Hao: Task 3
 Sam: Task 4
 
-Jane Bloggs: Task 5 drawTileFromBag - 23 Mar
-
-Erika Mustermann: Task 6 refillFactories - 25 Mar (depends on Task 5)
 
 ## Week 6
 
