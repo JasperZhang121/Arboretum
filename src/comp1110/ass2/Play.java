@@ -28,12 +28,12 @@ public class Play {
 
    public  int Comparing (int [] TwoCardsOfPlayerA, int [] TwoCardsOfPlayerB){
 
-        return // higher score
+        return 1;// higher score
    }
 
     public int Scoring(int WinnerInComparingCard){
 
-        return // score;
+        return 1;// score;
     }
 
 
