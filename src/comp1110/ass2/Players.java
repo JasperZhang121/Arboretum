@@ -2,9 +2,9 @@ package comp1110.ass2;
 
 public class Players {
     String name;
-    int [] cards;
+    Card [] cards;
 
-    public Players(String name, int[] cards) {
+    public Players(String name, Card[] cards) {
         this.name = name;
         this.cards = cards;
     }
@@ -15,7 +15,7 @@ public class Players {
         return name;
     }
 
-    public int[] getCards() {
+    public Card[] getCards() {
         return cards;
     }
 }
