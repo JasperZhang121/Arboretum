@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 public class Card {
     enum Species{
-        blue_spruce,
+        Blue_Spruce,
         Cassia,
         Cherry_Blossom,
         Dogwood,
