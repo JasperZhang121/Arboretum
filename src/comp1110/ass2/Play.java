@@ -36,5 +36,4 @@ public class Play {
         return 1;// score;
     }
 
-
 }
