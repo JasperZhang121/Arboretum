@@ -45,26 +45,22 @@ public class Arboretum {
         if (hiddenState.length < 3) {
             return false;
         }
-        boolean a;
+        boolean a = true;
         if(hiddenState[1].length() > 1) {
             a = isAlphaNumeric(hiddenState[1].substring(1));
         }
-        else a = true;
-        boolean b;
+        boolean b = true;
         if(hiddenState[2].length() > 1) {
             b = isAlphaNumeric(hiddenState[2].substring(1));
         }
-        else b = true;
-        boolean c;
+        boolean c = false;
         if (hiddenState[1].length() > 0){
             c = (hiddenState[1].charAt(0) == 'A');
         }
-        else c = false;
-        boolean d;
+        boolean d = false;
         if (hiddenState[2].length() > 0){
             d = (hiddenState[2].charAt(0) == 'B');
         }
-        else d = false;
         return isAlphaNumeric(hiddenState[0])
                 && a
                 && b
