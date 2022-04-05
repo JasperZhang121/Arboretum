@@ -45,78 +45,62 @@ public class Arboretum {
         if (hiddenState.length < 3) {
             return false;
         }
-        boolean x;
-        if(hiddenState[0] != ""){
-            x = isAlphaNumeric(hiddenState[0]);
-        }
-        else  x = true;
-        boolean y;
-        if(hiddenState[1].length() > 1) {
-            y = isAlphaNumeric(hiddenState[1].substring(1));
-        }
-        else y = true;
-        boolean z;
-        if(hiddenState[2].length() > 1) {
-            z = isAlphaNumeric(hiddenState[2].substring(1));
-        }
-        else z = true;
         boolean a;
-        if(hiddenState[1] != null){
-            a = ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
-                    || hiddenState[1].length() == 1);
+        if(hiddenState[1].length() > 1) {
+            a = isAlphaNumeric(hiddenState[1].substring(1));
         }
         else a = true;
         boolean b;
-        if(hiddenState[2] != null){
-            b = ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
-                    || hiddenState[2].length() == 1);
+        if(hiddenState[2].length() > 1) {
+            b = isAlphaNumeric(hiddenState[2].substring(1));
         }
         else b = true;
         boolean c;
-        if (hiddenState[1].length() != 0){
+        if (hiddenState[1].length() > 0){
             c = (hiddenState[1].charAt(0) == 'A');
         }
-        else c = true;
+        else c = false;
         boolean d;
-        if (hiddenState[2].length() != 0){
+        if (hiddenState[2].length() > 0){
             d = (hiddenState[2].charAt(0) == 'B');
         }
-        else d = true;
-        return x
-                && c
-                && y
+        else d = false;
+        return isAlphaNumeric(hiddenState[0])
                 && a
+                && b
+                && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
+                || hiddenState[1].length() == 1)
+                && c
                 && d
-                && z
-                && b;
+                && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
+                || hiddenState[2].length() == 1);
     }
     public static boolean isAlphaNumeric (String string) {
+        if (string == "") return true;
         String speciesLetters = "abcdjm";
         for (int i = 0; i < string.length(); i++) {
             if (i % 2 == 0){
                 if (!(speciesLetters.contains(string.charAt(i) + ""))){
                     return false;
-                };
+                }
+                if (i > 2){
+                    if(string.charAt(i - 2) > string.charAt(i)){
+                        return false;
+                    }
+                }
             }
             else {
                 if (!Character.isDigit(string.charAt(i))){
                     return false;
-                };
+                }
+                if(i > 2){
+                    if(Character.getNumericValue((string.charAt(i - 2)))
+                            > Character.getNumericValue((string.charAt(i)))
+                            && (string.charAt(i - 1) == (string.charAt(i - 3)))){
+                        return false;
+                    }
+                }
             }
-        }
-        for (int i = 2; i < string.length();) {
-            if(string.charAt(i - 2) > string.charAt(i)){
-                return false;
-            }
-            i = i+2;
-        }
-        for (int i = 3; i < string.length();) {
-            if(Character.getNumericValue((string.charAt(i - 2)))
-                    > Character.getNumericValue((string.charAt(i)))
-                    && (string.charAt(i - 1) == (string.charAt(i - 3)))){
-                return false;
-            }
-            i = i+2;
         }
         return true;
     }
