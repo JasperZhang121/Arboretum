@@ -42,10 +42,84 @@ public class Arboretum {
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
-        return false;
-        //FIXME TASK 3
+        if (hiddenState.length < 3) {
+            return false;
+        }
+        boolean x;
+        if(hiddenState[0] != ""){
+            x = isAlphaNumeric(hiddenState[0]);
+        }
+        else  x = true;
+        boolean y;
+        if(hiddenState[1].length() > 1) {
+            y = isAlphaNumeric(hiddenState[1].substring(1));
+        }
+        else y = true;
+        boolean z;
+        if(hiddenState[2].length() > 1) {
+            z = isAlphaNumeric(hiddenState[2].substring(1));
+        }
+        else z = true;
+        boolean a;
+        if(hiddenState[1] != null){
+            a = ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
+                    || hiddenState[1].length() == 1);
+        }
+        else a = true;
+        boolean b;
+        if(hiddenState[2] != null){
+            b = ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
+                    || hiddenState[2].length() == 1);
+        }
+        else b = true;
+        boolean c;
+        if (hiddenState[1].length() != 0){
+            c = (hiddenState[1].charAt(0) == 'A');
+        }
+        else c = true;
+        boolean d;
+        if (hiddenState[2].length() != 0){
+            d = (hiddenState[2].charAt(0) == 'B');
+        }
+        else d = true;
+        return x
+                && c
+                && y
+                && a
+                && d
+                && z
+                && b;
     }
-
+    public static boolean isAlphaNumeric (String string) {
+        String speciesLetters = "abcdjm";
+        for (int i = 0; i < string.length(); i++) {
+            if (i % 2 == 0){
+                if (!(speciesLetters.contains(string.charAt(i) + ""))){
+                    return false;
+                };
+            }
+            else {
+                if (!Character.isDigit(string.charAt(i))){
+                    return false;
+                };
+            }
+        }
+        for (int i = 2; i < string.length();) {
+            if(string.charAt(i - 2) > string.charAt(i)){
+                return false;
+            }
+            i = i+2;
+        }
+        for (int i = 3; i < string.length();) {
+            if(Character.getNumericValue((string.charAt(i - 2)))
+                    > Character.getNumericValue((string.charAt(i)))
+                    && (string.charAt(i - 1) == (string.charAt(i - 3)))){
+                return false;
+            }
+            i = i+2;
+        }
+        return true;
+    }
 
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
