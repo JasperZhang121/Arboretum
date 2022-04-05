@@ -42,10 +42,60 @@ public class Arboretum {
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
-        return false;
-        //FIXME TASK 3
+        if (hiddenState.length < 3) {
+            return false;
+        }
+        boolean a = true;
+        if(hiddenState[1].length() > 1) {
+            a = isAlphaNumeric(hiddenState[1].substring(1));
+        }
+        boolean b = true;
+        if(hiddenState[2].length() > 1) {
+            b = isAlphaNumeric(hiddenState[2].substring(1));
+        }
+        boolean c = false;
+        if (hiddenState[1].length() > 0){
+            c = (hiddenState[1].charAt(0) == 'A');
+        }
+        boolean d = false;
+        if (hiddenState[2].length() > 0){
+            d = (hiddenState[2].charAt(0) == 'B');
+        }
+        return isAlphaNumeric(hiddenState[0]) && a && b
+                && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
+                || hiddenState[1].length() == 1) && c && d
+                && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
+                || hiddenState[2].length() == 1);
     }
-
+    public static boolean isAlphaNumeric (String string) {
+        if (string == "") return true;
+        String speciesLetters = "abcdjm";
+        for (int i = 0; i < string.length(); i++) {
+            if (i % 2 == 0){
+                if (!(speciesLetters.contains(string.charAt(i) + ""))){
+                    return false;
+                }
+                if (i > 2){
+                    if(string.charAt(i - 2) > string.charAt(i)){
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (!Character.isDigit(string.charAt(i))){
+                    return false;
+                }
+                if(i > 2){
+                    if(Character.getNumericValue((string.charAt(i - 2)))
+                            > Character.getNumericValue((string.charAt(i)))
+                            && (string.charAt(i - 1) == (string.charAt(i - 3)))){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
