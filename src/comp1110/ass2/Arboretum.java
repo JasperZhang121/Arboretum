@@ -61,13 +61,9 @@ public class Arboretum {
         if (hiddenState[2].length() > 0){
             d = (hiddenState[2].charAt(0) == 'B');
         }
-        return isAlphaNumeric(hiddenState[0])
-                && a
-                && b
+        return isAlphaNumeric(hiddenState[0]) && a && b
                 && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
-                || hiddenState[1].length() == 1)
-                && c
-                && d
+                || hiddenState[1].length() == 1) && c && d
                 && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
                 || hiddenState[2].length() == 1);
     }
