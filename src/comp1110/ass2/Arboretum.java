@@ -68,7 +68,7 @@ public class Arboretum {
                 || hiddenState[2].length() == 1);
     }
     public static boolean isAlphaNumeric (String string) {
-        if (string == "") return true;
+        if (string.equals("")) return true;
         String speciesLetters = "abcdjm";
         for (int i = 0; i < string.length(); i++) {
             if (i % 2 == 0){
@@ -165,8 +165,16 @@ public class Arboretum {
      * TASK 5
      */
     public static String drawFromDeck(String deck) {
-                                                 return null; // FIXME TASK 5
-                                                                             }
+        if (deck.length() == 0) {
+            return "";
+        }
+        int random = (int) Math.floor(Math.random() * (deck.length() - 1));
+        while (random % 2 == 1) {
+            random = (int) Math.floor(Math.random() * (deck.length() - 1));
+        }
+        return deck.charAt(random) + String.valueOf(deck.charAt(random + 1));
+    }
+
 
     /**
      * Determine whether this placement is valid for the current player. The "Turn String" determines who is making
