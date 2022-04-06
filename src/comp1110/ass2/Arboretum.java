@@ -153,8 +153,50 @@ public class Arboretum {
      * TASK 4
      */
     public static boolean isSharedStateWellFormed(String[] sharedState) {
-                                                                      return false; //FIXME TASK 4
-                                                                                                  }
+
+        if (sharedState.length != 5) return false;;
+        if (!(sharedState[0] == "A" || sharedState[0] == "B")) return false;
+        if (!areTheyPlacementSubstrings(sharedState[1].substring(1))) return false;
+        if (sharedState[1].charAt(0) != 'A' ) return false;
+        if (!(sharedState[2].charAt(0) == 'A' && isCardSubstring(sharedState[2].substring(1)))) return false;
+        if (sharedState[3].charAt(0) != 'B' ) return false;
+        if (!areTheyPlacementSubstrings(sharedState[3].substring(1))) return false;
+        if (!(sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)))) return false;
+        return true; //FIXME TASK 4
+    }
+    public static boolean isCardSubstring (String string){
+        if (string.equals("")) return true;
+        if (string.length()%2 != 0) return false;
+        String speciesLetters = "abcdjm";
+        for (int i = 0; i < string.length(); i++) {
+            if (i % 2 == 0) {
+                if (!(speciesLetters.contains(string.charAt(i) + ""))) return false;
+            }
+            else {
+                if (!Character.isDigit(string.charAt(i))) return false;
+            }
+        }
+        return true;
+    }
+    public static boolean areTheyPlacementSubstrings (String string){
+        if (string.length()%8 != 0) return false;
+        if (string.equals("")) return true;
+        String[] placementSubstrings = new String[(string.length()-1)/8];
+        for (int i = 0; i < placementSubstrings.length; i++) {
+            placementSubstrings[i] = string.substring(0, 8);
+            string = string.substring(8);
+        }
+        for (String x: placementSubstrings) {
+            if (x.length() != 8) return false;
+            if (!"abcdjm".contains(x.charAt(0)+"")) return false;
+            if (x.charAt(1) <= 1 && x.charAt(0) >= 8 && Character.isDigit(x.charAt(1))) return false;
+            if (!"NSC".contains(x.charAt(2)+"")) return false;
+            if (!(Character.isDigit(x.charAt(3)) && Character.isDigit(x.charAt(4)))) return false;
+            if (!"EWC".contains(x.charAt(5)+"")) return false;
+            if (!(Character.isDigit(x.charAt(6)) && Character.isDigit(x.charAt(7)))) return false;
+        }
+        return true;
+    }
 
     /**
      * Given a deck string, draw a random card from the deck.
