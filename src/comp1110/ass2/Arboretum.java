@@ -45,21 +45,12 @@ public class Arboretum {
         if (hiddenState.length < 3) {
             return false;
         }
-        boolean a = true;
-        if(hiddenState[1].length() > 1) {
+        boolean a = true; boolean b = true; boolean c = false; boolean d = false;
+        if(hiddenState[1].length() > 0 && hiddenState[2].length() > 0) {
             a = isAlphaNumeric(hiddenState[1].substring(1));
-        }
-        boolean b = true;
-        if(hiddenState[2].length() > 1) {
             b = isAlphaNumeric(hiddenState[2].substring(1));
-        }
-        boolean c = false;
-        if (hiddenState[1].length() > 0){
-            c = (hiddenState[1].charAt(0) == 'A');
-        }
-        boolean d = false;
-        if (hiddenState[2].length() > 0){
-            d = (hiddenState[2].charAt(0) == 'B');
+            c = hiddenState[1].charAt(0) == 'A';
+            d = hiddenState[2].charAt(0) == 'B';
         }
         return isAlphaNumeric(hiddenState[0]) && a && b
                 && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
@@ -239,7 +230,7 @@ public class Arboretum {
      */
     public static boolean isPlacementValid(String[][] gameState, String placement) {
         return false;
-        //FIXME TASK 7
+        //FIXME TASK
     }
 
     /**
