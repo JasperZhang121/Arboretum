@@ -73,7 +73,8 @@ public class Arboretum {
                 }
             }
             else {
-                if (!Character.isDigit(string.charAt(i))){
+                if (Character.getNumericValue(string.charAt(i)) < 1
+                        && Character.getNumericValue(string.charAt(i)) > 8){
                     return false;
                 }
                 if(i > 2){
@@ -144,47 +145,36 @@ public class Arboretum {
      * TASK 4
      */
     public static boolean isSharedStateWellFormed(String[] sharedState) {
+        return (sharedState.length == 5)
+                && (sharedState[0].equals("A") || sharedState[0].equals("B"))
+                && sharedState[1].charAt(0) == 'A' && areTheyPlacementSubstrings(sharedState[1].substring(1))
+                && sharedState[2].charAt(0) == 'A' && isCardSubstring(sharedState[2].substring(1))
+                && sharedState[3].charAt(0) == 'B' && areTheyPlacementSubstrings(sharedState[3].substring(1))
+                && (sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)));
 
-        if (sharedState.length != 5) return false;;
-        if (!(sharedState[0] == "A" || sharedState[0] == "B")) return false;
-        if (!areTheyPlacementSubstrings(sharedState[1].substring(1))) return false;
-        if (sharedState[1].charAt(0) != 'A' ) return false;
-        if (!(sharedState[2].charAt(0) == 'A' && isCardSubstring(sharedState[2].substring(1)))) return false;
-        if (sharedState[3].charAt(0) != 'B' ) return false;
-        if (!areTheyPlacementSubstrings(sharedState[3].substring(1))) return false;
-        if (!(sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)))) return false;
-        return true; //FIXME TASK 4
     }
     public static boolean isCardSubstring (String string){
         if (string.equals("")) return true;
-        if (string.length()%2 != 0) return false;
+        if (string.length()%2 == 1) return false;
         String speciesLetters = "abcdjm";
-        for (int i = 0; i < string.length(); i++) {
-            if (i % 2 == 0) {
-                if (!(speciesLetters.contains(string.charAt(i) + ""))) return false;
-            }
-            else {
-                if (!Character.isDigit(string.charAt(i))) return false;
-            }
+        for (int i = 0; i < string.length(); i = i+2) {
+            int value = Character.getNumericValue(string.charAt(i + 1));
+            if (!(speciesLetters.contains(string.charAt(i) + "")) && (value >= 1
+                    && value <= 8))
+                return false;
         }
         return true;
     }
     public static boolean areTheyPlacementSubstrings (String string){
         if (string.length()%8 != 0) return false;
         if (string.equals("")) return true;
-        String[] placementSubstrings = new String[(string.length()-1)/8];
-        for (int i = 0; i < placementSubstrings.length; i++) {
-            placementSubstrings[i] = string.substring(0, 8);
-            string = string.substring(8);
-        }
-        for (String x: placementSubstrings) {
-            if (x.length() != 8) return false;
-            if (!"abcdjm".contains(x.charAt(0)+"")) return false;
-            if (x.charAt(1) <= 1 && x.charAt(0) >= 8 && Character.isDigit(x.charAt(1))) return false;
-            if (!"NSC".contains(x.charAt(2)+"")) return false;
-            if (!(Character.isDigit(x.charAt(3)) && Character.isDigit(x.charAt(4)))) return false;
-            if (!"EWC".contains(x.charAt(5)+"")) return false;
-            if (!(Character.isDigit(x.charAt(6)) && Character.isDigit(x.charAt(7)))) return false;
+        for (int i = 0; i < string.length()-7; i = i + 8){
+            if (!("abcdjm".contains(string.charAt(i) + "")
+                    && (string.charAt(i + 1) > 1 && string.charAt(i) < 8 || Character.isDigit(string.charAt(i + 1)))
+                    && "NSC".contains(string.charAt(i + 2) + "") && (Character.isDigit(string.charAt(i + 3))
+                    && Character.isDigit(string.charAt(i + 4))) && "EWC".contains(string.charAt(i + 5) + "")
+                    && (Character.isDigit(string.charAt(i + 6)) && Character.isDigit(string.charAt(i + 7)))))
+                return false;
         }
         return true;
     }
@@ -201,11 +191,8 @@ public class Arboretum {
         if (deck.length() == 0) {
             return "";
         }
-        int random = (int) Math.floor(Math.random() * (deck.length() - 1));
-        while (random % 2 == 1) {
-            random = (int) Math.floor(Math.random() * (deck.length() - 1));
-        }
-        return deck.charAt(random) + String.valueOf(deck.charAt(random + 1));
+        int random2 = ((int) (Math.random() * ((deck.length())/2)))*2;
+        return deck.substring(random2,random2+2);
     }
 
 
@@ -229,8 +216,56 @@ public class Arboretum {
      * TASK 7
      */
     public static boolean isPlacementValid(String[][] gameState, String placement) {
-        return false;
-        //FIXME TASK
+        String[] adjacentPlaces = new String[] {
+                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1)
+                + placement.substring(5, 8)
+                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1)
+                + placement.substring(5, 8)
+                , placement.substring(2, 5)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1)
+                , placement.substring(2, 5)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
+        };
+        for (String p : adjacentPlaces) {
+            System.out.println(p);
+        }
+        System.out.println(placement);
+        if (!(((gameState[0][0].equals("A") && gameState[0][1].length() == 1) ||
+                (gameState[0][0].equals("B") && gameState[0][3].length() == 1))
+                && placement.substring(2).equals("C00C00"))){
+            loop : for (int i = 0; i < 5; i++) {
+                if (i > 3) return false;
+                if (gameState[0][0].equals("A")){
+                    if (gameState[0][1].contains(adjacentPlaces[i])) break loop;
+                }
+                if (gameState[0][0].equals("B")){
+                    if (gameState[0][3].contains(adjacentPlaces[i])) break loop;
+                }
+            }
+        }
+        System.out.println(1);
+        return(((gameState[0][0].equals("A") && gameState[1][1].contains(placement.substring(0, 2)))
+                ||(gameState[0][0].equals("B") && gameState[1][2].contains(placement.substring(0, 2))))
+                && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
+                || (gameState[0][0].equals("B") && gameState[1][2].length() == 19))
+                && !((gameState[0][0].equals("A") && gameState[0][1].contains(placement.substring(2)))
+                ||(gameState[0][0].equals("B") && gameState[0][3].contains(placement.substring(2)))));
+    }
+    public static String adjustThings (char d, int l) {
+        String str = Integer.toString(Math.abs(l));
+        if (l > -10 && l < 10){
+            str = "0" + str;
+        }
+        if (l == 0) return "C00";
+        if (l < 0){
+            switch (d){
+                case 'N' : return "S" + str + "";
+                case 'S' : return "N" + str + "";
+                case 'E' : return "W" + str + "";
+                case 'W' : return "E" + str + "";
+            }
+        }
+        return d + str + "";
     }
 
     /**
