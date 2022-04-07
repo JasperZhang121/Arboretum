@@ -233,13 +233,13 @@ public class Arboretum {
         if (!(((gameState[0][0].equals("A") && gameState[0][1].length() == 1) ||
                 (gameState[0][0].equals("B") && gameState[0][3].length() == 1))
                 && placement.substring(2).equals("C00C00"))){
-            loop : for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (i > 3) return false;
-                if (gameState[0][0].equals("A")){
-                    if (gameState[0][1].contains(adjacentPlaces[i])) break loop;
+                if (gameState[0][0].equals("A")) {
+                    if (gameState[0][1].contains(adjacentPlaces[i])) break;
                 }
-                if (gameState[0][0].equals("B")){
-                    if (gameState[0][3].contains(adjacentPlaces[i])) break loop;
+                if (gameState[0][0].equals("B")) {
+                    if (gameState[0][3].contains(adjacentPlaces[i])) break;
                 }
             }
         }
