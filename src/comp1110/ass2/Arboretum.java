@@ -151,7 +151,6 @@ public class Arboretum {
                 && sharedState[2].charAt(0) == 'A' && isCardSubstring(sharedState[2].substring(1))
                 && sharedState[3].charAt(0) == 'B' && areTheyPlacementSubstrings(sharedState[3].substring(1))
                 && (sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)));
-
     }
     public static boolean isCardSubstring (String string){
         if (string.equals("")) return true;
@@ -226,10 +225,6 @@ public class Arboretum {
                 , placement.substring(2, 5)
                 + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
         };
-        for (String p : adjacentPlaces) {
-            System.out.println(p);
-        }
-        System.out.println(placement);
         if (!(((gameState[0][0].equals("A") && gameState[0][1].length() == 1) ||
                 (gameState[0][0].equals("B") && gameState[0][3].length() == 1))
                 && placement.substring(2).equals("C00C00"))){
@@ -243,7 +238,6 @@ public class Arboretum {
                 }
             }
         }
-        System.out.println(1);
         return(((gameState[0][0].equals("A") && gameState[1][1].contains(placement.substring(0, 2)))
                 ||(gameState[0][0].equals("B") && gameState[1][2].contains(placement.substring(0, 2))))
                 && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
