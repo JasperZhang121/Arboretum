@@ -51,13 +51,13 @@ public class Arboretum {
                 || hiddenState[2].length() == 1);
     }
     public  static boolean isAlphaNumeric (String string){
-        if (string.contains("0") || string.contains("9") || string.length()%2==1) return false;
+        if (string.length()%2==1) return false;
         for (int i = 0; i < string.length(); i++) {
             if (i%2==0 && !"abcdjm".contains(string.charAt(i)+""))return false;
         }
         for (int i = 0; i < string.length()-2; i++) {
             if(((i % 2 == 0 || (string.charAt(i - 1) == string.charAt(i + 1)))
-                    && string.charAt(i) > string.charAt(i + 2)) || (i % 2 == 1) && !Character.isDigit(string.charAt(i)))
+                    && string.charAt(i)>string.charAt(i + 2))||(i % 2 == 1)&&!"12345678".contains(string.charAt(i)+""))
                 return false;
         }
         return true;
