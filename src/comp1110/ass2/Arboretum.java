@@ -42,49 +42,22 @@ public class Arboretum {
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
-        if (hiddenState.length < 3) {
-            return false;
-        }
-        boolean a = true; boolean b = true; boolean c = false; boolean d = false;
-        if(hiddenState[1].length() > 0 && hiddenState[2].length() > 0) {
-            a = isAlphaNumeric(hiddenState[1].substring(1));
-            b = isAlphaNumeric(hiddenState[2].substring(1));
-            c = hiddenState[1].charAt(0) == 'A';
-            d = hiddenState[2].charAt(0) == 'B';
-        }
-        return isAlphaNumeric(hiddenState[0]) && a && b
+        return hiddenState.length >= 3 && hiddenState[1].length() > 0 && hiddenState[2].length() > 0
+                && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1))
+                && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0])
                 && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
-                || hiddenState[1].length() == 1) && c && d
+                || hiddenState[1].length() == 1)
                 && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
                 || hiddenState[2].length() == 1);
     }
-    public static boolean isAlphaNumeric (String string) {
-        if (string.equals("")) return true;
-        String speciesLetters = "abcdjm";
+    public  static boolean isAlphaNumeric (String string){
+        if (string.contains("0") || string.contains("9") || string.length()%2==1) return false;
         for (int i = 0; i < string.length(); i++) {
-            if (i % 2 == 0){
-                if (!(speciesLetters.contains(string.charAt(i) + ""))){
-                    return false;
-                }
-                if (i > 2){
-                    if(string.charAt(i - 2) > string.charAt(i)){
-                        return false;
-                    }
-                }
-            }
-            else {
-                if (Character.getNumericValue(string.charAt(i)) < 1
-                        && Character.getNumericValue(string.charAt(i)) > 8){
-                    return false;
-                }
-                if(i > 2){
-                    if(Character.getNumericValue((string.charAt(i - 2)))
-                            > Character.getNumericValue((string.charAt(i)))
-                            && (string.charAt(i - 1) == (string.charAt(i - 3)))){
-                        return false;
-                    }
-                }
-            }
+            if (i%2==0 && !"abcdjm".contains(string.charAt(i)+""))return false;
+        }
+        for (int i = 0; i < string.length()-2; i++) {
+            if(((i%2==0) || (i%2==1 && string.charAt(i-1) == string.charAt(i+1)))
+                    && string.charAt(i) > string.charAt(i + 2))return false;
         }
         return true;
     }
@@ -230,15 +203,11 @@ public class Arboretum {
                 && placement.substring(2).equals("C00C00"))){
             for (int i = 0; i < 5; i++) {
                 if (i > 3) return false;
-                if (gameState[0][0].equals("A")) {
-                    if (gameState[0][1].contains(adjacentPlaces[i])) break;
-                }
-                if (gameState[0][0].equals("B")) {
-                    if (gameState[0][3].contains(adjacentPlaces[i])) break;
-                }
+                if ((gameState[0][0].equals("A") && gameState[0][1].contains(adjacentPlaces[i]))
+                        || (gameState[0][0].equals("B") && gameState[0][3].contains(adjacentPlaces[i]))) break;
             }
         }
-        return(((gameState[0][0].equals("A") && gameState[1][1].contains(placement.substring(0, 2)))
+        return (((gameState[0][0].equals("A") && gameState[1][1].contains(placement.substring(0, 2)))
                 ||(gameState[0][0].equals("B") && gameState[1][2].contains(placement.substring(0, 2))))
                 && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
                 || (gameState[0][0].equals("B") && gameState[1][2].length() == 19))
@@ -253,13 +222,13 @@ public class Arboretum {
         if (l == 0) return "C00";
         if (l < 0){
             switch (d){
-                case 'N' : return "S" + str + "";
-                case 'S' : return "N" + str + "";
-                case 'E' : return "W" + str + "";
-                case 'W' : return "E" + str + "";
+                case 'N' : return "S" + str;
+                case 'S' : return "N" + str;
+                case 'E' : return "W" + str;
+                case 'W' : return "E" + str;
             }
         }
-        return d + str + "";
+        return d + str;
     }
 
     /**
