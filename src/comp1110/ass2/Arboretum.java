@@ -42,7 +42,7 @@ public class Arboretum {
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
-        return hiddenState.length >= 3 && hiddenState[1].length() > 0 && hiddenState[2].length() > 0
+        return hiddenState.length == 3 && hiddenState[1].length() > 0 && hiddenState[2].length() > 0
                 && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1))
                 && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0])
                 && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
