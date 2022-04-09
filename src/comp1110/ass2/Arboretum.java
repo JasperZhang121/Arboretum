@@ -168,7 +168,6 @@ public class Arboretum {
         return deck.substring(random2,random2+2);
     }
 
-
     /**
      * Determine whether this placement is valid for the current player. The "Turn String" determines who is making
      * this placement.
@@ -189,16 +188,7 @@ public class Arboretum {
      * TASK 7
      */
     public static boolean isPlacementValid(String[][] gameState, String placement) {
-        String[] adjacentPlaces = new String[] {
-                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1)
-                + placement.substring(5, 8)
-                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1)
-                + placement.substring(5, 8)
-                , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1)
-                , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
-        };
+        String[] adjacentPlaces = adjacentLocations(placement);
         if (!(((gameState[0][0].equals("A") && gameState[0][1].length() == 1) ||
                 (gameState[0][0].equals("B") && gameState[0][3].length() == 1))
                 && placement.substring(2).equals("C00C00"))){
@@ -214,6 +204,18 @@ public class Arboretum {
                 || (gameState[0][0].equals("B") && gameState[1][2].length() == 19))
                 && !((gameState[0][0].equals("A") && gameState[0][1].contains(placement.substring(2)))
                 ||(gameState[0][0].equals("B") && gameState[0][3].contains(placement.substring(2)))));
+    }
+    public static String[] adjacentLocations (String placement){
+        return new String[] {
+                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1)
+                + placement.substring(5, 8)
+                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1)
+                + placement.substring(5, 8)
+                , placement.substring(2, 5)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1)
+                , placement.substring(2, 5)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
+        };
     }
     public static String adjustThings (char d, int l) {
         String str = Integer.toString(Math.abs(l));
