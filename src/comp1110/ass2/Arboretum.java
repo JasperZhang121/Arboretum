@@ -56,7 +56,9 @@ public class Arboretum {
             if (i%2==0 && !"abcdjm".contains(string.charAt(i)+""))return false;
         }
         for (int i = 0; i < string.length()-2; i++) {
-            if((i % 2 == 0 || string.charAt(i - 1) == string.charAt(i + 1)) && string.charAt(i) > string.charAt(i + 2))return false;
+            if(((i % 2 == 0 || (string.charAt(i - 1) == string.charAt(i + 1)))
+                    && string.charAt(i) > string.charAt(i + 2)) || (i % 2 == 1) && !Character.isDigit(string.charAt(i)))
+                return false;
         }
         return true;
     }
