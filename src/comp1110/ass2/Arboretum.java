@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 public class Arboretum {
@@ -207,22 +209,26 @@ public class Arboretum {
     }
     public static String[] adjacentLocations (String placement){
         return new String[] {
-                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1)
-                + placement.substring(5, 8)
-                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1)
+                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1, 1)
+                        + placement.substring(5, 8)
+                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1, 1)
                 + placement.substring(5, 8)
                 , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1, 2)
                 , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
+                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1, 2)
         };
     }
-    public static String adjustThings (char d, int l) {
+    public static String adjustThings (char d, int l, int x) {
         String str = Integer.toString(Math.abs(l));
         if (l > -10 && l < 10){
             str = "0" + str;
         }
         if (l == 0) return "C00";
+        if (d == 'C' && l > 0 && x == 1) return "N" + str;
+        if (d == 'C' && l < 0 && x == 1) return "S" + str;
+        if (d == 'C' && l > 0 && x == 2) return "E" + str;
+        if (d == 'C' && l < 0 && x == 2) return "W" + str;
         if (l < 0){
             switch (d){
                 case 'N' : return "S" + str;
@@ -254,8 +260,82 @@ public class Arboretum {
      * @return true if the gameState is valid, false if it is not valid.
      * TASK 8
      */
-    public static boolean isStateValid(String[][] gameState) { return false;
-        // FIXME TASK 8
+    public static boolean isStateValid(String[][] gameState) {
+
+        String allCards = removePosition(gameState[0][1]) + removeHead(gameState[0][2]) + removePosition(gameState[0][3]) + removeHead(gameState[0][4]) + gameState[1][0] + removeHead(gameState[1][1]) + removeHead(gameState[1][2]);
+
+        // since every card length is 2, check if length is 48 x 2
+        if (allCards.length() != 96) {
+            return false;
+        }
+
+        // discard can't have more cards than arboretum as you play then discard
+        if ((gameState[0][2].length()-1)/2 > (gameState[0][1].length()-1)/8 || (gameState[0][4].length()-1)/2 > (gameState[0][3].length()-1)/8) {
+            return false;
+        }
+
+        // search for duplicate
+        for (int i = 0; i < allCards.length(); i += 2) {
+            for (int j = i + 2; j < allCards.length(); j += 2) {
+                if (allCards.charAt(i) == allCards.charAt(j) && allCards.charAt(i + 1) == allCards.charAt(j + 1)) {
+                    return false;
+                }
+            }
+        }
+
+        // check position to be adjacent
+        for (int i = 1; i < 4; i += 2) {
+            for (int c =  1; c < gameState[0][i].length()-1; c += 8) {
+                if (!isCardAdjacentToOtherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c + 8))) {
+                    return false;
+                }
+            }
+        }
+
+        // check B arboretum is one less or equal to A
+        if (gameState[0][1].length() < gameState[0][3].length() &&  gameState[0][3].length() >= gameState[0][1].length()-2 ) {
+            return false;
+        }
+
+        // player must have 7-9 card on their turn and 7 if not their turn which means
+        if (((gameState[0][0].equals("A") && (gameState[1][1].length() < 15 || (gameState[1][1].length() > 19)))
+           || (gameState[0][0].equals("B") && gameState[1][1].length() != 15)) && gameState[1][0].length() != 96) {
+            return false;
+        }
+        if (((gameState[0][0].equals("B") && (gameState[1][2].length() < 15
+           || (gameState[1][2].length() > 19))) || (gameState[0][0].equals("A") && gameState[1][2].length() != 15))
+           && gameState[1][0].length() != 96) {
+            return false;
+        }
+        return true;
+    }
+
+    public static String removeHead(String card) {
+        if (card.length() < 2) {
+            return "";
+        }
+        return card.substring(1);
+    }
+
+    public static String removePosition(String card) {
+        var cards = "";
+        for (int i = 1; i < card.length(); i += 8) {
+            cards += card.substring(i, i + 2);
+        }
+        return cards;
+    }
+
+    public static boolean isCardAdjacentToOtherCard(String arboretum, String placement) {
+        String[] adjacentPlaces = adjacentLocations(placement);
+        if (placement.substring(2).equals("C00C00")) {
+            return true;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (arboretum.contains(adjacentPlaces[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
