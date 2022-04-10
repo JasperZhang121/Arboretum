@@ -121,38 +121,80 @@ public class Arboretum {
      * TASK 4
      */
     public static boolean isSharedStateWellFormed(String[] sharedState) {
-        return (sharedState.length == 5)
-                && (sharedState[0].equals("A") || sharedState[0].equals("B"))
-                && sharedState[1].charAt(0) == 'A' && areTheyPlacementSubstrings(sharedState[1].substring(1))
-                && sharedState[2].charAt(0) == 'A' && isCardSubstring(sharedState[2].substring(1))
-                && sharedState[3].charAt(0) == 'B' && areTheyPlacementSubstrings(sharedState[3].substring(1))
-                && (sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)));
+
+        if(sharedState.length!=5)return false;
+        if(sharedState[1].length()<1 || sharedState[3].length()<1) return false;
+        if(sharedState[1].charAt(0)!='A' || sharedState[3].charAt(0)!='B')return false;
+        if(sharedState[2].length()<1 || sharedState[4].length()<1) return false;
+        if(sharedState[2].charAt(0)!='A' || sharedState[4].charAt(0)!='B')return false;
+        if(!(sharedState[0].equals("A")|| sharedState[0].equals("B")))return false;
+
+        boolean a;
+        if (sharedState[1].length()==1){
+            a = true;
+        } else {
+            a = isCardSubstring(sharedState[1].substring(1));
+        }
+
+        boolean b;
+        if (sharedState[2].length()==1){
+            b = true;
+        } else {
+            b = isDiscard(sharedState[2].substring(1));
+        }
+
+        boolean c;
+        if (sharedState[3].length()==1) {
+            c = true;
+        } else {
+            c =  isCardSubstring(sharedState[3].substring(1)) ;
+        }
+
+        boolean d;
+        if ( sharedState[4].length()==1) {
+            d = true;
+        } else {
+            d = isDiscard(sharedState[4].substring(1));
+        }
+
+
+        return a&& b
+                && c
+                && d;
     }
+
     public static boolean isCardSubstring (String string){
-        if (string.equals("")) return true;
-        if (string.length()%2 == 1) return false;
-        String speciesLetters = "abcdjm";
-        for (int i = 0; i < string.length(); i = i+2) {
-            int value = Character.getNumericValue(string.charAt(i + 1));
-            if (!(speciesLetters.contains(string.charAt(i) + "")) && (value >= 1
-                    && value <= 8))
-                return false;
+
+        String species = "abcdjm";
+        String CardNumber = "12345678";
+        String NSC ="NSC";
+        String zeroToNine = "0123456789";
+        String EWC = "EWC";
+
+        if(string == "") return true;
+        if(string.length()%8!=0) return false;
+        for (int i = 0; i < string.length()-2; i++) {
+            if (i%8==0 && !species.contains(string.charAt(i)+"")) return false;
+            if (i%8==1 && !CardNumber.contains(string.charAt(i)+"") ) return false;
+            if (i%8==2 && !NSC.contains(string.charAt(i)+"")) return false;
+            if ((i%8 == 3 || i%8==4 || i%8==6 || i%8==7) && !zeroToNine.contains(string.charAt(i)+""))return false;
+            if (i%8==5 && !EWC.contains(string.charAt(i)+"")) return false;
         }
         return true;
     }
-    public static boolean areTheyPlacementSubstrings (String string){
-        if (string.length()%8 != 0) return false;
-        if (string.equals("")) return true;
-        for (int i = 0; i < string.length()-7; i = i + 8){
-            if (!("abcdjm".contains(string.charAt(i) + "")
-                    && (string.charAt(i + 1) > 1 && string.charAt(i) < 8 || Character.isDigit(string.charAt(i + 1)))
-                    && "NSC".contains(string.charAt(i + 2) + "") && (Character.isDigit(string.charAt(i + 3))
-                    && Character.isDigit(string.charAt(i + 4))) && "EWC".contains(string.charAt(i + 5) + "")
-                    && (Character.isDigit(string.charAt(i + 6)) && Character.isDigit(string.charAt(i + 7)))))
-                return false;
+
+    public static boolean isDiscard (String string){
+
+        String species = "abcdjm";
+        String CardNumber = "12345678";
+        if(string.length()%2!=0) return false;
+        for (int i = 0; i < string.length(); i++) {
+            if(i%2==0 && !species.contains(string.charAt(i)+""))return false;
+            if(i%2==1 && !CardNumber.contains(string.charAt(i)+""))return false;
         }
         return true;
     }
+
 
     /**
      * Given a deck string, draw a random card from the deck.
