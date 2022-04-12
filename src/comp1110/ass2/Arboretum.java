@@ -45,10 +45,8 @@ public class Arboretum {
         return hiddenState.length == 3 && hiddenState[1].length() > 0 && hiddenState[2].length() > 0
                 && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1))
                 && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0])
-                && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19)
-                || hiddenState[1].length() == 1)
-                && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19)
-                || hiddenState[2].length() == 1);
+                && ((hiddenState[1].length() >= 15 && hiddenState[1].length() <= 19) || hiddenState[1].length() == 1)
+                && ((hiddenState[2].length() >= 15 && hiddenState[2].length() <= 19) || hiddenState[2].length() == 1);
     }
     public  static boolean isAlphaNumeric (String string){
         if (string.length()%2==1) return false;
@@ -200,18 +198,15 @@ public class Arboretum {
             }
         }
         String b = placement.substring(0, 2);
-        return (((gameState[0][0].equals("A") && gameState[1][1].contains(b))
-                ||(gameState[0][0].equals("B") && gameState[1][2].contains(b)))
-                && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
-                || (gameState[0][0].equals("B") && gameState[1][2].length() == 19))
-                && !((gameState[0][0].equals("A") && gameState[0][1].contains(a))
-                ||(gameState[0][0].equals("B") && gameState[0][3].contains(a))));
+        return (((gameState[0][0].equals("A") && gameState[1][1].contains(b)) ||(gameState[0][0].equals("B")
+                && gameState[1][2].contains(b))) && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
+                || (gameState[0][0].equals("B") && gameState[1][2].length() == 19)) && !((gameState[0][0].equals("A")
+                && gameState[0][1].contains(a)) ||(gameState[0][0].equals("B") && gameState[0][3].contains(a))));
     }
     public static String[] adjacentLocations (String placement){
         String a = placement.substring(2, 5); String b = placement.substring(5, 8);
         int c = Integer.parseInt(placement.substring(3, 5)); int d = Integer.parseInt(placement.substring(6, 8));
-        char e = placement.charAt(2);
-        char f = placement.charAt(5);
+        char e = placement.charAt(2); char f = placement.charAt(5);
         return new String[] {
                 adjustThings(e, c + 1, 1) + b, adjustThings(e, c - 1, 1) + b
                 , a + adjustThings(f, d + 1, 2), a + adjustThings(f, d - 1, 2)
