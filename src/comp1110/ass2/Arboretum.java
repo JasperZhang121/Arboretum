@@ -188,41 +188,45 @@ public class Arboretum {
      * TASK 7
      */
     public static boolean isPlacementValid(String[][] gameState, String placement) {
+        String a = placement.substring(2);
         String[] adjacentPlaces = adjacentLocations(placement);
         if (!(((gameState[0][0].equals("A") && gameState[0][1].length() == 1) ||
                 (gameState[0][0].equals("B") && gameState[0][3].length() == 1))
-                && placement.substring(2).equals("C00C00"))){
+                && a.equals("C00C00"))){
             for (int i = 0; i < 5; i++) {
                 if (i > 3) return false;
                 if ((gameState[0][0].equals("A") && gameState[0][1].contains(adjacentPlaces[i]))
                         || (gameState[0][0].equals("B") && gameState[0][3].contains(adjacentPlaces[i]))) break;
             }
         }
-        return (((gameState[0][0].equals("A") && gameState[1][1].contains(placement.substring(0, 2)))
-                ||(gameState[0][0].equals("B") && gameState[1][2].contains(placement.substring(0, 2))))
+        String b = placement.substring(0, 2);
+        return (((gameState[0][0].equals("A") && gameState[1][1].contains(b))
+                ||(gameState[0][0].equals("B") && gameState[1][2].contains(b)))
                 && ((gameState[0][0].equals("A") && gameState[1][1].length() == 19)
                 || (gameState[0][0].equals("B") && gameState[1][2].length() == 19))
-                && !((gameState[0][0].equals("A") && gameState[0][1].contains(placement.substring(2)))
-                ||(gameState[0][0].equals("B") && gameState[0][3].contains(placement.substring(2)))));
+                && !((gameState[0][0].equals("A") && gameState[0][1].contains(a))
+                ||(gameState[0][0].equals("B") && gameState[0][3].contains(a))));
     }
     public static String[] adjacentLocations (String placement){
+        String a = placement.substring(2, 5); String b = placement.substring(5, 8);
+        int c = Integer.parseInt(placement.substring(3, 5)); int d = Integer.parseInt(placement.substring(6, 8));
+        char e = placement.charAt(2);
+        char f = placement.charAt(5);
         return new String[] {
-                adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) + 1)
-                + placement.substring(5, 8)
-                , adjustThings(placement.charAt(2), Integer.parseInt(placement.substring(3, 5)) - 1)
-                + placement.substring(5, 8)
-                , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) + 1)
-                , placement.substring(2, 5)
-                + adjustThings(placement.charAt(5), Integer.parseInt(placement.substring(6, 8)) - 1)
+                adjustThings(e, c + 1, 1) + b, adjustThings(e, c - 1, 1) + b
+                , a + adjustThings(f, d + 1, 2), a + adjustThings(f, d - 1, 2)
         };
     }
-    public static String adjustThings (char d, int l) {
+    public static String adjustThings (char d, int l, int x) {
         String str = Integer.toString(Math.abs(l));
         if (l > -10 && l < 10){
             str = "0" + str;
         }
         if (l == 0) return "C00";
+        if (d == 'C' && l > 0 && x == 1) return "N" + str;
+        if (d == 'C' && l < 0 && x == 1) return "S" + str;
+        if (d == 'C' && l > 0 && x == 2) return "E" + str;
+        if (d == 'C' && l < 0 && x == 2) return "W" + str;
         if (l < 0){
             switch (d){
                 case 'N' : return "S" + str;
@@ -254,8 +258,45 @@ public class Arboretum {
      * @return true if the gameState is valid, false if it is not valid.
      * TASK 8
      */
-    public static boolean isStateValid(String[][] gameState) { return false;
-        // FIXME TASK 8
+
+    public static boolean isStateValid(String[][] gameState) {
+        String allCards = removePosition(gameState[0][1]) + gameState[0][2].substring(1)
+                + removePosition(gameState[0][3]) + gameState[0][4].substring(1) + gameState[1][0]
+                + gameState[1][1].substring(1) + gameState[1][2].substring(1);
+        for (int i = 0; i < allCards.length(); i+=2) {
+            String card = allCards.substring(i, i+2);
+            if (allCards.indexOf(card) != allCards.lastIndexOf(card)) return false;
+        }
+        for (int i = 1; i < 4; i+=2) {
+            for (int c =  1; c < gameState[0][i].length()-1; c+=8) {
+                if (!isCardAdjacentToOtherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c + 8)))
+                    return false;
+            }
+        }
+        return allCards.length() == 96 &&(((!gameState[0][0].equals("B")
+                || (gameState[1][2].length() >= 15 && (gameState[1][2].length() <= 19)))
+                && (!gameState[0][0].equals("A") || gameState[1][2].length() == 15))
+                || gameState[1][0].length() == 96) && gameState[0][1].length() >= gameState[0][3].length()
+                && gameState[0][1].length()-8 <= gameState[0][3].length() && !(((gameState[0][0].equals("A")
+                && (gameState[1][1].length() < 15 || (gameState[1][1].length() > 19)))
+                || (gameState[0][0].equals("B") && gameState[1][1].length() != 15)) && gameState[1][0].length() != 96)
+                && !((gameState[0][2].length()-1)/2 > (gameState[0][1].length()-1)/8
+                || (gameState[0][4].length()-1)/2 > (gameState[0][3].length()-1)/8);
+    }
+    public static String removePosition(String card) {
+        StringBuilder cards = new StringBuilder();
+        for (int i = 1; i < card.length(); i += 8) {
+            cards.append(card, i, i + 2);
+        }
+        return cards.toString();
+    }
+    public static boolean isCardAdjacentToOtherCard(String arboretum, String placement) {
+        String[] adjacentPlaces = adjacentLocations(placement);
+        if (placement.substring(2).equals("C00C00")) return true;
+        for (int i = 0; i < 4; i++) {
+            if (arboretum.contains(adjacentPlaces[i])) return true;
+        }
+        return false;
     }
 
     /**
