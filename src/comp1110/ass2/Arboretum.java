@@ -223,10 +223,12 @@ public class Arboretum {
             str = "0" + str;
         }
         if (l == 0) return "C00";
-        if (d == 'C' && l > 0 && x == 1) return "N" + str;
-        if (d == 'C' && l < 0 && x == 1) return "S" + str;
-        if (d == 'C' && l > 0 && x == 2) return "E" + str;
-        if (d == 'C' && l < 0 && x == 2) return "W" + str;
+        if (d == 'C')
+            if (l > 0)
+                if (x == 1) return "N" + str;
+                else return "E" + str;
+            else if (x == 1) return "S" + str;
+                else return "W" + str;
         if (l < 0){
             switch (d){
                 case 'N' : return "S" + str;
@@ -269,7 +271,7 @@ public class Arboretum {
         }
         for (int i = 1; i < 4; i+=2) {
             for (int c =  1; c < gameState[0][i].length()-1; c+=8) {
-                if (!isCardAdjacentToOtherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c + 8)))
+                if (!isCardAdjacentToAnotherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c + 8)))
                     return false;
             }
         }
@@ -290,7 +292,7 @@ public class Arboretum {
         }
         return cards.toString();
     }
-    public static boolean isCardAdjacentToOtherCard(String arboretum, String placement) {
+    public static boolean isCardAdjacentToAnotherCard(String arboretum, String placement) {
         String[] adjacentPlaces = adjacentLocations(placement);
         if (placement.substring(2).equals("C00C00")) return true;
         for (int i = 0; i < 4; i++) {
