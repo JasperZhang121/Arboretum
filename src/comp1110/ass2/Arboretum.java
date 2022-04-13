@@ -60,7 +60,6 @@ public class Arboretum {
         return true;
     }
 
-
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
      *
