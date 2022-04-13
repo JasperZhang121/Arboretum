@@ -42,11 +42,10 @@ public class Arboretum {
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
-        if (!(hiddenState.length == 3 && hiddenState[1].length() > 0 && hiddenState[2].length() > 0
-            && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0]))
-            && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1))) return false;
-        int L1 = hiddenState[1].length(); int L2 = hiddenState[2].length();
-        return ((L1 >= 15 && L1 <= 19) || L1 == 1) && ((L2 >= 15 && L2 <= 19) || L2 == 1);
+        if (hiddenState.length != 3) return false; int L1 = hiddenState[1].length(); int L2 = hiddenState[2].length();
+        return ((L1 >= 15 && L1 <= 19) || L1 == 1) && ((L2 >= 15 && L2 <= 19) || L2 == 1) && (L1 > 0 && L2 > 0
+                && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0]))
+                && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1));
     }
     public  static boolean isAlphaNumeric (String string){
         int strLength = string.length();
@@ -60,6 +59,7 @@ public class Arboretum {
         }
         return true;
     }
+
 
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
