@@ -47,6 +47,7 @@ public class Viewer extends Application {
         // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
 
         root.getChildren().clear();
+
         var handA = new Text(600,100,"HandA " + gameState[0][1]  );
         var ArboretumA = new Text(600,300,"ArboretumA "+ gameState[1][1]);
         var ArboretumB = new Text(600,400,"ArboretumB " + gameState[1][3]);
