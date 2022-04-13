@@ -40,26 +40,21 @@ public class Viewer extends Application {
      * @param gameState TASK 6
      */
     void displayState(String[][] gameState) {
-
         // not sure about the gameState. Assume it is the hiddenState and sharedState
         // so, String [hiddenState][sharedState]
         // it will be like :
-
         // Hidden : Deck       HandA        HandB
         // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
 
+        root.getChildren().clear();
         var handA = new Text(600,100,"HandA " + gameState[0][1]  );
         var ArboretumA = new Text(600,300,"ArboretumA "+ gameState[1][1]);
-
         var ArboretumB = new Text(600,400,"ArboretumB " + gameState[1][3]);
         var handB = new Text(600,600,"HandB " + gameState[0][2]);
         var discardA = new Text(300,500,"DiscardA "+ gameState[1][2]);
         var discardB = new Text(900,200,"DiscardB "+ gameState[1][4]);
         var deck = new Text(900,350,"deck "+ gameState[0][0] );
-
         root.getChildren().addAll(handA,ArboretumA,ArboretumB,handB,discardA,discardB,deck);
-        root.getChildren().clear();
-
         // FIXME Task 6: implement the simple state viewer
     }
 
