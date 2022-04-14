@@ -54,6 +54,7 @@ public class Viewer extends Application {
         var ArboretumA_Center = new Text(600,250,gameState[0][1].substring(1,3));
         var ArboretumB_Center = new Text(600,450,gameState[0][3].substring(1,3));
 
+
         String a = gameState[0][1].substring(1);
         for (int i = 0; i < a.substring(1).length(); i++) {
             if (i!=0 && i%8==0){
@@ -68,15 +69,15 @@ public class Viewer extends Application {
                     NS = distanceNS;
                 }
                 if (a.charAt(i+2) == 'S') {
-                    NS = distanceNS;
+                    NS = -1*distanceNS;
                 }
                 if (a.charAt(i+5) == 'E') {
                     EW = distanceEW;
                 }
-                if (a.charAt(i+5) == 'S') {
+                if (a.charAt(i+5) == 'W') {
                     EW = -1 * distanceEW;
                 }
-            var cardA = new Text(600+EW*oneSquare,250+NS*oneSquare,a.substring(i,i+2));
+            var cardA = new Text(600+EW*oneSquare,250-NS*oneSquare,a.substring(i,i+2));
                 root.getChildren().addAll(cardA);
             }
         }
@@ -96,15 +97,15 @@ public class Viewer extends Application {
                     NS = distanceNS;
                 }
                 if (b.charAt(i+2) == 'S') {
-                    NS = distanceNS;
+                    NS = -1*distanceNS;
                 }
                 if (b.charAt(i+5) == 'E') {
                     EW = distanceEW;
                 }
-                if (b.charAt(i+5) == 'S') {
+                if (b.charAt(i+5) == 'W') {
                     EW = -1 * distanceEW;
                 }
-                var cardB = new Text(600+EW*oneSquare,450+NS*oneSquare,b.substring(i,i+2));
+                var cardB = new Text(600+EW*oneSquare,450-NS*oneSquare,b.substring(i,i+2));
                 root.getChildren().addAll(cardB);
             }
         }
