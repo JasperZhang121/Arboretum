@@ -40,81 +40,49 @@ public class Viewer extends Application {
      * @param gameState TASK 6
      */
     void displayState(String[][] gameState) {
-
         // String [sharedState][hiddenState]
         // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
         // Hidden : Deck       HandA        HandB
-
         root.getChildren().clear();
-
-
         var handA = new Text(600,100,"HandA: " + gameState[1][1]);
         var ArboretumA = new Text(600,200,"ArboretumA: ");
         var ArboretumB = new Text(600,400,"ArboretumB: " );
         var ArboretumA_Center = new Text(600,250,gameState[0][1].substring(1,3));
         var ArboretumB_Center = new Text(600,450,gameState[0][3].substring(1,3));
-
-
-        String a = gameState[0][1].substring(1);
-        for (int i = 0; i < a.substring(1).length(); i++) {
-            if (i!=0 && i%8==0){
-
-                int NS =0;
-                int EW =0;
-                int oneSquare = 1;
-                int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
-                int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
-
-                if (a.charAt(i+2) == 'N') {
-                    NS = distanceNS;
-                }
-                if (a.charAt(i+2) == 'S') {
-                    NS = -1*distanceNS;
-                }
-                if (a.charAt(i+5) == 'E') {
-                    EW = distanceEW;
-                }
-                if (a.charAt(i+5) == 'W') {
-                    EW = -1 * distanceEW;
-                }
-            var cardA = new Text(600+EW*oneSquare,250-NS*oneSquare,a.substring(i,i+2));
-                root.getChildren().addAll(cardA);
-            }
-        }
-
-        String b = gameState[0][3].substring(1);
-        for (int i = 0; i < b.substring(1).length(); i++) {
-
-            if (i!=0 && i%8==0){
-
-                int NS =0;
-                int EW =0;
-                int oneSquare = 1;
-                int distanceNS = Integer.parseInt(b.substring(i+3,i+5));
-                int distanceEW = Integer.parseInt(b.substring(i+6,i+8));
-
-                if (b.charAt(i+2) == 'N') {
-                    NS = distanceNS;
-                }
-                if (b.charAt(i+2) == 'S') {
-                    NS = -1*distanceNS;
-                }
-                if (b.charAt(i+5) == 'E') {
-                    EW = distanceEW;
-                }
-                if (b.charAt(i+5) == 'W') {
-                    EW = -1 * distanceEW;
-                }
-                var cardB = new Text(600+EW*oneSquare,450-NS*oneSquare,b.substring(i,i+2));
-                root.getChildren().addAll(cardB);
-            }
-        }
-
         var handB = new Text(600,600,"HandB: " + gameState[1][2]);
         var discardA = new Text(300,150,"DiscardA: "+ gameState[0][2]);
         var discardB = new Text(300,500,"DiscardB: "+ gameState[0][4]);
         var deck = new Text(900,350,"deck: "+ gameState[1][0] );
         root.getChildren().addAll(handA,ArboretumA,ArboretumB,handB,discardA,discardB,deck,ArboretumA_Center,ArboretumB_Center);
+        int NS =0;
+        int EW =0;
+        int oneSquare = 1;
+        String a = gameState[0][1].substring(1);
+        for (int i = 0; i < a.substring(1).length(); i++) {
+            if (i!=0 && i%8==0){
+                int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
+                int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
+                if (a.charAt(i+2) == 'N') NS = distanceNS;
+                if (a.charAt(i+2) == 'S') NS = -1*distanceNS;
+                if (a.charAt(i+5) == 'E') EW = distanceEW;
+                if (a.charAt(i+5) == 'W') EW = -1 * distanceEW;
+            var cardA = new Text(600+EW*oneSquare,250-NS*oneSquare,a.substring(i,i+2));
+                root.getChildren().addAll(cardA);
+            }
+        }
+        String b = gameState[0][3].substring(1);
+        for (int i = 0; i < b.substring(1).length(); i++) {
+            if (i!=0 && i%8==0){
+                int distanceNS = Integer.parseInt(b.substring(i+3,i+5));
+                int distanceEW = Integer.parseInt(b.substring(i+6,i+8));
+                if (b.charAt(i+2) == 'N') NS = distanceNS;
+                if (b.charAt(i+2) == 'S') NS = -1*distanceNS;
+                if (b.charAt(i+5) == 'E') EW = distanceEW;
+                if (b.charAt(i+5) == 'W') EW = -1 * distanceEW;
+                var cardB = new Text(600+EW*oneSquare,450-NS*oneSquare,b.substring(i,i+2));
+                root.getChildren().addAll(cardB);
+            }
+        }
         // FIXME Task 6: implement the simple state viewer
     }
 
