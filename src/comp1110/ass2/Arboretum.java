@@ -237,40 +237,56 @@ public class Arboretum {
      */
 
     public static boolean isStateValid(String[][] gameState) {
+
         String allCards = removePosition(gameState[0][1]) + gameState[0][2].substring(1)
-                + removePosition(gameState[0][3]) + gameState[0][4].substring(1) + gameState[1][0]
-                + gameState[1][1].substring(1) + gameState[1][2].substring(1);
-        int gs12Length = gameState[1][2].length(); int gs10Length = gameState[1][0].length();
-        int gs01Length = gameState[0][1].length(); int gs03Length = gameState[0][3].length();
-        int gs11Length = gameState[1][1].length(); int allCardsLength = allCards.length()   ;
-        for (int i = 0; i < allCardsLength; i+=2) {
+                        + removePosition(gameState[0][3]) + gameState[0][4].substring(1) + gameState[1][0]
+                        + gameState[1][1].substring(1) + gameState[1][2].substring(1);
+
+        int gs12Length = gameState[1][2].length();
+        int gs10Length = gameState[1][0].length();
+        int gs01Length = gameState[0][1].length();
+        int gs03Length = gameState[0][3].length();
+        int gs11Length = gameState[1][1].length();
+        int allCardsLength = allCards.length()   ;
+
+        for (int i = 0; i < allCardsLength; i += 2) {
             String card = allCards.substring(i, i+2);
-            if (allCards.indexOf(card) != allCards.lastIndexOf(card)) return false;
+            if (allCards.indexOf(card) != allCards.lastIndexOf(card)) {
+                return false;
+            }
         }
+
         for (int i = 1; i < 4; i+=2) {
             for (int c =  1; c < gameState[0][i].length()-1; c+=8) {
-                if (!isCardAdjacentToAnotherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c + 8)))
+                if (!isCardAdjacentToAnotherCard(gameState[0][i].substring(1, c), gameState[0][i].substring(c, c+8)))
                     return false;
             }
         }
-        return allCardsLength == 96 && (((((gameState[0][0].equals("A") && gs12Length == 15)
+
+        return  allCardsLength == 96 && (((((gameState[0][0].equals("A") && gs12Length == 15)
                 && (gs11Length >= 15 && gs11Length <= 19)) || ((gameState[0][0].equals("B") && gs11Length == 15)
                 && (gs12Length >= 15 && gs12Length <= 19)))) || gs10Length == 96) && gs01Length >= gs03Length
                 && gs01Length - 8 <= gs03Length && !((gameState[0][2].length() - 1) / 2 > (gs01Length - 1) / 8
                 || (gameState[0][4].length() - 1) / 2 > (gs03Length - 1) / 8);
     }
+
     public static String removePosition(String card) {
         StringBuilder cards = new StringBuilder();
         for (int i = 1; i < card.length(); i += 8) {
-            cards.append(card, i, i + 2);
+            cards.append(card, i, i+2);
         }
         return cards.toString();
     }
+
     public static boolean isCardAdjacentToAnotherCard(String arboretum, String placement) {
         String[] adjacentPlaces = adjacentLocations(placement);
-        if (placement.substring(2).equals("C00C00")) return true;
+        if (placement.substring(2).equals("C00C00")) {
+            return true;
+        }
         for (int i = 0; i < 4; i++) {
-            if (arboretum.contains(adjacentPlaces[i])) return true;
+            if (arboretum.contains(adjacentPlaces[i])) {
+                return true;
+            }
         }
         return false;
     }
