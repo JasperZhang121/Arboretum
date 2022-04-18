@@ -48,7 +48,7 @@ public class Viewer extends Application {
         var ArboretumA = new Text(300,50,"ArboretumA: ");
         var ArboretumB = new Text(300,400,"ArboretumB: " );
         var ArboretumA_Center = new Text(800,200,gameState[0][1].substring(1,3));
-        var ArboretumB_Center = new Text(800,500,gameState[0][3].substring(1,3));
+        var ArboretumB_Center = new Text(600,400,gameState[0][3].substring(1,3));
         var handB = new Text(0,600,"HandB: " + gameState[1][2]);
         var discardA = new Text(0,150,"DiscardA: "+ gameState[0][2]);
         var discardB = new Text(0,500,"DiscardB: "+ gameState[0][4]);
@@ -56,11 +56,10 @@ public class Viewer extends Application {
         root.getChildren().addAll(handA,ArboretumA,ArboretumB,handB,discardA,discardB,deck,ArboretumA_Center,ArboretumB_Center);
         int NSC =0;
         int EWC =0;
-        int oneSquare = 20;
+        int oneSquare = 30;
 
         String a = gameState[0][1].substring(1);
         for (int i = 0; i < a.substring(1).length(); i++) {
-            if (a.substring(1) == "") break;
             if (i!=0 && i%8==0){
                 int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
                 int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
@@ -76,17 +75,16 @@ public class Viewer extends Application {
         }
         String b = gameState[0][3].substring(1);
         for (int i = 0; i < b.substring(1).length(); i++) {
-            if (b.substring(1) == "") break;
             if (i!=0 && i%8==0){
                 int distanceNS = Integer.parseInt(b.substring(i+3,i+5));
                 int distanceEW = Integer.parseInt(b.substring(i+6,i+8));
                 if (b.charAt(i+2) == 'N') NSC = distanceNS;
                 if (b.charAt(i+2) == 'S') NSC = -1*distanceNS;
-                if (a.charAt(i+2) == 'C') NSC = 0;
+                if (b.charAt(i+2) == 'C') NSC = 0;
                 if (b.charAt(i+5) == 'E') EWC = distanceEW;
                 if (b.charAt(i+5) == 'W') EWC = -1*distanceEW;
-                if (a.charAt(i+5) == 'C') EWC = 0;
-                var cardB = new Text(800+EWC*oneSquare,500-NSC*oneSquare,b.substring(i,i+2));
+                if (b.charAt(i+5) == 'C') EWC = 0;
+                var cardB = new Text(600+EWC*oneSquare,400-NSC*oneSquare,b.substring(i,i+2));
                 root.getChildren().addAll(cardB);
             }
         }
