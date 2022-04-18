@@ -1,0 +1,34 @@
+# IMPORTANT: It is very important that you correctly complete this originality
+# statement.
+#
+# This is your statement of your submitted work being your own.
+# Incorrectly filling out this statement could lead to charges
+# of academic misconduct.
+# 
+# For information on how to fill this out correctly, see
+# https://cs.anu.edu.au/courses/comp1110/help/faq/09-originality/
+#
+
+declaration: >-
+  I submit the work below for assessment as my best work. I declare that this
+  is entirely my own work, with the following documented exceptions:
+
+# Use this to list names of people who you collaborated with, and a
+# comment about what you collaborated on.
+#
+# Add as many "name+comment" entries as necessary
+# (or remove it altogether if you haven't collaborated with anyone)
+collaboration:
+  - name: Samuel Barilaro and Hao Zhang (Group members)
+    comment: Helped cross-check and improve the code quality (efficeintcy) for task 5 and task 8>-
+
+
+# I wish to submit the following methods as entirely my own (remove this if
+# you want to just submit classes):
+method:
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L158-163
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L239-292
+
+# sign *your* name and uid here
+name: Vincent Tanumihardja
+uid: u7145408
