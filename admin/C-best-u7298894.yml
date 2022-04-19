@@ -19,33 +19,20 @@ declaration: >-
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
 collaboration:
-  - name:
-    comment: >-
+  - name: Vincent Tanumihardja and Hao Zhang (Group members)
+    comment: helped review code for tasks 3 and 7
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
 # explaining your use and the URL to that code and the licence for
 # that code
-#
-# Add as many "url+licence+comment" entries as necessary
-# (or remove it altogether if you haven't used any external code)
-code:
-  - comment:
-    url:
-    licence:
-
-# I wish to submit the following classes as entirely my own (remove this if
-# you want to just submit methods):
-class:
-   - 
-   - 
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - 
-   - 
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L44-62
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L184-216
 
 # sign *your* name and uid here
-name:
-uid:
+name: Samuel Barilaro
+uid: u7298894
