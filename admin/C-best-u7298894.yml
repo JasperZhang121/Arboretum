@@ -30,9 +30,9 @@ collaboration:
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-  - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L44-62
-  - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L184-216
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L44-62
+   - https://gitlab.cecs.anu.edu.au/u7145408/comp1110-ass2/-/blob/master/src/comp1110/ass2/Arboretum.java#L184-216
 
-# sign your name and uid here
+# sign *your* name and uid here
 name: Samuel Barilaro
 uid: u7298894
