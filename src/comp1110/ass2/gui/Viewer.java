@@ -44,29 +44,32 @@ public class Viewer extends Application {
         // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
         // Hidden : Deck       HandA        HandB
         root.getChildren().clear();
-        var handA = new Text(600,100,"HandA: " + gameState[1][1]);
-        var ArboretumA = new Text(600,200,"ArboretumA: ");
-        var ArboretumB = new Text(600,400,"ArboretumB: " );
-        var ArboretumA_Center = new Text(600,250,gameState[0][1].substring(1,3));
-        var ArboretumB_Center = new Text(600,450,gameState[0][3].substring(1,3));
-        var handB = new Text(600,600,"HandB: " + gameState[1][2]);
-        var discardA = new Text(300,150,"DiscardA: "+ gameState[0][2]);
-        var discardB = new Text(300,500,"DiscardB: "+ gameState[0][4]);
-        var deck = new Text(900,350,"deck: "+ gameState[1][0] );
-        root.getChildren().addAll(handA,ArboretumA,ArboretumB,handB,discardA,discardB,deck,ArboretumA_Center,ArboretumB_Center);
-        int NS =0;
-        int EW =0;
-        int oneSquare = 1;
+        var ID = new Text(0,80,"Player Turn Id: " + gameState[0][0]);
+        var handA = new Text(0,100,"HandA: " + gameState[1][1]);
+        var ArboretumA = new Text(600,50,"ArboretumA: ");
+        var ArboretumB = new Text(200,400,"ArboretumB: " );
+        var ArboretumA_Center = new Text(800,250,gameState[0][1].substring(1,3));
+        var ArboretumB_Center = new Text(500,450,gameState[0][3].substring(1,3));
+        var handB = new Text(0,160,"HandB: " + gameState[1][2]);
+        var discardA = new Text(0,120,"DiscardA: "+ gameState[0][2]);
+        var discardB = new Text(0,180,"DiscardB: "+ gameState[0][4]);
+        var deck = new Text(0,140,"deck: "+ gameState[1][0] );
+        root.getChildren().addAll(handA,ArboretumA,ArboretumB,handB,discardA,discardB,deck,ArboretumA_Center,ArboretumB_Center,ID);
+        int NSC =0;
+        int EWC =0;
+        int oneSquare = 20;
         String a = gameState[0][1].substring(1);
         for (int i = 0; i < a.substring(1).length(); i++) {
             if (i!=0 && i%8==0){
                 int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
                 int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
-                if (a.charAt(i+2) == 'N') NS = distanceNS;
-                if (a.charAt(i+2) == 'S') NS = -1*distanceNS;
-                if (a.charAt(i+5) == 'E') EW = distanceEW;
-                if (a.charAt(i+5) == 'W') EW = -1 * distanceEW;
-            var cardA = new Text(600+EW*oneSquare,250-NS*oneSquare,a.substring(i,i+2));
+                if (a.charAt(i+2) == 'N') NSC = distanceNS;
+                if (a.charAt(i+2) == 'S') NSC = -1*distanceNS;
+                if (a.charAt(i+2) == 'C') NSC = 0;
+                if (a.charAt(i+5) == 'E') EWC = distanceEW;
+                if (a.charAt(i+5) == 'W') EWC = -1*distanceEW;
+                if (a.charAt(i+5) == 'C') EWC = 0;
+            var cardA = new Text(800+EWC*oneSquare,250-NSC*oneSquare,a.substring(i,i+2));
                 root.getChildren().addAll(cardA);
             }
         }
@@ -75,11 +78,13 @@ public class Viewer extends Application {
             if (i!=0 && i%8==0){
                 int distanceNS = Integer.parseInt(b.substring(i+3,i+5));
                 int distanceEW = Integer.parseInt(b.substring(i+6,i+8));
-                if (b.charAt(i+2) == 'N') NS = distanceNS;
-                if (b.charAt(i+2) == 'S') NS = -1*distanceNS;
-                if (b.charAt(i+5) == 'E') EW = distanceEW;
-                if (b.charAt(i+5) == 'W') EW = -1 * distanceEW;
-                var cardB = new Text(600+EW*oneSquare,450-NS*oneSquare,b.substring(i,i+2));
+                if (b.charAt(i+2) == 'N') NSC = distanceNS;
+                if (b.charAt(i+2) == 'S') NSC = -1*distanceNS;
+                if (b.charAt(i+2) == 'C') NSC = 0;
+                if (b.charAt(i+5) == 'E') EWC = distanceEW;
+                if (b.charAt(i+5) == 'W') EWC = -1*distanceEW;
+                if (b.charAt(i+5) == 'C') EWC = 0;
+                var cardB = new Text(500+EWC*oneSquare,450-NSC*oneSquare,b.substring(i,i+2));
                 root.getChildren().addAll(cardB);
             }
         }

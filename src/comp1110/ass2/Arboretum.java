@@ -43,22 +43,24 @@ public class Arboretum {
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
         if (hiddenState.length != 3) return false; int L1 = hiddenState[1].length(); int L2 = hiddenState[2].length();
-        return ((L1 >= 15 && L1 <= 19) || L1 == 1) && ((L2 >= 15 && L2 <= 19) || L2 == 1) && (L1 > 0 && L2 > 0
-                && hiddenState[1].charAt(0) == 'A' && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0]))
+        return (L1 >= 15 && L1 <= 19 || L1 == 1) && (L2 >= 15 && L2 <= 19 || L2 == 1) && hiddenState[1].charAt(0) == 'A'
+                && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0])
                 && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1));
     }
     public  static boolean isAlphaNumeric (String string){
         int strLength = string.length();
-        if (strLength%2==1) return false;
+        if ((strLength & 1) == 1) return false;
         for (int i = 0; i < strLength; i++) {
-            if (i%2==0 && !"abcdjm".contains(string.charAt(i)+"")) return false;
+            if ((i & 1) == 0 && !"abcdjm".contains(string.charAt(i)+"")
+                    || (string.charAt(i) < '1' && string.charAt(i) > '8')) return false;
         }
-        for (int i = 0; i < strLength-2; i++) {
-            if(((i % 2 == 0 || (string.charAt(i - 1) == string.charAt(i + 1))) && string.charAt(i)>string.charAt(i + 2))
-                    || (i % 2 == 1) && !"12345678".contains(string.charAt(i)+"")) return false;
+        for (int i = 1; i < strLength-2; i++) {
+            if (string.charAt(i) > string.charAt(i + 2) && ((i & 1) == 0
+                    || (string.charAt(i - 1) == string.charAt(i +1 )))) return false;
         }
         return true;
     }
+
 
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
@@ -116,19 +118,18 @@ public class Arboretum {
      * TASK 4
      */
     public static boolean isSharedStateWellFormed(String[] sharedState) {
-        return (sharedState.length == 5)
-                && (sharedState[0].equals("A") || sharedState[0].equals("B"))
+        return sharedState.length == 5       && (sharedState[0].equals("A") || sharedState[0].equals("B"))
                 && sharedState[1].charAt(0)  == 'A' && areTheyPlacementSubstrings(sharedState[1].substring(1))
                 && sharedState[2].charAt(0)  == 'A' && isCardSubstring(sharedState[2].substring(1))
                 && sharedState[3].charAt(0)  == 'B' && areTheyPlacementSubstrings(sharedState[3].substring(1))
-                && (sharedState[4].charAt(0) == 'B' && isCardSubstring(sharedState[4].substring(1)));
+                && sharedState[4].charAt(0)  == 'B' && isCardSubstring(sharedState[4].substring(1));
     }
     public static boolean isCardSubstring (String string){
         int strLength = string.length();
-        if (strLength%2==1) return false;
+        if ((strLength & 1) == 1) return false;
         for (int i = 0; i < strLength; i++) {
-            if ((i%2==0 && !"abcdjm".contains(string.charAt(i)+""))
-                    || (i%2==1 && !"12345678".contains(string.charAt(i)+""))) return false;
+            if (((i & 1) == 0) && !"abcdjm".contains(string.charAt(i)+"")
+                    || (string.charAt(i) < '1' && string.charAt(i) > '8')) return false;
         }
         return true;
     }
@@ -137,11 +138,10 @@ public class Arboretum {
         if (strLength%8 != 0) return false;
         if (string.equals("")) return true;
         for (int i = 0; i < strLength-7; i = i + 8){
-            if (!("abcdjm".contains(string.charAt(i) + "")       && (string.charAt(i + 1) > 1 && string.charAt(i) < 8
-                    || Character.isDigit(string.charAt(i + 1)))  && "NSC".contains(string.charAt(i + 2) + "")
-                    && (Character.isDigit(string.charAt(i + 3))  && Character.isDigit(string.charAt(i + 4)))
-                    && "EWC".contains(string.charAt(i + 5) + "") && (Character.isDigit(string.charAt(i + 6))
-                    && Character.isDigit(string.charAt(i + 7)))))
+            if (!("abcdjm".contains(string.charAt(i) + "") && (string.charAt(i + 1) > '0' || string.charAt(i + 1) < '9')
+                    && "NSC".contains(string.charAt(i + 2) + "") && Character.isDigit(string.charAt(i + 3))
+                    && Character.isDigit(string.charAt(i + 4))   && "EWC".contains(string.charAt(i + 5) + "")
+                    && Character.isDigit(string.charAt(i + 6))   && Character.isDigit(string.charAt(i + 7))))
                 return false;
         }
         return true;
@@ -193,24 +193,24 @@ public class Arboretum {
             }
         }
         return turn && gameState[1][1].contains(a) && gameState[1][1].length() == 19 && !gameState[0][1].contains(b)
-            || !turn && gameState[1][2].contains(a) && gameState[1][2].length() == 19 && !gameState[0][3].contains(b);
+                || !turn && gameState[1][2].contains(a) && gameState[1][2].length() == 19 && !gameState[0][3].contains(b);
     }
     public static String[] adjacentLocations (String placement){
         String a = placement.substring(2, 5); String b = placement.substring(5, 8);
         int c = Integer.parseInt(placement.substring(3, 5)); int d = Integer.parseInt(placement.substring(6, 8));
         char e = placement.charAt(2); char f = placement.charAt(5);
-        return new String[] {adjustSubCoordinate(e, c + 1, 1) + b, adjustSubCoordinate(e, c - 1, 1) + b
-                , a + adjustSubCoordinate(f, d + 1, 2), a + adjustSubCoordinate(f, d - 1, 2)};
+        return new String[] {adjustSubCoordinate(e, c + 1, true) + b, adjustSubCoordinate(e, c - 1, true) + b
+                , a + adjustSubCoordinate(f, d + 1, false), a + adjustSubCoordinate(f, d - 1, false)};
     }
-    public static String adjustSubCoordinate (char d, int l, int x) {
+    public static String adjustSubCoordinate (char d, int l, boolean x) {
+        if (l == 0) return "C00";
         String str = Integer.toString(Math.abs(l));
         if (l > -10 && l < 10)str = "0" + str;
-        if (l == 0) return "C00";
         if (d == 'C')
             if (l > 0)
-                if (x == 1) return "N" + str;
+                if (x) return "N" + str;
                 else return "E" + str;
-            else if (x == 1) return "S" + str;
+            else if (x) return "S" + str;
                 else return "W" + str;
         return d + str;
     }
@@ -239,9 +239,10 @@ public class Arboretum {
     public static boolean isStateValid(String[][] gameState) {
 
         String allCards = removePosition(gameState[0][1]) + gameState[0][2].substring(1)
-                        + removePosition(gameState[0][3]) + gameState[0][4].substring(1) + gameState[1][0]
-                        + gameState[1][1].substring(1) + gameState[1][2].substring(1);
+                + removePosition(gameState[0][3]) + gameState[0][4].substring(1) + gameState[1][0]
+                + gameState[1][1].substring(1) + gameState[1][2].substring(1);
 
+        boolean turn = gameState[0][0].equals("A");
         int gs12Length = gameState[1][2].length();
         int gs10Length = gameState[1][0].length();
         int gs01Length = gameState[0][1].length();
@@ -263,11 +264,11 @@ public class Arboretum {
             }
         }
 
-        return  allCardsLength == 96 && (((((gameState[0][0].equals("A") && gs12Length == 15)
-                && (gs11Length >= 15 && gs11Length <= 19)) || ((gameState[0][0].equals("B") && gs11Length == 15)
+        return  allCardsLength == 96 && (((((turn && gs12Length == 15)
+                && (gs11Length >= 15 && gs11Length <= 19)) || ((!turn && gs11Length == 15)
                 && (gs12Length >= 15 && gs12Length <= 19)))) || gs10Length == 96) && gs01Length >= gs03Length
-                && gs01Length - 8 <= gs03Length && !((gameState[0][2].length() - 1) / 2 > (gs01Length - 1) / 8
-                || (gameState[0][4].length() - 1) / 2 > (gs03Length - 1) / 8);
+                && gs01Length - 8 <= gs03Length && !((gameState[0][2].length() - 1) > (gs01Length - 1) / 4
+                || (gameState[0][4].length() - 1) > (gs03Length - 1) / 4);
     }
 
     public static String removePosition(String card) {
