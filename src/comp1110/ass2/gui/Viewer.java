@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
@@ -58,7 +60,15 @@ public class Viewer extends Application {
         int NSC =0;
         int EWC =0;
         int oneSquare = 20;
-        String a = gameState[0][1].substring(1);
+        cardsPlacement(gameState,1,800,250);
+        cardsPlacement(gameState,3,500,450);
+        // FIXME Task 6: implement the simple state viewer
+    }
+    void cardsPlacement(String[][] gameState,int Arboretum,int centerX,int centerY){
+        int NSC =0;
+        int EWC =0;
+        int oneSquare = 20;
+        String a = gameState[0][Arboretum].substring(1);
         for (int i = 0; i < a.substring(1).length(); i++) {
             if (i!=0 && i%8==0){
                 int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
@@ -69,27 +79,67 @@ public class Viewer extends Application {
                 if (a.charAt(i+5) == 'E') EWC = distanceEW;
                 if (a.charAt(i+5) == 'W') EWC = -1*distanceEW;
                 if (a.charAt(i+5) == 'C') EWC = 0;
-            var cardA = new Text(800+EWC*oneSquare,250-NSC*oneSquare,a.substring(i,i+2));
-                root.getChildren().addAll(cardA);
+                var cardAB = new Text(centerX+EWC*oneSquare,centerY-NSC*oneSquare,a.substring(i,i+2));
+                root.getChildren().addAll(cardAB);
             }
         }
-        String b = gameState[0][3].substring(1);
-        for (int i = 0; i < b.substring(1).length(); i++) {
-            if (i!=0 && i%8==0){
-                int distanceNS = Integer.parseInt(b.substring(i+3,i+5));
-                int distanceEW = Integer.parseInt(b.substring(i+6,i+8));
-                if (b.charAt(i+2) == 'N') NSC = distanceNS;
-                if (b.charAt(i+2) == 'S') NSC = -1*distanceNS;
-                if (b.charAt(i+2) == 'C') NSC = 0;
-                if (b.charAt(i+5) == 'E') EWC = distanceEW;
-                if (b.charAt(i+5) == 'W') EWC = -1*distanceEW;
-                if (b.charAt(i+5) == 'C') EWC = 0;
-                var cardB = new Text(500+EWC*oneSquare,450-NSC*oneSquare,b.substring(i,i+2));
-                root.getChildren().addAll(cardB);
-            }
-        }
-        // FIXME Task 6: implement the simple state viewer
     }
+
+    // Test Coordination
+    String coordination (String[][] gameState,int Arboretum){
+        StringBuilder stringBuilder = new StringBuilder();
+        int NSC =0;
+        int EWC =0;
+        String a = gameState[0][Arboretum].substring(1);
+        for (int i = 0; i < a.substring(1).length(); i++) {
+            if (i!=0 && i%8==0){
+                int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
+                int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
+                if (a.charAt(i+2) == 'N') NSC = distanceNS;
+                if (a.charAt(i+2) == 'S') NSC = -1*distanceNS;
+                if (a.charAt(i+2) == 'C') NSC = 0;
+                if (a.charAt(i+5) == 'E') EWC = distanceEW;
+                if (a.charAt(i+5) == 'W') EWC = -1*distanceEW;
+                if (a.charAt(i+5) == 'C') EWC = 0;
+                stringBuilder.append("("+ EWC+","+NSC+")");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    @Test
+    void cardsPlacementTest (){
+        // Arboretum 1 means test A
+        // Arboretum 2 means test B
+        String [] sharedState = new String[]{"A","Aa1C00C00a2S01C00a3S01E01a4S02E01","Aa5a6a7","Bb1C00C00b2N01C00b3N01W01b4N02W01","Bb5b6b7"};
+        String [] hiddenState = new String[]{"j1j2j3j4j5j6j7m1m2m3m4m5m6m7","c1c2c3c4c5c6c7","d1d2d3d4d5d6d7"};
+        String [] [] gameState = new String[][]{sharedState,hiddenState};
+
+        // test 7 for a true coordination of Arboretum A
+        StringBuilder test7 = new StringBuilder();
+        test7.append("(0,-1)(1,-1)(1,-2)");
+        boolean a = (coordination(gameState,1).equals(test7.toString()));
+        Assertions.assertTrue(a);
+
+        // test 8 for a false coordination of Arboretum A
+        StringBuilder test8 = new StringBuilder();
+        test8.append("(0,-1)(1,-1)(1,-3)");
+        boolean b = (coordination(gameState,1).equals(test8.toString()));
+        Assertions.assertFalse(b);
+
+        // test 9 for a true coordination of Arboretum B
+        StringBuilder test9 = new StringBuilder();
+        test9.append("(0,1)(-1,1)(-1,2)");
+        boolean c = (coordination(gameState,3).equals(test9.toString()));
+        Assertions.assertTrue(c);
+
+        // test 8 for a false coordination of Arboretum B
+        StringBuilder test10 = new StringBuilder();
+        test10.append("(0,1)(-1,1)(-1,3)");
+        boolean d = (coordination(gameState,3).equals(test10.toString()));
+        Assertions.assertFalse(d);
+    }
+    // Test end
 
     /**
      * Create a basic text field for input and a refresh button.
