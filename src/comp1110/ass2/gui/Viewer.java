@@ -91,7 +91,7 @@ public class Viewer extends Application {
     @Test
     void cardsPlacementTest (){
         // Arboretum 1 means test A
-        // Arboretum 2 means test B
+        // Arboretum 3 means test B
         String [] sharedState = new String[]{"A","Aa1C00C00a2S01C00a3S01E01a4S02E01","Aa5a6a7","Bb1C00C00b2N01C00b3N01W01b4N02W01","Bb5b6b7"};
         String [] hiddenState = new String[]{"j1j2j3j4j5j6j7m1m2m3m4m5m6m7","c1c2c3c4c5c6c7","d1d2d3d4d5d6d7"};
         String [] [] gameState = new String[][]{sharedState,hiddenState};
@@ -114,7 +114,7 @@ public class Viewer extends Application {
         boolean c = (cardsPlacement(gameState,3,500,450).equals(test9.toString()));
         Assertions.assertTrue(c);
 
-        // test 8 for a false coordination of Arboretum B
+        // test 10 for a false coordination of Arboretum B
         StringBuilder test10 = new StringBuilder();
         test10.append("(0,1)(-1,1)(-1,3)");
         boolean d = (cardsPlacement(gameState,3,500,450).equals(test10.toString()));
