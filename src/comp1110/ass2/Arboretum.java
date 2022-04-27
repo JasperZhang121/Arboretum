@@ -307,8 +307,50 @@ public class Arboretum {
      * TASK 9
      */
     public static boolean canScore(String[][] gameState, char player, char species) {
-        return false;
+
         // FIXME TASK 9
+
+        var handASum = 0;
+        var handA = gameState[1][1].substring(1);
+        var specialA = 0;
+        for (int i = 0; i < gameState[1][1].length()-1; i+=2) {
+            if (handA.charAt(i) == species) {
+                handASum += Character.getNumericValue(handA.charAt(i+1));
+                if (Character.getNumericValue(handA.charAt(i+1)) == 1) {
+                    specialA = 1;
+                }
+                else if (Character.getNumericValue(handA.charAt(i+1)) == 8) {
+                    specialA = 8;
+                }
+            }
+        }
+
+        var handBSum = 0;
+        var handB = gameState[1][2].substring(1);
+        var specialB = 0;
+        for (int i = 0; i < gameState[1][1].length()-1; i+=2) {
+            if (handB.charAt(i) == species) {
+                handBSum += Character.getNumericValue(handB.charAt(i+1));
+                if (Character.getNumericValue(handB.charAt(i+1)) == 1) {
+                    specialB = 1;
+                }
+                else if (Character.getNumericValue(handB.charAt(i+1)) == 8) {
+                    specialB = 8;
+                }
+            }
+        }
+
+        if (specialA == 1 && specialB == 8) {
+            handBSum -= 8;
+        }
+        else if (specialA == 8 && specialB == 1) {
+            handASum -= 8;
+        }
+
+        if ((player == 'A' && handASum > handBSum) || (player == 'B' && handBSum > handASum) || handASum == handBSum) {
+            return true;
+        }
+        return false;
     }
 
     /**
