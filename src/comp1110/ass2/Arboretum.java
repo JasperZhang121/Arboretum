@@ -1,5 +1,8 @@
 package comp1110.ass2;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Set;
 
 public class Arboretum {
@@ -146,6 +149,35 @@ public class Arboretum {
         }
         return true;
     }
+
+    // Test Start:
+    @Test
+    void isCardSubstringTest (){
+        // test1: Capital species
+        String test1 = "a1a2a3a4b1b2b3b4c1C2c3c4c5";
+        Assertions.assertFalse(isCardSubstring(test1));
+        // test2: missing value of card
+        String test2 = "a1a2a3a";
+        Assertions.assertFalse(isCardSubstring(test2));
+        // test3: empty
+        String test3 = "";
+        Assertions.assertTrue(isCardSubstring(test3));
+    }
+
+    @Test
+    void areTheyPlacementSubstringTest (){
+        // test4: Unknown Direction
+        String test4 = "Aa1C00C00a2D00E01";
+        Assertions.assertFalse(areTheyPlacementSubstrings(test4));
+        // test5: missing char
+        String test5 = "Aa1C00C00a3C01C0";
+        Assertions.assertFalse(areTheyPlacementSubstrings(test5));
+        // test 6: missing first Card
+        String test6 ="Aa1S01E01";
+        Assertions.assertFalse(areTheyPlacementSubstrings(test6));
+    }
+
+    // Test end.
 
     /**
      * Given a deck string, draw a random card from the deck.
