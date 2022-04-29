@@ -269,13 +269,13 @@ public class Arboretum {
     @Test
     void adjacentLocations(){
         // test1: correct locations
-        Assertions.assertTrue(Arrays.equals(adjacentLocations("b2C00C00"),new String[] {"N01C00","S01C00","C00E01","C00W01"}));
+        Assertions.assertArrayEquals(adjacentLocations("b2C00C00"), new String[]{"N01C00", "S01C00", "C00E01", "C00W01"});
         // test2: correct locations
-        Assertions.assertTrue(Arrays.equals(adjacentLocations("j4N10E03"),new String[] {"N11E03","N09E03","N10E04","N10E02"}));
+        Assertions.assertArrayEquals(adjacentLocations("j4N10E03"), new String[]{"N11E03", "N09E03", "N10E04", "N10E02"});
         // test3: correct locations
-        Assertions.assertTrue(Arrays.equals(adjacentLocations("c2N10W03"),new String[] {"N11W03","N09W03","N10W04","N10W02"}));
+        Assertions.assertArrayEquals(adjacentLocations("c2N10W03"), new String[]{"N11W03", "N09W03", "N10W04", "N10W02"});
         // test4: correct locations
-        Assertions.assertTrue(Arrays.equals(adjacentLocations("m8S01W03"),new String[] {"S02W03","C00W03","S01W04","S01W02"}));
+        Assertions.assertArrayEquals(adjacentLocations("m8S01W03"), new String[]{"S02W03", "C00W03", "S01W04", "S01W02"});
         // test5: incorrect locations
         Assertions.assertFalse(Arrays.equals(adjacentLocations("b2C00C00"),new String[] {"N01C00","S01C01","C00E01","C00W01"}));
         // test6: incorrect locations
