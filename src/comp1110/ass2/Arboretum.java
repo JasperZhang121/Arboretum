@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 
 import java.util.Set;
 
@@ -64,7 +65,25 @@ public class Arboretum {
         return true;
     }
 
-
+    @Test
+    void isAlphaNumeric(){
+        // test1: out of numerical order with same while species
+        Assertions.assertFalse(isAlphaNumeric("a2a3a5b1b4b2c1c2c4j1"));
+        // test2: species out of alphabetical order
+        Assertions.assertFalse(isAlphaNumeric("b3j1c1j2m2m5m8"));
+        // test3: nonexistent species i
+        Assertions.assertFalse(isAlphaNumeric("a6b7b8c8d2j2i8"));
+        // test4: nonexistent species B
+        Assertions.assertFalse(isAlphaNumeric("a8b5B6c2c7d1"));
+        // test5: contains card that is not 2 character substring
+        Assertions.assertFalse(isAlphaNumeric("c1c2c3c4c5d2d4jj3m2"));
+        // test6: substring in alphanumeric order
+        Assertions.assertTrue(isAlphaNumeric("c1c2c3c4c5d2d4j3m2"));
+        // test7: substring in alphanumeric order
+        Assertions.assertTrue(isAlphaNumeric("a6b7b8c8d2j2j8"));
+        // test4: space at end of string
+        Assertions.assertFalse(isAlphaNumeric("a8b5B6c2c7d1 "));
+    }
     /**
      * A sharedState string array is well-formed if it complies with the following rules:
      *
@@ -245,6 +264,26 @@ public class Arboretum {
             else if (x) return "S" + str;
                 else return "W" + str;
         return d + str;
+    }
+
+    @Test
+    void adjacentLocations(){
+        // test1: correct locations
+        Assertions.assertArrayEquals(adjacentLocations("b2C00C00"), new String[]{"N01C00", "S01C00", "C00E01", "C00W01"});
+        // test2: correct locations
+        Assertions.assertArrayEquals(adjacentLocations("j4N10E03"), new String[]{"N11E03", "N09E03", "N10E04", "N10E02"});
+        // test3: correct locations
+        Assertions.assertArrayEquals(adjacentLocations("c2N10W03"), new String[]{"N11W03", "N09W03", "N10W04", "N10W02"});
+        // test4: correct locations
+        Assertions.assertArrayEquals(adjacentLocations("m8S01W03"), new String[]{"S02W03", "C00W03", "S01W04", "S01W02"});
+        // test5: incorrect locations
+        Assertions.assertFalse(Arrays.equals(adjacentLocations("b2C00C00"),new String[] {"N01C00","S01C01","C00E01","C00W01"}));
+        // test6: incorrect locations
+        Assertions.assertFalse(Arrays.equals(adjacentLocations("j4N10E03"),new String[] {"N11E03","N09E03","N10S04","N10E02"}));
+        // test7: incorrect locations
+        Assertions.assertFalse(Arrays.equals(adjacentLocations("c2N10W03"),new String[] {"N11W03","N09W03","N10E04","N10W02"}));
+        // test8: incorrect locations
+        Assertions.assertFalse(Arrays.equals(adjacentLocations("m8S01W03"),new String[] {"S22W03","C00W03","S01W04","S01W02"}));
     }
 
     /**
