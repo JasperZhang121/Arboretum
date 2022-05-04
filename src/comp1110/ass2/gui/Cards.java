@@ -1,15 +1,21 @@
 package comp1110.ass2.gui;
 
+import javafx.scene.image.Image;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class Cards {
-    String species;
-    String value;
+    private String species;
+    private String value;
+    private Image image;
 
     public Cards(String species, String value) {
         setSpecies(species);
         setValue(value);
+        //String file = species.charAt(0)+value+".png";
+        //image = new Image("comp1110/ass2/gui/images/"+file);
     }
 
     public String getSpecies() {
@@ -49,7 +55,15 @@ public class Cards {
 
     // method returns valid species for cards
     public static List<String> getValidSpecies(){
-        return Arrays.asList("Cassia","Blue_Spruce","Cherry_Blossom","Dogwood","Jacaranda","Maple");
+        return Arrays.asList("a_Cassia","b_Blue_Spruce","c_Cherry_Blossom","d_Dogwood","j_Jacaranda","m_Maple");
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     @Override
@@ -59,4 +73,15 @@ public class Cards {
                 ", value='" + value + '\'' +
                 '}';
     }
+
+
+   /* //test
+    public static void main(String[] args) {
+        String species= "abcdefj";
+        String value = "1";
+        String file = species.charAt(0)+value+".png";
+        var card1 = new Cards("a_Cassia","1");
+        System.out.println(file);
+        System.out.println(card1);
+    }*/
 }

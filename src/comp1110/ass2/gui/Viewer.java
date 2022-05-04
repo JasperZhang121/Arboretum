@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +13,10 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.ImageView;
 import java.awt.*;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class Viewer extends Application {
 
