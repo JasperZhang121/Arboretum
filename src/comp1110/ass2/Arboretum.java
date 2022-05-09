@@ -439,8 +439,8 @@ public class Arboretum {
      * TASK 10
      */
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
-        int turnIndex;
         // finds the index of the players arboretum within the sharedState of the gameState.
+        int turnIndex;
         if (gameState[0][0].equals("A")) turnIndex = 1;
         else turnIndex = 3;
         // If the players arboretum is empty the function returns the card at the centre position.
