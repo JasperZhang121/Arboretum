@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Arboretum {
@@ -438,8 +439,19 @@ public class Arboretum {
      * TASK 10
      */
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
-        return null;
-        //FIXME TASK 10
+        int turnIndex;
+        if (gameState[0][0].equals("A")) turnIndex = 1;
+        else turnIndex = 3;
+        Set<String> validPlacements = new HashSet<>();
+        if (gameState[0][turnIndex].length() == 1) validPlacements.add(card + "C00C00");
+        else{
+            for (int c = 1; c < (gameState[0][turnIndex].length() - 1); c += 8){
+                for (String position : adjacentLocations(gameState[0][turnIndex].substring(c, c + 8))) {
+                    if (!gameState[0][turnIndex].contains(position)) validPlacements.add(card + position);
+                }
+            }
+        }
+        return validPlacements;
     }
 
     /**
