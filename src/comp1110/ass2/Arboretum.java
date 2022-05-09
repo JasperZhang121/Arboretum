@@ -440,10 +440,15 @@ public class Arboretum {
      */
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
         int turnIndex;
+        // finds the index of the players arboretum within the sharedState of the gameState.
         if (gameState[0][0].equals("A")) turnIndex = 1;
         else turnIndex = 3;
+        // If the players arboretum is empty the function returns the card at the centre position.
         Set<String> validPlacements = new HashSet<>();
         if (gameState[0][turnIndex].length() == 1) validPlacements.add(card + "C00C00");
+        // The adjacentLocations helper function is used to find the adjacent locations of each card in the players
+        // arboretum, adding the locations with the card prepended to them so long that the position is not contained
+        // the players arboretum.
         else{
             for (int c = 1; c < (gameState[0][turnIndex].length() - 1); c += 8){
                 for (String position : adjacentLocations(gameState[0][turnIndex].substring(c, c + 8))) {
