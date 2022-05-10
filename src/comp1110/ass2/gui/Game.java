@@ -42,63 +42,65 @@ public class Game extends Application {
         root.getChildren().addAll(handA,Arboretum,handB,discardA,discardB,deck,Arboretum_Center,ID);
 
 
+        //Add images
+        for (int i = 0; i < 8; i++) {
+            Image image = new Image(getClass().getResource("images/a"+(i+1)+".png").toURI().toString());
+            ImageView iv = new ImageView(image);
+            iv.setFitHeight(70);
+            iv.setFitWidth(50);
+            iv.setX(i * 50);
+            iv.setY(560);
+            root.getChildren().add(iv);
+
+            Image image1 = new Image(getClass().getResource("images/b"+(i+1)+".png").toURI().toString());
+            ImageView iv1 = new ImageView(image1);
+            iv1.setFitHeight(70);
+            iv1.setFitWidth(50);
+            iv1.setX(i * 50);
+            iv1.setY(630);
+            root.getChildren().add(iv1);
+
+            Image image2 = new Image(getClass().getResource("images/c"+(i+1)+".png").toURI().toString());
+            ImageView iv2 = new ImageView(image2);
+            iv2.setFitHeight(70);
+            iv2.setFitWidth(50);
+            iv2.setX(400+ i * 50);
+            iv2.setY(630);
+            root.getChildren().add(iv2);
+
+            Image image3 = new Image(getClass().getResource("images/d"+(i+1)+".png").toURI().toString());
+            ImageView iv3 = new ImageView(image3);
+            iv3.setFitHeight(70);
+            iv3.setFitWidth(50);
+            iv3.setX(400+i * 50);
+            iv3.setY(560);
+            root.getChildren().add(iv3);
+
+            Image image4 = new Image(getClass().getResource("images/j"+(i+1)+".png").toURI().toString());
+            ImageView iv4 = new ImageView(image4);
+            iv4.setFitHeight(70);
+            iv4.setFitWidth(50);
+            iv4.setX(800+i * 50);
+            iv4.setY(560);
+            root.getChildren().add(iv4);
+
+            Image image5 = new Image(getClass().getResource("images/m"+(i+1)+".png").toURI().toString());
+            ImageView iv5 = new ImageView(image5);
+            iv5.setFitHeight(70);
+            iv5.setFitWidth(50);
+            iv5.setX(800+ i * 50);
+            iv5.setY(630);
+            root.getChildren().add(iv5);
 
 
-        //Add image
-        Image image = new Image(getClass().getResource("images/a1.png").toURI().toString());
-        ImageView iv = new ImageView(image);
-        iv.setFitHeight(70);
-        iv.setFitWidth(50);
-        iv.setX(600);
-        iv.setY(350);
-        root.getChildren().add(iv);
-
+        }
 
 
         // default
         stage.setScene(scene);
         stage.show();
-    }
 
 
-    void displayState(String[][] gameState) throws Exception {
-        // String [sharedState][hiddenState]
-        // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
-        // Hidden : Deck       HandA        HandB
-        int NSC =0;
-        int EWC =0;
-        int oneSquare = 20;
-        cardsPlacementGame(gameState,1,800,250);
-        cardsPlacementGame(gameState,3,500,450);
 
-    }
-
-    void cardsPlacementGame(String[][] gameState,int Arboretum,int centerX,int centerY) throws Exception{
-
-        StringBuilder stringBuilder = new StringBuilder();
-        int NSC =0;
-        int EWC =0;
-        int oneSquare = 20;
-        String a = gameState[0][Arboretum].substring(1);
-        for (int i = 0; i < a.substring(1).length(); i++) {
-            if (i!=0 && i%8==0){
-                int distanceNS = Integer.parseInt(a.substring(i+3,i+5));
-                int distanceEW = Integer.parseInt(a.substring(i+6,i+8));
-                if (a.charAt(i+2) == 'N') NSC = distanceNS;
-                if (a.charAt(i+2) == 'S') NSC = -1*distanceNS;
-                if (a.charAt(i+2) == 'C') NSC = 0;
-                if (a.charAt(i+5) == 'E') EWC = distanceEW;
-                if (a.charAt(i+5) == 'W') EWC = -1*distanceEW;
-                if (a.charAt(i+5) == 'C') EWC = 0;
-                stringBuilder.append("("+ EWC+","+NSC+")");
-
-                Image image = new Image(getClass().getResource("images/"+a.substring(i,i+2)+".png").toURI().toString());
-                int w = (int)image.getWidth();
-                int h =(int)image.getHeight();
-                ImageView iv = new ImageView(image);
-
-                var cardAB = new Text(centerX+EWC*oneSquare,centerY-NSC*oneSquare,a.substring(i,i+2));
-            }
-        }
     }
 }
