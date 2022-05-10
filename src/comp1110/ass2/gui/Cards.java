@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,8 +15,6 @@ public class Cards {
     public Cards(String species, String value) {
         setSpecies(species);
         setValue(value);
-        //String file = species.charAt(0)+value+".png";
-        //image = new Image("comp1110/ass2/gui/images/"+file);
     }
 
     public String getSpecies() {
@@ -74,14 +73,14 @@ public class Cards {
                 '}';
     }
 
+    // get the image of the card
+    public ImageView getCardImage(){
+        String url = "images/"+species.charAt(0)+value+".png";
+        ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
+        iv.setFitWidth(70);
+        iv.setY(50);
+        return iv;
+    }
 
-   /* //test
-    public static void main(String[] args) {
-        String species= "abcdefj";
-        String value = "1";
-        String file = species.charAt(0)+value+".png";
-        var card1 = new Cards("a_Cassia","1");
-        System.out.println(file);
-        System.out.println(card1);
-    }*/
+
 }

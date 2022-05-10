@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Deck {
     private ArrayList<Cards>deck;
-
     // collection of cards
     public Deck(ArrayList<Cards> deck) {
         this.deck = deck;
@@ -22,10 +21,5 @@ public class Deck {
                 deck.add(new Cards(specie,value));
             }
         }
-    }
-
-    public static void main(String[] args) {
-        var deck = new Deck();
-
     }
 }
