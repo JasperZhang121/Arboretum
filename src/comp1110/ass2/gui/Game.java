@@ -1,14 +1,20 @@
 package comp1110.ass2.gui;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.dnd.MouseDragGestureRecognizer;
 import java.io.FileInputStream;
 import java.util.Collection;
 
@@ -42,6 +48,8 @@ public class Game extends Application {
         root.getChildren().addAll(handA,Arboretum,handB,discardA,discardB,deck,Arboretum_Center,ID);
 
 
+
+
         //Add images
         for (int i = 0; i < 8; i++) {
             Image image = new Image(getClass().getResource("images/a"+(i+1)+".png").toURI().toString());
@@ -50,6 +58,17 @@ public class Game extends Application {
             iv.setFitWidth(50);
             iv.setX(i * 50);
             iv.setY(560);
+
+            iv.setOnDragDetected(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                   Dragboard cassia =  iv.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent content = new ClipboardContent();
+                    content.putImage(image);
+                    cassia.setContent(content);
+                }
+            });
+
             root.getChildren().add(iv);
 
             Image image1 = new Image(getClass().getResource("images/b"+(i+1)+".png").toURI().toString());
@@ -91,8 +110,6 @@ public class Game extends Application {
             iv5.setX(800+ i * 50);
             iv5.setY(630);
             root.getChildren().add(iv5);
-
-
         }
 
 
