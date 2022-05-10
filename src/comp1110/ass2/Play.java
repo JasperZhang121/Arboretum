@@ -1,8 +1,27 @@
 package comp1110.ass2;
 
 public class Play {
+    static String turn;
+    static String deck;
+    static String handA;
+    static String handB;
+    static String arboretumA;
+    static String arboretumB;
+    static String discardA;
+    static String discardB;
 
-    public void DrawSevenCards (){
+    public Play(String[][] gameState) {
+        this.turn = gameState[0][0];
+        this.arboretumA = gameState[0][1];
+        this.handA = gameState[0][2];
+        this.arboretumB = gameState[0][3];
+        this.handB = gameState[0][4];
+        this.deck = gameState[1][0];
+        this.discardA = gameState[1][1];
+        this.discardB = gameState[1][2];
+    }
+
+    public void DrawSevenCards(){
 
     }
 
@@ -18,15 +37,15 @@ public class Play {
 
     }
 
-    public void Discard(){
+    public void Discard() {
 
     }
 
-    public void Turn(){
-
+    public String Turn() {
+        return turn;
     }
 
-   public  int Comparing (int [] TwoCardsOfPlayerA, int [] TwoCardsOfPlayerB){
+   public int Comparing (int [] TwoCardsOfPlayerA, int [] TwoCardsOfPlayerB){
 
         return 1;// higher score
    }

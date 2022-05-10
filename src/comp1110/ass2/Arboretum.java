@@ -439,7 +439,7 @@ public class Arboretum {
      * TASK 10
      */
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
-        // finds the index of the players arboretum within the sharedState of the gameState.
+        // finds the index of the player's arboretum within the sharedState of the gameState.
         int turnIndex;
         if (gameState[0][0].equals("A")) turnIndex = 1;
         else turnIndex = 3;
@@ -525,6 +525,7 @@ public class Arboretum {
      * pile.
      * TASK 14
      */
+   // draw a card from pile only if last is consecutive of a species (can create a path)
     public static String chooseDrawLocation(String[][] gameState) {
         return null;
         // FIXME TASK 14
@@ -550,6 +551,7 @@ public class Arboretum {
      * @return a valid move for this player.
      * TASK 15
      */
+    // use the same heuristic for task 14 and discard the least useful card
     public static String[] generateMove(String[][] gameState) {
         return null;
         // FIXME TASK 15
