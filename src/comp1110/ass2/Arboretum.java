@@ -525,24 +525,43 @@ public class Arboretum {
      */
    // draw a card from pile only if last is consecutive of a species (can create a path)
     public static String chooseDrawLocation(String[][] gameState) {
-        return null;
+        var player = gameState[0][0].charAt(0);
+        return heuristic(gameState,player);
         // FIXME TASK 14
     }
 
     /**
-     *
+     * get the card that will extend the path
+     * iterate over all the sorted optimal cards and check whether discard either discard top card is that card
+     * if no optimal card is found, draw from deck
      * @return where to draw (deck, discardA or discardB)
      */
     public static String heuristic(String[][] gameState, char player) {
         Set<String> path = new HashSet<>();
+        var discardA = "";
+        var discardB = "";
+        if (gameState[0][2].length() > 1) {
+            discardA = Character.toString(gameState[0][2].charAt(gameState[0][2].length() - 2) + gameState[0][2].charAt(gameState[0][2].length() - 1));
+        }
+        if (gameState[0][4].length() > 1) {
+            discardB = Character.toString(gameState[0][4].charAt(gameState[0][4].length() - 2) + gameState[0][4].charAt(gameState[0][4].length() - 1));
+        }
         var species = allSpecies(gameState,player);
         for (int i = 0; i < species.length(); i++) {
             path.addAll(getAllViablePaths(gameState,player,species.charAt(i)));
         }
-        return null;
+        var target = sortedOptimalCards(optimalCards(path));
+        for (var card : target) {
+            if (discardA.equals(card) || discardB.equals(card)) {
+                return card;
+            }
+        }
+        return "D";
     }
 
     /**
+     * get all the species that a player owns
+     * considered cards are in hand and arboretum
      * @return all the species available on arboretum
      */
     public static String allSpecies(String[][] gameState, char player) {
@@ -566,7 +585,37 @@ public class Arboretum {
         }
         return species;
     }
+    /**
+     * get the start and end cards of each path
+     * check if there is a lower or higher card value to connect
+     * card at the beginning and in the end must be the same species
+     * @return list of cards optimal for the player
+     */
+    public static ArrayList<String> optimalCards(Set<String> paths) {
+        ArrayList<String> cards = new ArrayList<String>();
+        for (var path : paths) {
+            var first = path.substring(0,2);
+            if (!cards.contains(first)) {
+                cards.add(first);
+            }
+            if (path.length() > 2) {
+                var last = Character.toString(path.charAt(path.length() - 2) + path.charAt(path.length() - 1));
+                if (!cards.contains(last)) {
+                    cards.add(last);
+                }
+            }
+        }
+        return cards;
+    }
 
+    /**
+     * @return a sorted of optimal cards to get the best path score
+     */
+    public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
+        for (var card : cards) {
+        }
+        return null;
+    }
     /**
      * AI Part 2:
      * Generate a moveString array for the player whose turn it is.
