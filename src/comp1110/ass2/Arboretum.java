@@ -2,10 +2,8 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import java.util.Arrays;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Arboretum {
 
@@ -531,6 +529,43 @@ public class Arboretum {
         // FIXME TASK 14
     }
 
+    /**
+     *
+     * @return where to draw (deck, discardA or discardB)
+     */
+    public static String heuristic(String[][] gameState, char player) {
+        Set<String> path = new HashSet<>();
+        var species = allSpecies(gameState,player);
+        for (int i = 0; i < species.length(); i++) {
+            path.addAll(getAllViablePaths(gameState,player,species.charAt(i)));
+        }
+        return null;
+    }
+
+    /**
+     * @return all the species available on arboretum
+     */
+    public static String allSpecies(String[][] gameState, char player) {
+        var cardsA = gameState[1][1].substring(1) + removePosition(gameState[0][1]);
+        var cardsB = gameState[1][2].substring(1) + removePosition(gameState[0][3]);
+        var play = gameState[0][0];
+        String species = new String();
+        if (play == "A") {
+            for (int i = 0; i < cardsA.length(); i+=2) {
+                if (!species.contains(Character.toString(cardsA.charAt(i)))) {
+                    species += cardsA.charAt(i);
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < cardsB.length(); i+=2) {
+                if (!species.contains(Character.toString(cardsB.charAt(i)))) {
+                    species += cardsB.charAt(i);
+                }
+            }
+        }
+        return species;
+    }
 
     /**
      * AI Part 2:
