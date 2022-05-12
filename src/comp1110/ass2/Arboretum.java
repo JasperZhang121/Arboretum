@@ -612,10 +612,19 @@ public class Arboretum {
      * @return a sorted of optimal cards to get the best path score
      */
     public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
-        for (var card : cards) {
+        for (int i = 0; i < cards.size()-1; i++) {
+            var index = i;
+            var largest = Integer.parseInt(cards.get(i).substring(1));
+            for (int j = i + 1; j < cards.size() - 2; j++)
+                if (Integer.parseInt(cards.get(j).substring(1)) > largest) {
+                    largest = Integer.parseInt(cards.get(j).substring(1));
+                    index = j;
+                }
+            Collections.swap(cards,i,index);
         }
-        return null;
+        return cards;
     }
+
     /**
      * AI Part 2:
      * Generate a moveString array for the player whose turn it is.
