@@ -540,6 +540,7 @@ public class Arboretum {
         Set<String> path = new HashSet<>();
         var discardA = "";
         var discardB = "";
+        var deck = gameState[1][0];
         if (gameState[0][2].length() > 1) {
             discardA = Character.toString(gameState[0][2].charAt(gameState[0][2].length() - 2) + gameState[0][2].charAt(gameState[0][2].length() - 1));
         }
@@ -548,13 +549,18 @@ public class Arboretum {
         }
         var species = allSpecies(gameState,player);
         for (int i = 0; i < species.length(); i++) {
-            path.addAll(getAllViablePaths(gameState,player,species.charAt(i)));
+            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && getAllViablePaths(gameState,player,species.charAt(i)).size() > 0) {
+                path.addAll(getAllViablePaths(gameState, player, species.charAt(i)));
+            }
         }
         var target = sortedOptimalCards(optimalCards(path));
         for (var card : target) {
             if (discardA.equals(card) || discardB.equals(card)) {
                 return card;
             }
+        }
+        if (deck.length() == 0) {
+            return discardA;
         }
         return "D";
     }
