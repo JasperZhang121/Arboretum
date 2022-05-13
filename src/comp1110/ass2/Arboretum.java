@@ -597,7 +597,7 @@ public class Arboretum {
                 continue;
             }
             var paths = getAllViablePaths(gameState,player,species.charAt(i));
-            if (path.isEmpty()) {
+            if (paths.isEmpty()) {
                 continue;
             }
             for (var p : paths) {
@@ -648,20 +648,22 @@ public class Arboretum {
     /**
      * get the start and end cards of each path
      * check if there is a lower or higher card value to connect
-     * card at the beginning and in the end must be the same species
+     * card at the beginning and in the end must be the same species (haven't check)
      * @return list of cards optimal for the player
      */
     public static ArrayList<String> optimalCards(Set<String> paths) {
         ArrayList<String> cards = new ArrayList<String>();
         for (var path : paths) {
-            var first = path.substring(0,2);
-            if (!cards.contains(first)) {
-                cards.add(first);
+            var first = path.substring(0, 2);
+            var next = first.substring(0, 1) + Character.getNumericValue(first.charAt(1) - 1);
+            if (!cards.contains(next) && (Character.getNumericValue(first.charAt(1)) - 1) > 0) {
+                cards.add(next);
             }
             if (path.length() > 2) {
-                var last = Character.toString(path.charAt(path.length() - 2) + path.charAt(path.length() - 1));
-                if (!cards.contains(last)) {
-                    cards.add(last);
+                var last = path.substring(path.length() - 2);
+                var temp = last.substring(0, 1) + Character.getNumericValue(last.charAt(1) + 1);
+                if (!cards.contains(temp) && (Character.getNumericValue(last.charAt(1)) + 1) <= 8) {
+                    cards.add(temp);
                 }
             }
         }
@@ -675,10 +677,10 @@ public class Arboretum {
         if (cards.isEmpty()) {
             return cards;
         }
-        for (int i = 0; i < cards.size()-1; i++) {
+        for (int i = 0; i < cards.size() - 1; i++) {
             var index = i;
             var largest = Integer.parseInt(cards.get(i).substring(1));
-            for (int j = i + 1; j < cards.size() - 2; j++)
+            for (int j = i + 1; j < cards.size(); j++)
                 if (Integer.parseInt(cards.get(j).substring(1)) > largest) {
                     largest = Integer.parseInt(cards.get(j).substring(1));
                     index = j;
@@ -709,6 +711,18 @@ public class Arboretum {
      */
     // use the same heuristic for task 14 and discard the least useful card
     public static String[] generateMove(String[][] gameState) {
+        String[] move = new String[2];
+        var play = chooseDrawLocation(gameState);
+        if (gameState[0][0] == "A") {
+            var hand = gameState[1][1];
+        }
+        else {
+            var hand = gameState[1][2];
+        }
+        if (!play.equals("D")) {
+            var placement = getAllValidPlacements(gameState,play);
+
+        }
         return null;
         // FIXME TASK 15
     }
