@@ -243,7 +243,7 @@ public class Arboretum {
             }
         }
         return turn && gameState[1][1].contains(a) && gameState[1][1].length() == 19 && !gameState[0][1].contains(b)
-                || !turn && gameState[1][2].contains(a) && gameState[1][2].length() == 19 && !gameState[0][3].contains(b);
+                || !turn && gameState[1][2].contains(a) && gameState[1][2].length()==19 && !gameState[0][3].contains(b);
     }
     public static String[] adjacentLocations (String placement){
         String a = placement.substring(2, 5); String b = placement.substring(5, 8);
@@ -385,11 +385,12 @@ public class Arboretum {
         var specialA = 0;
         for (int i = 0; i < gameState[1][1].length()-1; i+=2) {
             if (handA.charAt(i) == species) {
-                handASum += Character.getNumericValue(handA.charAt(i+1));
-                if (Character.getNumericValue(handA.charAt(i+1)) == 1) {
+                int value = Character.getNumericValue(handA.charAt(i + 1));
+                handASum += value;
+                if (value == 1) {
                     specialA = 1;
                 }
-                else if (Character.getNumericValue(handA.charAt(i+1)) == 8) {
+                else if (value == 8) {
                     specialA = 8;
                 }
             }
@@ -400,11 +401,12 @@ public class Arboretum {
         var specialB = 0;
         for (int i = 0; i < gameState[1][2].length()-1; i+=2) {
             if (handB.charAt(i) == species) {
-                handBSum += Character.getNumericValue(handB.charAt(i+1));
-                if (Character.getNumericValue(handB.charAt(i+1)) == 1) {
+                int value = Character.getNumericValue(handB.charAt(i + 1));
+                handBSum += value;
+                if (value == 1) {
                     specialB = 1;
                 }
-                else if (Character.getNumericValue(handB.charAt(i+1)) == 8) {
+                else if (value == 8) {
                     specialB = 8;
                 }
             }
@@ -588,18 +590,17 @@ public class Arboretum {
         if (gameState[0][4].length() > 1) {
             discardB = gameState[0][4].substring(gameState[0][4].length() - 2);
         }
-        var species = allSpecies(gameState,player);
+        var species = allSpecies(gameState);
         for (int i = 0; i < species.length(); i++) {
             if (getAllViablePaths(gameState,player,species.charAt(i)) == null) {
                 continue;
             }
             var paths = getAllViablePaths(gameState,player,species.charAt(i));
+            assert paths != null;
             if (paths.isEmpty()) {
                 continue;
             }
-            for (var p : paths) {
-                path.add(p);
-            }
+            path.addAll(paths);
         }
         var target = sortedOptimalCards(optimalCards(path));
         for (var card : target) {
@@ -620,29 +621,28 @@ public class Arboretum {
      * get all the species that a player owns
      * considered cards are those in player's hand and arboretum
      * @param gameState
-     * @param player
      * @return all the species available on arboretum as a string
      */
-    public static String allSpecies(String[][] gameState, char player) {
+    public static String allSpecies(String[][] gameState) {
         var cardsA = gameState[1][1].substring(1) + removePosition(gameState[0][1]);
         var cardsB = gameState[1][2].substring(1) + removePosition(gameState[0][3]);
         var play = gameState[0][0];
-        String species = new String();
-        if (play == "A") {
+        StringBuilder species = new StringBuilder();
+        if (play.equals("A")) {
             for (int i = 0; i < cardsA.length(); i+=2) {
-                if (!species.contains(Character.toString(cardsA.charAt(i)))) {
-                    species += cardsA.charAt(i);
+                if (!species.toString().contains(Character.toString(cardsA.charAt(i)))) {
+                    species.append(cardsA.charAt(i));
                 }
             }
         }
         else {
             for (int i = 0; i < cardsB.length(); i+=2) {
-                if (!species.contains(Character.toString(cardsB.charAt(i)))) {
-                    species += cardsB.charAt(i);
+                if (!species.toString().contains(Character.toString(cardsB.charAt(i)))) {
+                    species.append(cardsB.charAt(i));
                 }
             }
         }
-        return species;
+        return species.toString();
     }
     /**
      * get the start and end cards of each path
@@ -652,7 +652,7 @@ public class Arboretum {
      * @return list of cards optimal for the player
      */
     public static ArrayList<String> optimalCards(Set<String> paths) {
-        ArrayList<String> cards = new ArrayList<String>();
+        ArrayList<String> cards = new ArrayList<>();
         for (var path : paths) {
             var first = path.substring(0, 2);
             var next = first.substring(0, 1) + Character.getNumericValue(first.charAt(1) - 1);
