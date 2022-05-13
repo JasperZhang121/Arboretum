@@ -417,10 +417,7 @@ public class Arboretum {
             handASum -= 8;
         }
 
-        if ((player == 'A' && handASum > handBSum) || (player == 'B' && handBSum > handASum) || handASum == handBSum) {
-            return true;
-        }
-        return false;
+        return (player == 'A' && handASum > handBSum) || (player == 'B' && handBSum > handASum) || handASum == handBSum;
     }
 
     /**
@@ -529,7 +526,24 @@ public class Arboretum {
      * TASK 13
      */
     public static int getHighestViablePathScore(String[][] gameState, char player, char species) {
-        return Integer.MIN_VALUE;
+        if (!canScore(gameState, player, species)) return -1;
+        int highestScore = 0;
+        for (String path : Objects.requireNonNull(getAllViablePaths(gameState, player, species))) {
+            int score = path.length()/2;
+            int scoreCopy = score;
+            boolean sameSpecies = true;
+            for (int i = 0; i < scoreCopy * 2; i += 2) {
+                if (path.charAt(i) != species) {
+                    sameSpecies = false;
+                    break;
+                }
+            }
+            if (path.length() >= 8 && sameSpecies) score = scoreCopy * 2;
+            if (path.charAt(scoreCopy * 2 - 1) == '8') score += 2;
+            if (path.charAt(1) == '1') score++;
+            if (score > highestScore) highestScore = score;
+        }
+        return highestScore;
         // FIXME TASK 13
     }
 
@@ -578,7 +592,7 @@ public class Arboretum {
         }
         var species = allSpecies(gameState,player);
         for (int i = 0; i < species.length(); i++) {
-            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && getAllViablePaths(gameState,player,species.charAt(i)).size() > 0) {
+            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && Objects.requireNonNull(getAllViablePaths(gameState, player, species.charAt(i))).size() > 0) {
                 path.addAll(getAllViablePaths(gameState, player, species.charAt(i)));
             }
         }
