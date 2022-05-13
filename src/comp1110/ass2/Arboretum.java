@@ -611,7 +611,10 @@ public class Arboretum {
             }
         }
         if (deck.length() == 0) {
-            return discardA;
+            if (discardA.charAt(1) > discardB.charAt(1)) {
+                return discardA;
+            }
+            return discardB;
         }
         return "D";
     }
