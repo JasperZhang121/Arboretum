@@ -482,8 +482,37 @@ public class Arboretum {
      * TASK 12
      */
     public static Set<String> getAllViablePaths(String[][] gameState, char player, char species) {
-        return null;
+        if (!canScore(gameState, player, species)) return null;
+        int turnIndex;
+        if (player ==  'A') turnIndex = 1;
+        else turnIndex = 3;
+        Set<String> viablePaths = new HashSet<>();
+        for (int i = 1; i < gameState[0][turnIndex].length(); i += 8) {
+            if (gameState[0][turnIndex].charAt(i) == species){
+                viablePaths.addAll(viablePathsFromCard(gameState[0][turnIndex]
+                        , gameState[0][turnIndex].substring(i, i + 8)
+                        , gameState[0][turnIndex].substring(i, i + 2), species, new HashSet<>()));
+            }
+        }
+        return viablePaths;
         // FIXME TASK 12
+    }
+    public static HashSet<String> nextValidCards (String arboretum, String card) {
+        String[] adjacentPlaces = adjacentLocations(card);
+        HashSet<String> nextCards = new HashSet<>();
+        for (int i = 0; i < 4; i++) {
+            int index = arboretum.indexOf(adjacentPlaces[i]);
+            if (index != -1 && arboretum.charAt(index - 1) > card.charAt(1))
+                nextCards.add(arboretum.substring(index - 2, index + 6));
+        }
+        return nextCards;
+    }
+    public static HashSet<String> viablePathsFromCard(String arboretum, String card, String path, char species, HashSet<String> validPaths) {
+        HashSet<String> validCards = nextValidCards(arboretum, card);
+        if (card.charAt(0) == species && path.length() > 2) validPaths.add(path);
+        validCards.forEach(nextCard -> validPaths.addAll(viablePathsFromCard
+                (arboretum, nextCard, path + nextCard.substring(0, 2), species, validPaths)));
+        return validPaths;
     }
 
     /**
