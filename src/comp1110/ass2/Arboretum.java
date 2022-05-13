@@ -494,7 +494,7 @@ public class Arboretum {
         return viablePaths;
         // FIXME TASK 12
     }
-    public static HashSet<String> nextValidCards (String arboretum, String card) {
+    public static HashSet<String> viablePathsFromCard(String arboretum, String card, String path, char species, HashSet<String> validPaths) {
         String[] adjacentPlaces = adjacentLocations(card);
         HashSet<String> nextCards = new HashSet<>();
         for (int i = 0; i < 4; i++) {
@@ -502,12 +502,8 @@ public class Arboretum {
             if (index != -1 && arboretum.charAt(index - 1) > card.charAt(1))
                 nextCards.add(arboretum.substring(index - 2, index + 6));
         }
-        return nextCards;
-    }
-    public static HashSet<String> viablePathsFromCard(String arboretum, String card, String path, char species, HashSet<String> validPaths) {
-        HashSet<String> validCards = nextValidCards(arboretum, card);
         if (card.charAt(0) == species && path.length() > 2) validPaths.add(path);
-        validCards.forEach(nextCard -> validPaths.addAll(viablePathsFromCard
+        nextCards.forEach(nextCard -> validPaths.addAll(viablePathsFromCard
                 (arboretum, nextCard, path + nextCard.substring(0, 2), species, validPaths)));
         return validPaths;
     }
