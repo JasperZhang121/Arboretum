@@ -398,7 +398,7 @@ public class Arboretum {
         var handBSum = 0;
         var handB = gameState[1][2].substring(1);
         var specialB = 0;
-        for (int i = 0; i < gameState[1][1].length()-1; i+=2) {
+        for (int i = 0; i < gameState[1][2].length()-1; i+=2) {
             if (handB.charAt(i) == species) {
                 handBSum += Character.getNumericValue(handB.charAt(i+1));
                 if (Character.getNumericValue(handB.charAt(i+1)) == 1) {
@@ -586,15 +586,22 @@ public class Arboretum {
         var discardB = "";
         var deck = gameState[1][0];
         if (gameState[0][2].length() > 1) {
-            discardA = Character.toString(gameState[0][2].charAt(gameState[0][2].length() - 2) + gameState[0][2].charAt(gameState[0][2].length() - 1));
+            discardA = gameState[0][2].substring(gameState[0][2].length() - 2);
         }
         if (gameState[0][4].length() > 1) {
-            discardB = Character.toString(gameState[0][4].charAt(gameState[0][4].length() - 2) + gameState[0][4].charAt(gameState[0][4].length() - 1));
+            discardB = gameState[0][4].substring(gameState[0][4].length() - 2);
         }
         var species = allSpecies(gameState,player);
         for (int i = 0; i < species.length(); i++) {
-            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && !getAllViablePaths(gameState, player, species.charAt(i)).isEmpty()) {
-                path.addAll(getAllViablePaths(gameState, player, species.charAt(i)));
+            if (getAllViablePaths(gameState,player,species.charAt(i)) == null) {
+                continue;
+            }
+            var paths = getAllViablePaths(gameState,player,species.charAt(i));
+            if (path.isEmpty()) {
+                continue;
+            }
+            for (var p : paths) {
+                path.add(p);
             }
         }
         var target = sortedOptimalCards(optimalCards(path));
@@ -662,6 +669,9 @@ public class Arboretum {
      * @return a sorted of optimal cards to get the best path score
      */
     public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
+        if (cards.isEmpty()) {
+            return cards;
+        }
         for (int i = 0; i < cards.size()-1; i++) {
             var index = i;
             var largest = Integer.parseInt(cards.get(i).substring(1));
