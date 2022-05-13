@@ -566,7 +566,6 @@ public class Arboretum {
      * pile.
      * TASK 14
      */
-   // draw a card from pile only if last is consecutive of a species (can create a path)
     public static String chooseDrawLocation(String[][] gameState) {
         var player = gameState[0][0].charAt(0);
         return heuristic(gameState,player);
@@ -575,9 +574,11 @@ public class Arboretum {
 
     /**
      * get the card that will extend the path
-     * iterate over all the sorted optimal cards and check whether discard either discard top card is that card
+     * iterate over all the sorted optimal cards and decide where or what to draw
      * if no optimal card is found, draw from deck
-     * if deck has no card, dram from discard pile A
+     * if deck has no card, dram from discard pile that has bigger card value
+     * @param gameState
+     * @param player
      * @return where to draw (deck, discardA or discardB)
      */
     public static String heuristic(String[][] gameState, char player) {
@@ -621,7 +622,9 @@ public class Arboretum {
 
     /**
      * get all the species that a player owns
-     * considered cards are in hand and arboretum
+     * considered cards are those in player's hand and arboretum
+     * @param gameState
+     * @param player
      * @return all the species available on arboretum as a string
      */
     public static String allSpecies(String[][] gameState, char player) {
@@ -649,6 +652,7 @@ public class Arboretum {
      * get the start and end cards of each path
      * check if there is a lower or higher card value to connect
      * card at the beginning and in the end must be the same species (haven't check)
+     * @param paths
      * @return list of cards optimal for the player
      */
     public static ArrayList<String> optimalCards(Set<String> paths) {
@@ -671,6 +675,8 @@ public class Arboretum {
     }
 
     /**
+     * sort the optimal cards by species and value in descending order
+     * @param cards
      * @return a sorted of optimal cards to get the best path score
      */
     public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
