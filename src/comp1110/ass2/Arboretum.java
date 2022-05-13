@@ -650,8 +650,8 @@ public class Arboretum {
     }
     /**
      * get the start and end cards of each path
-     * check if there is a lower or higher card value to connect
-     * card at the beginning and in the end must be the same species (haven't check)
+     * check if there is a lower or higher card value to connect (only get 1 higher or lower but not all lower)
+     * card at the beginning and in the end must be the same species
      * @param paths
      * @return list of cards optimal for the player
      */
@@ -659,15 +659,23 @@ public class Arboretum {
         ArrayList<String> cards = new ArrayList<String>();
         for (var path : paths) {
             var first = path.substring(0, 2);
+            var last = path.substring(path.length() - 2);
             var next = first.substring(0, 1) + Character.getNumericValue(first.charAt(1) - 1);
+            var next2 = last.substring(0,1) + Character.getNumericValue(first.charAt(1) - 1);
             if (!cards.contains(next) && (Character.getNumericValue(first.charAt(1)) - 1) > 0) {
                 cards.add(next);
             }
+            if (!cards.contains(next2) && (Character.getNumericValue(first.charAt(1)) - 1) > 0) {
+                cards.add(next2);
+            }
             if (path.length() > 2) {
-                var last = path.substring(path.length() - 2);
                 var temp = last.substring(0, 1) + Character.getNumericValue(last.charAt(1) + 1);
+                var temp2 = first.substring(0, 1) + Character.getNumericValue(last.charAt(1) + 1);
                 if (!cards.contains(temp) && (Character.getNumericValue(last.charAt(1)) + 1) <= 8) {
                     cards.add(temp);
+                }
+                if (!cards.contains(temp2) && (Character.getNumericValue(last.charAt(1)) + 1) <= 8) {
+                    cards.add(temp2);
                 }
             }
         }
