@@ -529,7 +529,21 @@ public class Arboretum {
      * TASK 13
      */
     public static int getHighestViablePathScore(String[][] gameState, char player, char species) {
-        return Integer.MIN_VALUE;
+        if (!canScore(gameState, player, species)) return -1;
+        int highestScore = 0;
+        for (String path : getAllViablePaths(gameState, player, species)) {
+            int score = path.length()/2;
+            int scoreCopy = score;
+            boolean sameSpecies = true;
+            for (int i = 0; i < scoreCopy * 2; i += 2) {
+                if (path.charAt(i) != species) sameSpecies = false;
+            }
+            if (path.length() >= 8 && sameSpecies) score = scoreCopy * 2;
+            if (path.charAt(scoreCopy * 2 - 1) == '8') score += 2;
+            if (path.charAt(1) == '1') score++;
+            if (score > highestScore) highestScore = score;
+        }
+        return highestScore;
         // FIXME TASK 13
     }
 
