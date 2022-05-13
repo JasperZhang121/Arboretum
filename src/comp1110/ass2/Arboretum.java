@@ -577,6 +577,7 @@ public class Arboretum {
      * get the card that will extend the path
      * iterate over all the sorted optimal cards and check whether discard either discard top card is that card
      * if no optimal card is found, draw from deck
+     * if deck has no card, dram from discard pile A
      * @return where to draw (deck, discardA or discardB)
      */
     public static String heuristic(String[][] gameState, char player) {
@@ -592,7 +593,7 @@ public class Arboretum {
         }
         var species = allSpecies(gameState,player);
         for (int i = 0; i < species.length(); i++) {
-            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && Objects.requireNonNull(getAllViablePaths(gameState, player, species.charAt(i))).size() > 0) {
+            if (getAllViablePaths(gameState,player,species.charAt(i)) != null && !getAllViablePaths(gameState, player, species.charAt(i)).isEmpty()) {
                 path.addAll(getAllViablePaths(gameState, player, species.charAt(i)));
             }
         }
@@ -611,7 +612,7 @@ public class Arboretum {
     /**
      * get all the species that a player owns
      * considered cards are in hand and arboretum
-     * @return all the species available on arboretum
+     * @return all the species available on arboretum as a string
      */
     public static String allSpecies(String[][] gameState, char player) {
         var cardsA = gameState[1][1].substring(1) + removePosition(gameState[0][1]);
