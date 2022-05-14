@@ -437,20 +437,16 @@ public class Arboretum {
      */
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
         // finds the index of the player's arboretum within the sharedState of the gameState.
-        int turnIndex;
-        if (gameState[0][0].equals("A")) turnIndex = 1;
-        else turnIndex = 3;
+        int t; if (gameState[0][0].equals("A")) t = 1; else t = 3;
         // If the players arboretum is empty the function returns the card at the centre position.
         Set<String> validPlacements = new HashSet<>();
-        if (gameState[0][turnIndex].length() == 1) validPlacements.add(card + "C00C00");
+        if (gameState[0][t].length() == 1) validPlacements.add(card + "C00C00");
         // The adjacentLocations helper function is used to find the adjacent locations of each card in the players
         // arboretum, adding the locations with the card prepended to them so long that the position is not contained
         // the players arboretum.
-        else{
-            for (int c = 1; c < (gameState[0][turnIndex].length() - 1); c += 8){
-                for (String position : adjacentLocations(gameState[0][turnIndex].substring(c, c + 8))) {
-                    if (!gameState[0][turnIndex].contains(position)) validPlacements.add(card + position);
-                }
+        else for (int c = 1; c < (gameState[0][t].length() - 1); c += 8){
+                for (String position : adjacentLocations(gameState[0][t].substring(c, c + 8))) {
+                    if (!gameState[0][t].contains(position)) validPlacements.add(card + position);
             }
         }
         return validPlacements;
@@ -483,25 +479,22 @@ public class Arboretum {
     public static Set<String> getAllViablePaths(String[][] gameState, char player, char species) {
         if (!canScore(gameState, player, species)) return null;
         int t; if (player ==  'A') t = 1; else t = 3;
-        Set<String> viablePaths = new HashSet<>();
+        Set<String> allPaths = new HashSet<>();
         for (int i = 1; i < gameState[0][t].length(); i += 8) {
-            if (gameState[0][t].charAt(i) == species)
-                viablePaths.addAll(viablePathsFromCard(gameState[0][t], gameState[0][t].substring(i, i + 8)
-                        , gameState[0][t].substring(i, i + 2), species, new HashSet<>()));
+            if (gameState[0][t].charAt(i) == species) allPaths.addAll(viablePaths(gameState[0][t], gameState[0][t].
+                    substring(i, i + 8), gameState[0][t].substring(i, i + 2), species, new HashSet<>()));
         }
-        return viablePaths;
+        return allPaths;
     }
-    public static HashSet<String> viablePathsFromCard(String arboretum, String card, String path
-            , char species, HashSet<String> validPaths) {
-        String[] adjacentPlaces = adjacentLocations(card);
+    public static HashSet<String> viablePaths
+            (String arboretum, String card, String path, char species, HashSet<String> validPaths) {
         HashSet<String> nextCards = new HashSet<>();
-        for (int i = 0; i < 4; i++) {
-            int index = arboretum.indexOf(adjacentPlaces[i]);
-            if (index != -1 && arboretum.charAt(index - 1) > card.charAt(1))
-                nextCards.add(arboretum.substring(index - 2, index + 6));
+        for (int c = 0; c < 4; c++) {
+            int i = arboretum.indexOf(adjacentLocations(card)[c]);
+            if (i != -1 && arboretum.charAt(i - 1) > card.charAt(1)) nextCards.add(arboretum.substring(i - 2, i + 6));
         }
         if (card.charAt(0) == species && path.length() > 2) validPaths.add(path);
-        nextCards.forEach(nextCard -> validPaths.addAll(viablePathsFromCard
+        nextCards.forEach(nextCard -> validPaths.addAll(viablePaths
                 (arboretum, nextCard, path + nextCard.substring(0, 2), species, validPaths)));
         return validPaths;
     }
@@ -527,10 +520,7 @@ public class Arboretum {
             int scoreCopy = score;
             boolean sameSpecies = true;
             for (int i = 0; i < scoreCopy * 2; i += 2) {
-                if (path.charAt(i) != species) {
-                    sameSpecies = false;
-                    break;
-                }
+                if (path.charAt(i) != species) {sameSpecies = false; break;}
             }
             if (path.length() >= 8 && sameSpecies) score = scoreCopy * 2;
             if (path.charAt(scoreCopy * 2 - 1) == '8') score += 2;
@@ -538,7 +528,6 @@ public class Arboretum {
             if (score > highestScore) highestScore = score;
         }
         return highestScore;
-        // FIXME TASK 13
     }
 
     /**
@@ -571,8 +560,8 @@ public class Arboretum {
      * iterate over all the sorted optimal cards and decide where or what to draw
      * if no optimal card is found, draw from deck
      * if deck has no card, dram from discard pile that has bigger card value
-     * @param gameState
-     * @param player
+     * @param gameState the game state array
+     * @param player the given player
      * @return where to draw (deck, discardA or discardB)
      */
     public static String heuristic(String[][] gameState, char player) {
@@ -616,7 +605,7 @@ public class Arboretum {
     /**
      * get all the species that a player owns
      * considered cards are those in player's hand and arboretum
-     * @param gameState
+     * @param gameState the game state array
      * @return all the species available on arboretum as a string
      */
     public static String allSpecies(String[][] gameState) {
