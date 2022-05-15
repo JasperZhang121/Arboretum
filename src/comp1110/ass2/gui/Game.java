@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import com.sun.media.jfxmedia.events.NewFrameEvent;
+import comp1110.ass2.Player;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -23,10 +24,19 @@ public class Game extends Application {
     /* board layout */
     private static final int BOARD_WIDTH = 1200;
     private static final int BOARD_HEIGHT = 700;
-    private final Group root = new Group();
+
+    // Create the deck and player A
+    Deck deck = new Deck();
+    Players players = new Players(null,"A");
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        stage.setTitle("Arboretum");
+        Group root = new Group();
+        Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
+        stage.setScene(scene);
+        stage.show();
 
         // FIXME Task 11: Implement a basic playable Arboretum game in JavaFX that only allows cards to be placed in
         //   valid places
@@ -34,18 +44,13 @@ public class Game extends Application {
         // FIXME Task 18: Implement variant(s).
 
 
-        // Task 11, adding basic information for the panel
-        stage.setTitle("Arboretum");
-        //Group root = new Group(); I moved the root to outside the method at line 19
-        Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
-
         /** Display basic information
          *  the text will be put on the hbox for showing information */
         var discard = new Text(1100,240,"Discard");
         var deck = new Text(0,555,"Deck: ");
         var center = new Text(600,255,"Center");
 
-       /** Hbox for the center*/
+        /** Hbox for the center*/
         var hbox = new HBox();
         hbox.setLayoutX(593);
         hbox.setLayoutY(215);
@@ -222,8 +227,8 @@ public class Game extends Application {
         }
 
 
-        // default
-        stage.setScene(scene);
-        stage.show();
+
     }
+
+
 }

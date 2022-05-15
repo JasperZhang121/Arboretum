@@ -7,10 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *  Create cards with species and value (Constructor, setSpecies, setValue)
+ *  Only allow valid species and values (getValidSpecies and getValidValue method), else throw illegalArgumentException
+ *  Create get method for species and values
+ *  Create getCardImage for getting the Image of the card
+ *  Create the toString Method
+ */
+
 public class Cards {
     private String species;
     private String value;
-    private Image image;
 
     public Cards(String species, String value) {
         setSpecies(species);
@@ -21,7 +28,7 @@ public class Cards {
         return species;
     }
 
-    // valid species Cassia,Blue_Spruce,Cherry_Blossom,Dogwood,Jacaranda,Maple
+    // valid species: Cassia,Blue_Spruce,Cherry_Blossom,Dogwood,Jacaranda,Maple
     // Only run the valid objects, stop when something wrong.
     public void setSpecies(String species) {
         var validSpecies = getValidSpecies();
@@ -36,7 +43,7 @@ public class Cards {
         return value;
     }
 
-    // valid values 1,2,3,4,5,6,7,8.
+    // valid values: 1,2,3,4,5,6,7,8.
     // Only run the valid objects, stop when something wrong.
     public void setValue(String value) {
         var validValues = getValidValues();
@@ -54,22 +61,14 @@ public class Cards {
 
     // method returns valid species for cards
     public static List<String> getValidSpecies(){
-        return Arrays.asList("a_Cassia","b_Blue_Spruce","c_Cherry_Blossom","d_Dogwood","j_Jacaranda","m_Maple");
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
+        return Arrays.asList("a","b","c","d","j","m");
     }
 
     @Override
     public String toString() {
-        return "Cards{" +
-                "species='" + species + '\'' +
-                ", value='" + value + '\'' +
+        return "{" +
+                "'" + species + '\'' +
+                ", '" + value + '\'' +
                 '}';
     }
 
@@ -77,10 +76,8 @@ public class Cards {
     public ImageView getCardImage(){
         String url = "images/"+species.charAt(0)+value+".png";
         ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
-        iv.setFitWidth(70);
-        iv.setY(50);
+        iv.setFitHeight(70);
+        iv.setFitWidth(50);
         return iv;
     }
-
-
 }
