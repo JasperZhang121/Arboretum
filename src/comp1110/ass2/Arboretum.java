@@ -717,6 +717,7 @@ public class Arboretum {
         if (!card.equals("D")) {
             move[0] = optimalPlacement(gameState,card);
             move[1] = uselessCard(gameState,hand);
+            return move;
         }
         move[0] = optimalPlacement(gameState, lastDeckCard);
         move[1] = uselessCard(gameState,lastDeckCard);
@@ -724,6 +725,13 @@ public class Arboretum {
         // FIXME TASK 15
     }
 
+    /**
+     * Get the best placement of a card based on the game state.
+     * @param gameState
+     * @param card
+     * @return the most optimal placement that gives the highest score
+     */
+    // can't get the first object  out of the set
     public static String optimalPlacement(String[][] gameState, String card) {
         var player = gameState[0][0].charAt(0);
         var placements = getAllValidPlacements(gameState,card);
@@ -731,6 +739,9 @@ public class Arboretum {
             return null;
         }
         var paths = getAllViablePaths(gameState,player,card.charAt(0));
+        if (paths == null) {
+            return null;
+        }
         var best= placements.iterator().next();
         var bestPath = pathScore(paths.iterator().next() + card + best);
         for (var place : placements) {
@@ -751,24 +762,56 @@ public class Arboretum {
 
     /**
      * Check whether a path is valid
+     * Assume that path is not empty and more than one card
      * @param path
      * @return a boolean
      */
     public static boolean validPath(String path) {
-
+        var firstSpecies = path.charAt(0);
+        var lastSpecies = path.charAt(path.length()-7);
+        if (firstSpecies != lastSpecies) {
+            return false;
+        }
+        var cards = removePosition(path);
+        for (int i = 1; i < cards.length() - 2; i += 2) {
+            if (Character.getNumericValue(path.charAt(i)) > Character.getNumericValue(path.charAt(i+2))) {
+                return false;
+            }
+        }
         return true;
     }
 
     /**
      * Calculate the score of a valid path
+     * Assume that path is not empty
      * @param path
      * @return an integer score
      */
     public static int pathScore(String path) {
-        return 0;
+        var cards = removePosition(path);
+        var score = 0;
+        for (int i = 1; i < cards.length(); i += 2) {
+            score += Character.getNumericValue(cards.charAt(i));
+        }
+        return score;
     }
 
+    /**
+     * Get the most useless card that does not create a path or gives the least value path
+     * @param gameState
+     * @param hand
+     * @return the most useless card in hand to be discarded
+     */
+    // haven't check for path score
     public static String uselessCard(String[][] gameState, String hand) {
-        return "ai";
+        var worstCard = hand.substring(0,2);
+        var placementSize = getAllValidPlacements(gameState,worstCard).size();
+        for (int i = 0; i < hand.length()-1; i += 2) {
+            if (getAllValidPlacements(gameState,hand.substring(i,i+2)).size() < placementSize) {
+                worstCard = hand.substring(i,i+2);
+                placementSize = getAllValidPlacements(gameState,hand.substring(i,i+2)).size();
+            }
+        }
+        return worstCard;
     }
 }
