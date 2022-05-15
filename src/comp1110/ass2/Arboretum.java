@@ -588,6 +588,7 @@ public class Arboretum {
             path.addAll(paths);
         }
         var target = sortedOptimalCards(optimalCards(path));
+        System.out.println(target);
         for (var card : target) {
             if (discardA.equals(card) || discardB.equals(card)) {
                 return card;
@@ -641,22 +642,22 @@ public class Arboretum {
         for (var path : paths) {
             var first = path.substring(0, 2);
             var last = path.substring(path.length() - 2);
-            var next = first.substring(0, 1) + Character.getNumericValue(first.charAt(1) - 1);
-            var next2 = last.substring(0,1) + Character.getNumericValue(first.charAt(1) - 1);
-            if (!cards.contains(next) && (Character.getNumericValue(first.charAt(1)) - 1) > 0) {
-                cards.add(next);
-            }
-            if (!cards.contains(next2) && (Character.getNumericValue(first.charAt(1)) - 1) > 0) {
-                cards.add(next2);
-            }
-            if (path.length() > 2) {
-                var temp = last.substring(0, 1) + Character.getNumericValue(last.charAt(1) + 1);
-                var temp2 = first.substring(0, 1) + Character.getNumericValue(last.charAt(1) + 1);
-                if (!cards.contains(temp) && (Character.getNumericValue(last.charAt(1)) + 1) <= 8) {
-                    cards.add(temp);
+            var i = 1;
+            while (Character.getNumericValue((first.charAt(1) - i)) > 0) {
+                var next = first.substring(0,1) + Character.getNumericValue(first.charAt(1) - i);
+                if (!cards.contains(next)) {
+                    cards.add(next);
                 }
-                if (!cards.contains(temp2) && (Character.getNumericValue(last.charAt(1)) + 1) <= 8) {
-                    cards.add(temp2);
+                i++;
+            }
+            var j = 1;
+            if (path.length() > 2) {
+                while (Character.getNumericValue((last.charAt(1) + j)) <= 8) {
+                    var temp = last.substring(0, 1) + Character.getNumericValue(last.charAt(1) + j);
+                    if (!cards.contains(temp)) {
+                        cards.add(temp);
+                    }
+                    j++;
                 }
             }
         }
