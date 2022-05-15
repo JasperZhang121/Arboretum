@@ -6,7 +6,7 @@ package comp1110.ass2.gui;
  */
 
 public class Discard {
-    private Cards [] discard = new Cards[9];
+    private Cards [] discard;
     private String name;
 
     public Discard(Cards [] discard, String name) {
