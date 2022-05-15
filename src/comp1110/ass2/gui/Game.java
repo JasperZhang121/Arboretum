@@ -29,6 +29,8 @@ public class Game extends Application {
     Deck deck = new Deck();
     Players players = new Players(null,"A");
 
+
+
     @Override
     public void start(Stage stage) throws Exception {
 

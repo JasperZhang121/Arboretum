@@ -35,7 +35,7 @@ public class Deck {
     // Initialize the draw as null
     // Random choose the index of deck, set the deck[index] as the draw card
     // Make the draw card position in deck as null, then return the draw
-    public Cards drawCard(){
+    public Cards drawCardFromDeck(){
         Cards draw = null;
         while (draw==null){
             int index = (int)(Math.random()*deck.length);
@@ -50,7 +50,7 @@ public class Deck {
         var testDeck = new Deck();
         int count=0;
         for (int i = 0; i < 100; i++) {
-            System.out.println(testDeck.drawCard());
+            System.out.println(testDeck.drawCardFromDeck());
             count++;
             System.out.println(count);
         }
