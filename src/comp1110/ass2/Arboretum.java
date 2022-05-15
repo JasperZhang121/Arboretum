@@ -438,12 +438,12 @@ public class Arboretum {
     public static Set<String> getAllValidPlacements(String[][] gameState, String card) {
         // finds the index of the player's arboretum within the sharedState of the gameState.
         int t; if (gameState[0][0].equals("A")) t = 1; else t = 3;
-        // If the players arboretum is empty the function returns the card at the centre position.
+        // If the player's arboretum is empty the function returns the card at the centre position.
         Set<String> validPlacements = new HashSet<>();
         if (gameState[0][t].length() == 1) validPlacements.add(card + "C00C00");
         // The adjacentLocations helper function is used to find the adjacent locations of each card in the players
         // arboretum, adding the locations with the card prepended to them so long that the position is not contained
-        // the players arboretum.
+        // the player's arboretum.
         else for (int c = 1; c < (gameState[0][t].length() - 1); c += 8){
                 for (String position : adjacentLocations(gameState[0][t].substring(c, c + 8))) {
                     if (!gameState[0][t].contains(position)) validPlacements.add(card + position);
@@ -486,8 +486,7 @@ public class Arboretum {
         }
         return allPaths;
     }
-    public static HashSet<String> viablePaths
-            (String arboretum, String card, String path, char species, HashSet<String> validPaths) {
+    public static HashSet<String> viablePaths(String arboretum, String card, String path, char species, HashSet<String> validPaths) {
         HashSet<String> nextCards = new HashSet<>();
         for (int c = 0; c < 4; c++) {
             int i = arboretum.indexOf(adjacentLocations(card)[c]);
@@ -667,7 +666,7 @@ public class Arboretum {
     /**
      * sort the optimal cards by species and value in descending order
      * @param cards
-     * @return a sorted of optimal cards to get the best path score
+     * @return a sorted optimal cards to get the best path score
      */
     public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
         if (cards.isEmpty()) {
@@ -708,18 +707,68 @@ public class Arboretum {
     // use the same heuristic for task 14 and discard the least useful card
     public static String[] generateMove(String[][] gameState) {
         String[] move = new String[2];
-        var play = chooseDrawLocation(gameState);
-        if (gameState[0][0] == "A") {
-            var hand = gameState[1][1];
+        var card = chooseDrawLocation(gameState);
+        var hand = gameState[1][1];
+        var deck = gameState[1][0];
+        var lastDeckCard = deck.substring(deck.length()-2);
+        if (gameState[0][0].equals("B")) {
+            hand = gameState[1][2];
         }
-        else {
-            var hand = gameState[1][2];
+        if (!card.equals("D")) {
+            move[0] = optimalPlacement(gameState,card);
+            move[1] = uselessCard(gameState,hand);
         }
-        if (!play.equals("D")) {
-            var placement = getAllValidPlacements(gameState,play);
-
-        }
-        return null;
+        move[0] = optimalPlacement(gameState, lastDeckCard);
+        move[1] = uselessCard(gameState,lastDeckCard);
+        return move;
         // FIXME TASK 15
+    }
+
+    public static String optimalPlacement(String[][] gameState, String card) {
+        var player = gameState[0][0].charAt(0);
+        var placements = getAllValidPlacements(gameState,card);
+        if (placements.isEmpty()) {
+            return null;
+        }
+        var paths = getAllViablePaths(gameState,player,card.charAt(0));
+        var best= placements.iterator().next();
+        var bestPath = pathScore(paths.iterator().next() + card + best);
+        for (var place : placements) {
+            // check if placed in the path scores a higher score than best
+            for (var path : paths) {
+                var placed = card + place + path;
+                if (Character.getNumericValue(card.charAt(1)) > Character.getNumericValue(path.charAt(-7))) {
+                    placed = path + card + place;
+                }
+                if (validPath(placed) && pathScore(placed) > bestPath) {
+                    best = place;
+                    bestPath = pathScore(placed);
+                }
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Check whether a path is valid
+     * @param path
+     * @return a boolean
+     */
+    public static boolean validPath(String path) {
+
+        return true;
+    }
+
+    /**
+     * Calculate the score of a valid path
+     * @param path
+     * @return an integer score
+     */
+    public static int pathScore(String path) {
+        return 0;
+    }
+
+    public static String uselessCard(String[][] gameState, String hand) {
+        return "ai";
     }
 }
