@@ -705,6 +705,7 @@ public class Arboretum {
      * TASK 15
      */
     // use the same heuristic for task 14 and discard the least useful card
+    // optimal card is not necessary from the one drawn
     public static String[] generateMove(String[][] gameState) {
         String[] move = new String[2];
         var card = chooseDrawLocation(gameState);
