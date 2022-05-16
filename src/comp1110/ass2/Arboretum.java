@@ -708,11 +708,11 @@ public class Arboretum {
     public static String[] generateMove(String[][] gameState) {
         String[] move = new String[2];
         var card = chooseDrawLocation(gameState);
-        var hand = gameState[1][1];
+        var hand = gameState[1][1].substring(1);
         var deck = gameState[1][0];
         var lastDeckCard = deck.substring(deck.length()-2);
         if (gameState[0][0].equals("B")) {
-            hand = gameState[1][2];
+            hand = gameState[1][2].substring(1);
         }
         if (!card.equals("D")) {
             move[0] = optimalPlacement(gameState,card);
@@ -798,12 +798,16 @@ public class Arboretum {
 
     /**
      * Get the most useless card that does not create a path or gives the least value path
+     * Hand must not be empty
      * @param gameState
      * @param hand
      * @return the most useless card in hand to be discarded
      */
     // haven't check for path score
     public static String uselessCard(String[][] gameState, String hand) {
+        if (hand.length() == 3) {
+            return hand;
+        }
         var worstCard = hand.substring(0,2);
         var placementSize = getAllValidPlacements(gameState,worstCard).size();
         for (int i = 0; i < hand.length()-1; i += 2) {
