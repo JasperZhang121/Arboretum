@@ -486,7 +486,8 @@ public class Arboretum {
         }
         return allPaths;
     }
-    public static HashSet<String> viablePaths(String arboretum, String card, String path, char species, HashSet<String> validPaths) {
+    public static HashSet<String> viablePaths(
+            String arboretum, String card, String path, char species, HashSet<String> validPaths) {
         HashSet<String> nextCards = new HashSet<>();
         for (int c = 0; c < 4; c++) {
             int i = arboretum.indexOf(adjacentLocations(card)[c]);
