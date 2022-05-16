@@ -61,10 +61,6 @@ public class Game extends Application {
         // FIXME Task 18: Implement variant(s).
 
 
-        var cards = new Cards("a","1");
-        cards.getCardImage();
-        root.getChildren().add(cards.getCardImage());
-
 
         /** Display basic information
          *  the text will be put on the hbox for showing information */
@@ -147,9 +143,6 @@ public class Game extends Application {
         root.getChildren().addAll(firstOnHand,secondOnHand,thirdOnHand,forthOnHand,fifthOnHand,sixthOnHand,seventhOnHand,eighthOnHand,ninthOnHand);
 
 
-
-
-
         /** Add drag event for deck*/
         Deck.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
@@ -180,6 +173,7 @@ public class Game extends Application {
                 @Override
                 public void handle(DragEvent dragEvent) {
                     var card = deck.drawCardFromDeck();
+                    playerA.getCard(card);
                     try {
                         hand.setImage(card.getImage());
                     } catch (URISyntaxException e) {
@@ -189,20 +183,22 @@ public class Game extends Application {
             });
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        /** Add drop event for discard A and B*/
+        ImageView [] discard_A_B = {DiscardA,DiscardB};
+        for (var discard : discard_A_B){
+            discard.setOnDragOver(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent dragEvent) {
+                    dragEvent.acceptTransferModes(TransferMode.COPY);
+                }
+            });
+            discard.setOnDragDropped(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent dragEvent) {
+                    var card = deck.drawCardFromDeck();
+                }
+            });
+        }
 
 
 
@@ -333,22 +329,6 @@ public class Game extends Application {
                 }
             });
 
-            DiscardA.setOnDragOver(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    dragEvent.acceptTransferModes(TransferMode.COPY);
-
-                }
-            });
-            DiscardA.setOnDragDropped(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    discardText.setText(" Valid");
-                    iv.setImage(null);
-
-                }
-            });
-
             hbox.setOnDragOver(new EventHandler<DragEvent>() {
                 @Override
                 public void handle(DragEvent dragEvent) {
@@ -360,7 +340,6 @@ public class Game extends Application {
                 public void handle(DragEvent dragEvent) {
                     Dragboard db =dragEvent.getDragboard();
                     Image image = db.getImage();
-
                 }
             });
         }
