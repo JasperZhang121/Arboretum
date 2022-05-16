@@ -1,8 +1,12 @@
 package comp1110.ass2.gui;
 
+import java.util.Arrays;
+
 /** Create the Discard (set the Maximum cards inside as 9)
  *  Allow discard cards
  *  Allow draw top card (not random but top card)
+ *  Create toString method to make the Discard corresponding to the gameState
+ *  Use main method for testing above things
  */
 
 public class Discard {
@@ -23,14 +27,15 @@ public class Discard {
                 Cards [] discard1 = new Cards[9];
                 discard1[0]=card;
                 discard=discard1;
+        } else {
+            for (int i = 0; i < discard.length; i++) {
+                if (discard[i]==null){
+                    discard[i]=card;
+                    break;
+                }
+            }
         }
 
-        for (int i = 0; i < discard.length; i++) {
-             if (discard[i]==null){
-                 discard[i]=card;
-                 break;
-             }
-        }
 
     }
 
@@ -51,6 +56,20 @@ public class Discard {
         return null;
     }
 
+    // Using for loop to take the object one by one from the Cards array
+    @Override
+    public String toString() {
+        if (discard==null)return name;
+        StringBuilder stringBuilder =new StringBuilder();
+        for (int i = 0; i < discard.length; i++) {
+            if (discard[i]!=null){
+                stringBuilder.append(discard[i]);
+            } else {
+                stringBuilder.append("");
+            }
+        }
+        return   name + stringBuilder;
+    }
 
     //test draw and discard
     public static void main(String[] args) {
@@ -60,12 +79,26 @@ public class Discard {
         var testCard3 = new Cards("c","1");
 
         var dis = new Discard(null,"A");
+        System.out.println(dis);
+
         dis.discardCard(testCard1);
+        System.out.println(dis);
+
         dis.discardCard(testCard2);
+        System.out.println(dis);
+
         dis.discardCard(testCard3);
-        System.out.println(dis.drawFromDiscard());
+        System.out.println(dis);
 
 
+        dis.drawFromDiscard();
+        System.out.println(dis);
+
+        dis.drawFromDiscard();
+        System.out.println(dis);
+
+        dis.drawFromDiscard();
+        System.out.println(dis);
     }
 }
 

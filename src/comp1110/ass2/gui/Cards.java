@@ -3,6 +3,7 @@ package comp1110.ass2.gui;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -12,10 +13,11 @@ import java.util.Locale;
  *  Only allow valid species and values (getValidSpecies and getValidValue method), else throw illegalArgumentException
  *  Create get method for species and values
  *  Create getCardImage for getting the Image of the card
- *  Create the toString Method
+ *  Create the toString Method and make it corresponding to the gameState, so each card will be called "a1","a2" etc.
+ *  Use main method for testing above things
  */
 
-public class Cards {
+public class Cards implements Serializable {
     private String species;
     private String value;
 
@@ -66,10 +68,7 @@ public class Cards {
 
     @Override
     public String toString() {
-        return "{" +
-                "'" + species + '\'' +
-                ", '" + value + '\'' +
-                '}';
+        return species + value;
     }
 
     // get the image of the card
@@ -79,5 +78,10 @@ public class Cards {
         iv.setFitHeight(70);
         iv.setFitWidth(50);
         return iv;
+    }
+
+    public static void main(String[] args) {
+        var card = new Cards("a","1");
+        System.out.println(card);
     }
 }

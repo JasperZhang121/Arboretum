@@ -28,7 +28,11 @@ public class Game extends Application {
     // Create the deck and player A
     Deck deck = new Deck();
     Players players = new Players(null,"A");
+    // Create the start gameState
 
+
+
+    String[][] gameState = new String[][]{ };
 
 
     @Override
@@ -44,6 +48,11 @@ public class Game extends Application {
         //   valid places
         // FIXME Task 16: Implement a computer opponent so that a human can play your game against the computer.
         // FIXME Task 18: Implement variant(s).
+
+
+        var cards = new Cards("a","1");
+        cards.getCardImage();
+        root.getChildren().add(cards.getCardImage());
 
 
         /** Display basic information

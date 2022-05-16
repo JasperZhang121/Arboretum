@@ -8,11 +8,14 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Create the deck (48 cards).
- * Adding drawCard method to get cards in the deck until deck is empty
+ * Adding drawFromDeck method to get cards in the deck, and no action when the deck is empty
+ * Create the toString to make the deck corresponding to the gameState
+ * Use main method for testing above things
  */
 
 public class Deck {
@@ -45,7 +48,18 @@ public class Deck {
         return draw;
     }
 
+    // Using for loop to take the object one by one from the Cards array
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < deck.length; i++) {
+            stringBuilder.append(deck[i]);
+        }
+        return stringBuilder.toString();
+    }
+
     //test whether the deck can draw the card until the deck is empty
+    //test the toString method
     public static void main(String[] args) {
         var testDeck = new Deck();
         int count=0;
@@ -54,5 +68,6 @@ public class Deck {
             count++;
             System.out.println(count);
         }
+        System.out.println(testDeck);
     }
 }
