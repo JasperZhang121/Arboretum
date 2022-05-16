@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.awt.dnd.MouseDragGestureRecognizer;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class Game extends Application {
@@ -25,14 +26,23 @@ public class Game extends Application {
     private static final int BOARD_WIDTH = 1200;
     private static final int BOARD_HEIGHT = 700;
 
-    // Create the deck and player A
+    // Create Objects for the game (deck, playerA, playerB, discardA, discardB, ArboretumA, ArboretumB)
     Deck deck = new Deck();
-    Players players = new Players(null,"A");
-    // Create the start gameState
+    Players playerA = new Players(null,"A");
+    Players playerB = new Players(null,"B");
+    Discard discardA= new Discard(null,"A");
+    Discard discardB= new Discard(null,"B");
+    String ArboretumA = "";
+    String ArboretumB = "";
 
 
-
-    String[][] gameState = new String[][]{ };
+    // Create the start gameState, assume start with A player
+    // String [sharedState][hiddenState]
+    // Shared : StringID   ArboretumA   DiscardA    ArboretumB    DiscardB
+    // Hidden : Deck       HandA        HandB
+    String[] shared = {playerA.getName(), ArboretumA, discardA.toString(), ArboretumB,discardB.toString()};
+    String[] hidden = { deck.toString(), playerA.toString(), playerB.toString()};
+    String[][] gameState = new String[][]{shared,hidden};
 
 
     @Override

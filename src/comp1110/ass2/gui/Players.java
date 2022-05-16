@@ -22,6 +22,10 @@ public class Players {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     // get the card from deck and give it to the hand
     // if the hand is null, create a new object array and put the card as the first card in it, then assign the new array to the old
     // else, detect the first null value, if exist then assign the card to that position and break
@@ -94,5 +98,8 @@ public class Players {
         play.getCard(testCard2);
         play.getCard(testCard3);
         System.out.println(play);
+
+
+
     }
 }
