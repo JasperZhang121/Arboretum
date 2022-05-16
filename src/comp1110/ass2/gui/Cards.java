@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -73,13 +74,21 @@ public class Cards implements Serializable {
 
     // get the image of the card
     public ImageView getCardImage(){
-        String url = "images/"+species.charAt(0)+value+".png";
+        String url = "images/"+species+value+".png";
         ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
         iv.setFitHeight(70);
         iv.setFitWidth(50);
         return iv;
     }
+    public Image getImage() throws URISyntaxException {
 
+        String url = "images/"+species+value+".png";
+        Image image = new Image(getClass().getResource(url).toURI().toString());
+        return image;
+    }
+
+
+    // test
     public static void main(String[] args) {
         var card = new Cards("a","1");
         System.out.println(card);

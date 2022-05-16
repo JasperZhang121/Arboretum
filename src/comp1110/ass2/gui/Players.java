@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.Player;
+import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  *  Create the player class, and the input of constructor is hand (cards array) and name (String)
  *  Create method of getCard and put Card
  *  Create the toString method to make it corresponding the gameState, so it will be called like "Aa1b1c1", "Bc2","B" etc.
+ *  Create the method for getting the empty card picture
  *  Use main method for testing above things
  */
 
@@ -72,6 +74,17 @@ public class Players {
         return   name + stringBuilder;
     }
 
+    // Empty card pictures
+
+    public ImageView getEmptyCard(){
+        String url = "images/EmptyCard.png";
+        ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
+        iv.setFitHeight(70);
+        iv.setFitWidth(50);
+        return iv;
+    }
+
+
     // test getCard and putCard method
     // test toString method
     public static void main(String[] args) {
@@ -98,8 +111,5 @@ public class Players {
         play.getCard(testCard2);
         play.getCard(testCard3);
         System.out.println(play);
-
-
-
     }
 }

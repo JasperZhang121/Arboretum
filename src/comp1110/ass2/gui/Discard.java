@@ -1,11 +1,14 @@
 package comp1110.ass2.gui;
 
+import javafx.scene.image.ImageView;
+
 import java.util.Arrays;
 
 /** Create the Discard (set the Maximum cards inside as 9)
  *  Allow discard cards
  *  Allow draw top card (not random but top card)
  *  Create toString method to make the Discard corresponding to the gameState
+ *  Create the getBackOfCard method for getting the back image of card
  *  Use main method for testing above things
  */
 
@@ -35,13 +38,10 @@ public class Discard {
                 }
             }
         }
-
-
     }
 
     // Allow draw from the discard pile
     // Else, detect the null position in object array, return the card before the null, set the return card position to null
-
     public Cards drawFromDiscard(){
         Cards returnCard;
         if (discard != null) {
@@ -54,6 +54,14 @@ public class Discard {
             }
         }
         return null;
+    }
+    // Back of discard
+    public ImageView getBackOfCard(){
+        String url = "images/Back.png";
+        ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
+        iv.setFitHeight(70);
+        iv.setFitWidth(50);
+        return iv;
     }
 
     // Using for loop to take the object one by one from the Cards array

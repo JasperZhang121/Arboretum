@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.awt.dnd.MouseDragGestureRecognizer;
 import java.io.FileInputStream;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -67,9 +68,10 @@ public class Game extends Application {
 
         /** Display basic information
          *  the text will be put on the hbox for showing information */
-        var discard = new Text(1100,240,"Discard");
-        var deck = new Text(0,555,"Deck: ");
+        var discardText = new Text(1100,265,"Discard:");
+        var deckText = new Text(0,245,"Deck: ");
         var center = new Text(600,255,"Center");
+        var handText = new Text(0,395,"Player A:");
 
         /** Hbox for the center*/
         var hbox = new HBox();
@@ -79,17 +81,133 @@ public class Game extends Application {
         hbox.setPrefHeight(70);
         hbox.setStyle("-fx-padding: 10; -fx-background-color: cornsilk;");
         root.getChildren().add(hbox);
+        root.getChildren().addAll(deckText,center,discardText,handText);
 
-        root.getChildren().addAll(deck,center,discard);
+        /** Add discardA, put the back of card on scene */
+        ImageView DiscardA = discardA.getBackOfCard();
+        DiscardA.setFitHeight(70);
+        DiscardA.setFitWidth(50);
+        DiscardA.setX(1150);
+        DiscardA.setY(275);
+        root.getChildren().add(DiscardA);
 
-        /** Add images for backside of cards*/
-        Image imageB = new Image(getClass().getResource("images/Back.png").toURI().toString());
-        ImageView Discard = new ImageView(imageB);
-        Discard.setFitHeight(70);
-        Discard.setFitWidth(50);
-        Discard.setX(1100);
-        Discard.setY(250);
-        root.getChildren().add(Discard);
+        /** Add discardB, put the back of card on scene*/
+        ImageView DiscardB = discardA.getBackOfCard();
+        DiscardB.setFitHeight(70);
+        DiscardB.setFitWidth(50);
+        DiscardB.setX(1150);
+        DiscardB.setY(175);
+        root.getChildren().add(DiscardB);
+
+        /** Add the deck, put the back of card of scene */
+        ImageView Deck = deck.getBackOfCard();
+        Deck.setFitHeight(70);
+        Deck.setFitWidth(50);
+        Deck.setX(0);
+        Deck.setY(250);
+        root.getChildren().add(Deck);
+
+        /** Add empty cards on hand, which will be the valid places for storing cards from drawing*/
+        var firstOnHand = playerA.getEmptyCard();
+        firstOnHand.setX(0);
+        firstOnHand.setY(400);
+
+        var secondOnHand = playerA.getEmptyCard();
+        secondOnHand.setX(55);
+        secondOnHand.setY(400);
+
+        var thirdOnHand = playerA.getEmptyCard();
+        thirdOnHand.setX(110);
+        thirdOnHand.setY(400);
+
+        var forthOnHand = playerA.getEmptyCard();
+        forthOnHand.setX(165);
+        forthOnHand.setY(400);
+
+        var fifthOnHand = playerA.getEmptyCard();
+        fifthOnHand.setX(220);
+        fifthOnHand.setY(400);
+
+        var sixthOnHand = playerA.getEmptyCard();
+        sixthOnHand.setX(0);
+        sixthOnHand.setY(475);
+
+        var seventhOnHand =playerA.getEmptyCard();
+        seventhOnHand.setX(55);
+        seventhOnHand.setY(475);
+
+        var eighthOnHand = playerA.getEmptyCard();
+        eighthOnHand.setX(110);
+        eighthOnHand.setY(475);
+
+        var ninthOnHand= playerA.getEmptyCard();
+        ninthOnHand.setX(165);
+        ninthOnHand.setY(475);
+
+        root.getChildren().addAll(firstOnHand,secondOnHand,thirdOnHand,forthOnHand,fifthOnHand,sixthOnHand,seventhOnHand,eighthOnHand,ninthOnHand);
+
+
+
+
+
+        /** Add drag event for deck*/
+        Deck.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Dragboard deckPng =  Deck.startDragAndDrop(TransferMode.COPY);
+                ClipboardContent content = new ClipboardContent();
+                Image image = null;
+                try {
+                    image = new Image(getClass().getResource("images/Back.png").toURI().toString());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                content.putImage(image);
+                deckPng.setContent(content);
+            }
+        });
+
+        /** Add drop event for hand */
+        ImageView [] handALL = {firstOnHand,secondOnHand,thirdOnHand,forthOnHand,fifthOnHand,sixthOnHand,seventhOnHand,eighthOnHand,ninthOnHand};
+        for (var hand : handALL){
+            hand.setOnDragOver(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent dragEvent) {
+                    dragEvent.acceptTransferModes(TransferMode.COPY);
+                }
+            });
+            hand.setOnDragDropped(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent dragEvent) {
+                    var card = deck.drawCardFromDeck();
+                    try {
+                        hand.setImage(card.getImage());
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /** Add images for all cards on the scene*/
         for (int i = 0; i < 8; i++) {
@@ -215,17 +333,17 @@ public class Game extends Application {
                 }
             });
 
-            Discard.setOnDragOver(new EventHandler<DragEvent>() {
+            DiscardA.setOnDragOver(new EventHandler<DragEvent>() {
                 @Override
                 public void handle(DragEvent dragEvent) {
                     dragEvent.acceptTransferModes(TransferMode.COPY);
 
                 }
             });
-            Discard.setOnDragDropped(new EventHandler<DragEvent>() {
+            DiscardA.setOnDragDropped(new EventHandler<DragEvent>() {
                 @Override
                 public void handle(DragEvent dragEvent) {
-                    discard.setText(" Valid");
+                    discardText.setText(" Valid");
                     iv.setImage(null);
 
                 }

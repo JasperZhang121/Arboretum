@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.Arboretum;
+import javafx.scene.image.ImageView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * Create the deck (48 cards).
  * Adding drawFromDeck method to get cards in the deck, and no action when the deck is empty
  * Create the toString to make the deck corresponding to the gameState
+ * Create getBackOfCard method for getting the image for the back of card
  * Use main method for testing above things
  */
 
@@ -56,6 +58,15 @@ public class Deck {
             stringBuilder.append(deck[i]);
         }
         return stringBuilder.toString();
+    }
+
+    // Back of deck
+    public ImageView getBackOfCard(){
+        String url = "images/Back.png";
+        ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
+        iv.setFitHeight(70);
+        iv.setFitWidth(50);
+        return iv;
     }
 
     //test whether the deck can draw the card until the deck is empty
