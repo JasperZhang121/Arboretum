@@ -705,24 +705,32 @@ public class Arboretum {
      * @return a valid move for this player.
      * TASK 15
      */
-    // use the same heuristic for task 14 and discard the least useful card
     // optimal card is not necessary from the one drawn
+    // optimal card is the one that creates the longest path or highest score
     public static String[] generateMove(String[][] gameState) {
         String[] move = new String[2];
-        var card = chooseDrawLocation(gameState);
-        var hand = gameState[1][1].substring(1);
-        var deck = gameState[1][0];
-        var lastDeckCard = deck.substring(deck.length()-2);
+        var hand = gameState[1][1];
         if (gameState[0][0].equals("B")) {
-            hand = gameState[1][2].substring(1);
+            hand = gameState[1][2];
         }
-        if (!card.equals("D")) {
-            move[0] = optimalPlacement(gameState,card);
-            move[1] = uselessCard(gameState,hand);
-            return move;
+        if (hand.length() == 1) {
+            hand = "";
         }
-        move[0] = optimalPlacement(gameState, lastDeckCard);
-        move[1] = uselessCard(gameState,lastDeckCard);
+        else {
+            hand = hand.substring(1);
+        }
+        var cards = cardStringToList(hand);
+        var bestCard = cards.get(0);
+        var bestScore = 0;
+        for (var card : cards) {
+             if (pathScore(optimalPlacement(gameState,card)[1]) > bestScore) {
+                 bestCard = card;
+                 bestScore = pathScore(optimalPlacement(gameState,card)[1]);
+             }
+        }
+        move[0] = bestCard + optimalPlacement(gameState, bestCard)[0];
+        move[1] = uselessCard(gameState,hand);
+        System.out.println(move);
         return move;
         // FIXME TASK 15
     }
@@ -731,10 +739,10 @@ public class Arboretum {
      * Get the best placement of a card based on the game state.
      * @param gameState
      * @param card
-     * @return the most optimal placement that gives the highest score
+     * @return the most optimal placement that gives the highest score and the path
      */
     // can't get the first object  out of the set
-    public static String optimalPlacement(String[][] gameState, String card) {
+    public static String[] optimalPlacement(String[][] gameState, String card) {
         var player = gameState[0][0].charAt(0);
         var placements = getAllValidPlacements(gameState,card);
         if (placements.isEmpty()) {
@@ -745,7 +753,8 @@ public class Arboretum {
             return null;
         }
         var best= placements.iterator().next();
-        var bestPath = pathScore(paths.iterator().next() + card + best);
+        var bestPath = "";
+        var bestPathScore = pathScore(paths.iterator().next() + card + best);
         for (var place : placements) {
             // check if placed in the path scores a higher score than best
             for (var path : paths) {
@@ -753,13 +762,18 @@ public class Arboretum {
                 if (Character.getNumericValue(card.charAt(1)) > Character.getNumericValue(path.charAt(-7))) {
                     placed = path + card + place;
                 }
-                if (validPath(placed) && pathScore(placed) > bestPath) {
+                if (validPath(placed) && pathScore(placed) > bestPathScore) {
                     best = place;
-                    bestPath = pathScore(placed);
+                    bestPath = placed;
+                    bestPathScore = pathScore(placed);
                 }
             }
         }
-        return best;
+        String[] output = new String[2];
+        output[0] = best;
+        output[1] = bestPath;
+        System.out.println(output);
+        return output;
     }
 
     /**
@@ -819,5 +833,18 @@ public class Arboretum {
             }
         }
         return worstCard;
+    }
+
+    /**
+     * Convert a string of cards to a list of cards
+     * @param card
+     * @return a list of cards
+     */
+    public static ArrayList<String> cardStringToList(String card) {
+        ArrayList<String> cards = new ArrayList<>();
+        for (int i = 0; i < card.length() - 1; i += 2) {
+            cards.add(card.substring(i,i+2));
+        }
+        return cards;
     }
 }
