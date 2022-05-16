@@ -723,10 +723,17 @@ public class Arboretum {
         var bestCard = cards.get(0);
         var bestScore = 0;
         for (var card : cards) {
+             if (optimalPlacement(gameState,card) == null) {
+                 continue;
+             }
              if (pathScore(optimalPlacement(gameState,card)[1]) > bestScore) {
                  bestCard = card;
                  bestScore = pathScore(optimalPlacement(gameState,card)[1]);
              }
+        }
+        // get any card that can be placed
+        if (optimalPlacement(gameState, bestCard)[0] == null) {
+
         }
         move[0] = bestCard + optimalPlacement(gameState, bestCard)[0];
         move[1] = uselessCard(gameState,hand);
@@ -749,14 +756,14 @@ public class Arboretum {
             return null;
         }
         var paths = getAllViablePaths(gameState,player,card.charAt(0));
-        if (paths == null) {
+        if (paths == null || paths.size() == 0) {
             return null;
         }
+        // may not be working
         var best= placements.iterator().next();
-        var bestPath = "";
+        String bestPath = "";
         var bestPathScore = pathScore(paths.iterator().next() + card + best);
         for (var place : placements) {
-            // check if placed in the path scores a higher score than best
             for (var path : paths) {
                 var placed = card + place + path;
                 if (Character.getNumericValue(card.charAt(1)) > Character.getNumericValue(path.charAt(-7))) {
