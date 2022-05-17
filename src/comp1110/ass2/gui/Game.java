@@ -60,8 +60,6 @@ public class Game extends Application {
         // FIXME Task 16: Implement a computer opponent so that a human can play your game against the computer.
         // FIXME Task 18: Implement variant(s).
 
-
-
         /** Display basic information
          *  the text will be put on the hbox for showing information */
         var discardText = new Text(1100,265,"Discard:");
@@ -114,6 +112,7 @@ public class Game extends Application {
                     public void handle(DragEvent dragEvent) {
                         var card = deck.drawCardFromDeck();
                         playerA.getCard(card);
+                        gameState[0][1]=deck.toString();
                         try {
                             HandA.setImage(card.getImage());
                         } catch (URISyntaxException e) {
@@ -154,6 +153,7 @@ public class Game extends Application {
                 @Override
                 public void handle(DragEvent dragEvent) {
                     var card = deck.drawCardFromDeck();
+                    gameState[0][1]=deck.toString();
                 }
             });
         }
@@ -178,6 +178,7 @@ public class Game extends Application {
                     public void handle(DragEvent dragEvent) {
                         var card = deck.drawCardFromDeck();
                         playerA.getCard(card);
+                        gameState[0][1]=deck.toString();
                         try {
                             EmptyCards.setImage(card.getImage());
                         } catch (URISyntaxException e) {

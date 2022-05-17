@@ -98,7 +98,6 @@ public class Discard {
         dis.discardCard(testCard3);
         System.out.println(dis);
 
-
         dis.drawFromDiscard();
         System.out.println(dis);
 
