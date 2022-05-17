@@ -713,31 +713,43 @@ public class Arboretum {
         if (gameState[0][0].equals("B")) {
             hand = gameState[1][2];
         }
+        //don't think it is necessary
         if (hand.length() == 1) {
             hand = "";
+            move[0] = null;
+            move[1] = null;
+            return move;
         }
         else {
             hand = hand.substring(1);
         }
         var cards = cardStringToList(hand);
         var bestCard = cards.get(0);
-        var bestScore = 0;
+        var bestScore = -1;
         for (var card : cards) {
+            //System.out.println(optimalPlacement(gameState,card));
              if (optimalPlacement(gameState,card) == null) {
                  continue;
              }
-             if (pathScore(optimalPlacement(gameState,card)[1]) > bestScore) {
+             if (pathScore(optimalPlacement(gameState,card).get(1)) > bestScore) {
                  bestCard = card;
-                 bestScore = pathScore(optimalPlacement(gameState,card)[1]);
+                 //System.out.println(bestCard);
+                 bestScore = pathScore(optimalPlacement(gameState,card).get(1));
+                 //System.out.println(bestScore);
+
              }
         }
         // get any card that can be placed
-        if (optimalPlacement(gameState, bestCard)[0] == null) {
-
+        if (optimalPlacement(gameState, bestCard) == null) {
+            return null;
         }
-        move[0] = bestCard + optimalPlacement(gameState, bestCard)[0];
+        move[0] = bestCard + optimalPlacement(gameState, bestCard).get(0);
+        cards.remove(bestCard);
+        hand = String.join(", ", cards);
+        //System.out.println(hand);
+        //System.out.println(uselessCard(gameState,hand));
         move[1] = uselessCard(gameState,hand);
-        System.out.println(move);
+        //System.out.println(move);
         return move;
         // FIXME TASK 15
     }
@@ -748,24 +760,35 @@ public class Arboretum {
      * @param card
      * @return the most optimal placement that gives the highest score and the path
      */
-    // can't get the first object  out of the set
-    public static String[] optimalPlacement(String[][] gameState, String card) {
+    public static ArrayList<String> optimalPlacement(String[][] gameState, String card) {
         var player = gameState[0][0].charAt(0);
         var placements = getAllValidPlacements(gameState,card);
+        ArrayList<String> output = new ArrayList<>();
+        //System.out.println(placements);
         if (placements.isEmpty()) {
             return null;
         }
         var paths = getAllViablePaths(gameState,player,card.charAt(0));
-        if (paths == null || paths.size() == 0) {
+        System.out.println(paths);
+        if (paths == null) {
             return null;
         }
-        // may not be working
-        var best= placements.iterator().next();
+        else if (paths.size() == 0) {
+            var place = placements.toArray(new String[placements.size()]);
+            output.add(place[0].substring(2));
+            output.add(card + place[0].substring(2));
+            return output;
+        }
+        var best= placements.toArray(String[] :: new)[0];
+        //System.out.println(best);
         String bestPath = "";
-        var bestPathScore = pathScore(paths.iterator().next() + card + best);
+        var bestPathScore = pathScore(paths.toArray(String[] :: new)[0] + card + best);
         for (var place : placements) {
             for (var path : paths) {
                 var placed = card + place + path;
+                System.out.println(path);
+                System.out.println(place);
+                System.out.println(placed);
                 if (Character.getNumericValue(card.charAt(1)) > Character.getNumericValue(path.charAt(-7))) {
                     placed = path + card + place;
                 }
@@ -776,10 +799,9 @@ public class Arboretum {
                 }
             }
         }
-        String[] output = new String[2];
-        output[0] = best;
-        output[1] = bestPath;
-        System.out.println(output);
+        output.add(best);
+        output.add(bestPath);
+        //System.out.println(output);
         return output;
     }
 
