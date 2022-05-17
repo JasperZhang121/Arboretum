@@ -86,8 +86,6 @@ public class Cards implements Serializable {
         Image image = new Image(getClass().getResource(url).toURI().toString());
         return image;
     }
-
-
     // test
     public static void main(String[] args) {
         var card = new Cards("a","1");

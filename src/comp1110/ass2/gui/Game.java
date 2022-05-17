@@ -66,18 +66,9 @@ public class Game extends Application {
          *  the text will be put on the hbox for showing information */
         var discardText = new Text(1100,265,"Discard:");
         var deckText = new Text(0,245,"Deck: ");
-        var center = new Text(600,255,"Center");
-        var handText = new Text(0,395,"Player A:");
-
-        /** Hbox for the center*/
-        var hbox = new HBox();
-        hbox.setLayoutX(593);
-        hbox.setLayoutY(215);
-        hbox.setPrefWidth(50);
-        hbox.setPrefHeight(70);
-        hbox.setStyle("-fx-padding: 10; -fx-background-color: cornsilk;");
-        root.getChildren().add(hbox);
-        root.getChildren().addAll(deckText,center,discardText,handText);
+        //var center = new Text(600,255,"Center");
+        var handText = new Text(0,475,"Player A's hand:");
+        root.getChildren().addAll(deckText,discardText,handText);
 
         /** Add discardA, put the back of card on scene */
         ImageView DiscardA = discardA.getBackOfCard();
@@ -103,45 +94,35 @@ public class Game extends Application {
         Deck.setY(250);
         root.getChildren().add(Deck);
 
-        /** Add empty cards on hand, which will be the valid places for storing cards from drawing*/
-        var firstOnHand = playerA.getEmptyCard();
-        firstOnHand.setX(0);
-        firstOnHand.setY(400);
+        /** Add empty cards on hand A, which will be the valid places for storing cards from drawing
+         *  Add drop event for hand A */
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                var HandA = playerA.getEmptyCard();
+                HandA.setX(i*55);
+                HandA.setY(480+j*75);
+                root.getChildren().add(HandA);
 
-        var secondOnHand = playerA.getEmptyCard();
-        secondOnHand.setX(55);
-        secondOnHand.setY(400);
-
-        var thirdOnHand = playerA.getEmptyCard();
-        thirdOnHand.setX(110);
-        thirdOnHand.setY(400);
-
-        var forthOnHand = playerA.getEmptyCard();
-        forthOnHand.setX(165);
-        forthOnHand.setY(400);
-
-        var fifthOnHand = playerA.getEmptyCard();
-        fifthOnHand.setX(220);
-        fifthOnHand.setY(400);
-
-        var sixthOnHand = playerA.getEmptyCard();
-        sixthOnHand.setX(0);
-        sixthOnHand.setY(475);
-
-        var seventhOnHand =playerA.getEmptyCard();
-        seventhOnHand.setX(55);
-        seventhOnHand.setY(475);
-
-        var eighthOnHand = playerA.getEmptyCard();
-        eighthOnHand.setX(110);
-        eighthOnHand.setY(475);
-
-        var ninthOnHand= playerA.getEmptyCard();
-        ninthOnHand.setX(165);
-        ninthOnHand.setY(475);
-
-        root.getChildren().addAll(firstOnHand,secondOnHand,thirdOnHand,forthOnHand,fifthOnHand,sixthOnHand,seventhOnHand,eighthOnHand,ninthOnHand);
-
+                HandA.setOnDragOver(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        dragEvent.acceptTransferModes(TransferMode.COPY);
+                    }
+                });
+                HandA.setOnDragDropped(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        var card = deck.drawCardFromDeck();
+                        playerA.getCard(card);
+                        try {
+                            HandA.setImage(card.getImage());
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
 
         /** Add drag event for deck*/
         Deck.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -160,29 +141,6 @@ public class Game extends Application {
             }
         });
 
-        /** Add drop event for hand */
-        ImageView [] handALL = {firstOnHand,secondOnHand,thirdOnHand,forthOnHand,fifthOnHand,sixthOnHand,seventhOnHand,eighthOnHand,ninthOnHand};
-        for (var hand : handALL){
-            hand.setOnDragOver(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    dragEvent.acceptTransferModes(TransferMode.COPY);
-                }
-            });
-            hand.setOnDragDropped(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    var card = deck.drawCardFromDeck();
-                    playerA.getCard(card);
-                    try {
-                        hand.setImage(card.getImage());
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
         /** Add drop event for discard A and B*/
         ImageView [] discard_A_B = {DiscardA,DiscardB};
         for (var discard : discard_A_B){
@@ -200,13 +158,41 @@ public class Game extends Application {
             });
         }
 
+        /** Add placement ground
+         *  Add drop event for the ground*/
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 8; j++) {
+                var EmptyCards = playerA.getEmptyCard();
+                EmptyCards.setX(300+i*55);
+                EmptyCards.setY(j * 75);
+                root.getChildren().add(EmptyCards);
+
+                EmptyCards.setOnDragOver(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        dragEvent.acceptTransferModes(TransferMode.COPY);
+                    }
+                });
+                EmptyCards.setOnDragDropped(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent dragEvent) {
+                        var card = deck.drawCardFromDeck();
+                        playerA.getCard(card);
+                        try {
+                            EmptyCards.setImage(card.getImage());
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
 
 
 
 
-
-        /** Add images for all cards on the scene*/
-        for (int i = 0; i < 8; i++) {
+        /** Add images for all cards on the scene - not useful, comment out*/
+        /*for (int i = 0; i < 8; i++) {
             Image image = new Image(getClass().getResource("images/a"+(i+1)+".png").toURI().toString());
             ImageView iv = new ImageView(image);
             iv.setFitHeight(70);
@@ -255,8 +241,8 @@ public class Game extends Application {
             iv5.setY(630);
             root.getChildren().add(iv5);
 
-            /** Set drag events
-             *  All cards are draggable*/
+            *//** Set drag events
+             *  All cards are draggable*//*
             iv.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
@@ -313,7 +299,7 @@ public class Game extends Application {
             });
 
 
-            /** Set on Drop*/
+            *//** Set on Drop*//*
             center.setOnDragOver(new EventHandler<DragEvent>() {
                 @Override
                 public void handle(DragEvent dragEvent) {
@@ -342,11 +328,10 @@ public class Game extends Application {
                     Image image = db.getImage();
                 }
             });
-        }
+        }*/
 
 
 
     }
-
 
 }
