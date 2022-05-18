@@ -713,16 +713,7 @@ public class Arboretum {
         if (gameState[0][0].equals("B")) {
             hand = gameState[1][2];
         }
-        //don't think it is necessary
-        if (hand.length() == 1) {
-            hand = "";
-            move[0] = null;
-            move[1] = null;
-            return move;
-        }
-        else {
-            hand = hand.substring(1);
-        }
+        hand = hand.substring(1);
         var cards = cardStringToList(hand);
         var bestCard = cards.get(0);
         var bestScore = -1;
@@ -738,10 +729,6 @@ public class Arboretum {
                  //System.out.println(bestScore);
 
              }
-        }
-        // get any card that can be placed
-        if (optimalPlacement(gameState, bestCard) == null) {
-            return null;
         }
         move[0] = bestCard + optimalPlacement(gameState, bestCard).get(0);
         cards.remove(bestCard);
@@ -775,7 +762,7 @@ public class Arboretum {
             output.add(place[0]);
             return output;
         }
-        // working but not be optimal wrong
+        // working but not be optimal
         // assumed first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
         String bestPath = "";
@@ -832,8 +819,7 @@ public class Arboretum {
         if (firstSpecies != lastSpecies) {
             return false;
         }
-        var cards = removePosition(path);
-        for (int i = 1; i < cards.length() - 2; i += 2) {
+        for (int i = 1; i < path.length() - 2; i += 2) {
             if (Character.getNumericValue(path.charAt(i)) > Character.getNumericValue(path.charAt(i+2))) {
                 return false;
             }
@@ -848,10 +834,9 @@ public class Arboretum {
      * @return an integer score
      */
     public static int pathScore(String path) {
-        var cards = removePosition(path);
         var score = 0;
-        for (int i = 1; i < cards.length(); i += 2) {
-            score += Character.getNumericValue(cards.charAt(i));
+        for (int i = 1; i < path.length(); i += 2) {
+            score += Character.getNumericValue(path.charAt(i));
         }
         return score;
     }
