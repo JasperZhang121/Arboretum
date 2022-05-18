@@ -871,6 +871,8 @@ public class Arboretum {
      * Author : Vincent
      */
     // haven't check for path score
+    // only check the number of available placements
+    //less placements mean more useless
     public static String uselessCard(String[][] gameState, String hand) {
         if (hand.length() == 3) {
             return hand;
