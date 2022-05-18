@@ -730,8 +730,9 @@ public class Arboretum {
     public static String[] generateMove(String[][] gameState) {
         // FIXME TASK 15
         String[] move = new String[2];
+        var player = gameState[0][0].charAt(0);
         var hand = gameState[1][1];
-        if (gameState[0][0].equals("B")) {
+        if (player == 'B') {
             hand = gameState[1][2];
         }
         hand = hand.substring(1);
@@ -739,24 +740,25 @@ public class Arboretum {
         var bestCard = cards.get(0);
         var bestScore = -1;
         for (var card : cards) {
-            //System.out.println(optimalPlacement(gameState,card));
              if (optimalPlacement(gameState,card) == null) {
                  continue;
              }
-             //not the right way to score
-             if (pathScore(optimalPlacement(gameState,card).get(1)) > bestScore) {
+             var score = Integer.parseInt(optimalPlacement(gameState,card).get(1));
+            System.out.println("Highest score of card " + card + " : " + score);
+            System.out.println("Current best move score: " + bestScore);
+             if (score > bestScore) {
                  bestCard = card;
-                 System.out.println(bestCard);
-                 bestScore = pathScore(optimalPlacement(gameState,card).get(1));
-                 System.out.println(bestScore);
+                 //System.out.println(bestCard);
+                 bestScore = score;
+                 //System.out.println(bestScore);
 
              }
         }
-        move[0] = bestCard + optimalPlacement(gameState, bestCard).get(0);
+        move[0] = optimalPlacement(gameState, bestCard).get(0);
         cards.remove(bestCard);
         hand = String.join(", ", cards);
         move[1] = uselessCard(gameState,hand);
-        //System.out.println(move);
+        System.out.println("Final move " + move[0]);
         return move;
     }
 
@@ -764,7 +766,7 @@ public class Arboretum {
      * Get the best placement of a card based on the game state.
      * @param gameState
      * @param card
-     * @return the most optimal placement that gives the highest score and the card + placement
+     * @return the most optimal placement that gives the highest score and the score
      * Author : Vincent
      */
     public static ArrayList<String> optimalPlacement(String[][] gameState, String card) {
@@ -777,27 +779,23 @@ public class Arboretum {
         }
         else if (paths.size() == 0) {
             var place = placements.toArray(new String[placements.size()]);
-            output.add(place[0].substring(2));
             output.add(place[0]);
+            if (player == 'A') {
+                gameState[0][1] += place[0];
+                output.add(Integer.toString(getHighestViablePathScore(gameState,player,card.charAt(0))));
+                gameState[0][1] = gameState[0][1].substring(0,gameState[0][1].length()-8);
+            }
+            else {
+                gameState[0][3] += place[0];
+                output.add(Integer.toString(getHighestViablePathScore(gameState,player,card.charAt(0))));
+                gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
+            }
             return output;
         }
         // working but not optimal
         // assumed first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
-        String bestPath = "";
-        // save the path score temporarily
-        var temp = 0;
-        if (player == 'A') {
-            gameState[0][1] += best;
-            temp = getHighestViablePathScore(gameState,player,card.charAt(0));
-            gameState[0][1] = gameState[0][1].substring(0,gameState[0][1].length()-8);
-        }
-        else {
-            gameState[0][3] += best;
-            temp = getHighestViablePathScore(gameState,player,card.charAt(0));
-            gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
-        }
-        var bestPathScore = temp;
+        var bestPathScore = 0;
         // check if new arboretum has the highest path that is better previous highest
         // get the highest path gives the score so if higher path score save it and iterate over all the cards
         for (var place : placements) {
@@ -812,54 +810,18 @@ public class Arboretum {
                 temp2 = getHighestViablePathScore(gameState,player,card.charAt(0));
                 gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
             }
-            //never go here
+            System.out.println("Current score " + temp2);
+            System.out.println("Placement " + place);
+            System.out.println("Current best score "+ bestPathScore);
             if (temp2 > bestPathScore) {
                 best = place;
                 bestPathScore = temp2;
-                //System.out.println(best);
-                //System.out.println(bestPathScore);
             }
         }
-        output.add(best.substring(2));
         output.add(best);
-       //System.out.println(output);
+        output.add(Integer.toString(bestPathScore));
+        System.out.println("Optimal: " + output);
         return output;
-    }
-
-    /**
-     * Check whether a path is valid
-     * Assume that path is not empty and more than one card
-     * @param path
-     * @return a boolean
-     * Author : Vincent
-     */
-    public static boolean validPath(String path) {
-        var firstSpecies = path.charAt(0);
-        var lastSpecies = path.charAt(path.length()-7);
-        if (firstSpecies != lastSpecies) {
-            return false;
-        }
-        for (int i = 1; i < path.length() - 2; i += 2) {
-            if (Character.getNumericValue(path.charAt(i)) > Character.getNumericValue(path.charAt(i+2))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Calculate the score of a valid path
-     * Assume that path is not empty
-     * @param path
-     * @return an integer score
-     * Author : Vincent
-     */
-    public static int pathScore(String path) {
-        var score = 0;
-        for (int i = 1; i < path.length(); i += 2) {
-            score += Character.getNumericValue(path.charAt(i));
-        }
-        return score;
     }
 
     /**
@@ -872,7 +834,7 @@ public class Arboretum {
      */
     // haven't check for path score
     // only check the number of available placements
-    //less placements mean more useless
+    // less placements mean more useless (less flexibility)
     public static String uselessCard(String[][] gameState, String hand) {
         if (hand.length() == 3) {
             return hand;
