@@ -805,7 +805,6 @@ public class Arboretum {
                 gameState[0][3] += place;
                 temp2 = getHighestViablePathScore(gameState,player,card.charAt(0));
                 gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
-
             }
             //never go here
             if (temp2 > bestPathScore) {
