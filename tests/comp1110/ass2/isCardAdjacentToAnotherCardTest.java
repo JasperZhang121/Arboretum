@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Author : Vincent
 public class isCardAdjacentToAnotherCardTest {
 
     private String errorPrefix(String[][] state) {

@@ -204,6 +204,7 @@ public class Arboretum {
      * @param deck the deck string.
      * @return a random cardString from the deck. If the deck is empty, return the empty string "".
      * TASK 5
+     * Author : Vincent
      */
     public static String drawFromDeck(String deck) {
         int deckLength = deck.length();
@@ -304,6 +305,7 @@ public class Arboretum {
      * @param gameState the game state array
      * @return true if the gameState is valid, false if it is not valid.
      * TASK 8
+     * Author : Vincent
      */
 
     public static boolean isStateValid(String[][] gameState) {
@@ -341,6 +343,12 @@ public class Arboretum {
                 || (gameState[0][4].length() - 1) > (gs03Length - 1) / 4);
     }
 
+    /**
+     * Remove the position of cards (i3. in arboretum) to be a string of cards
+     * @param card
+     * @return a string of cards without the positions
+     * Author : Vincent
+     */
     public static String removePosition(String card) {
         StringBuilder cards = new StringBuilder();
         for (int i = 1; i < card.length(); i += 8) {
@@ -349,6 +357,13 @@ public class Arboretum {
         return cards.toString();
     }
 
+    /**
+     * check if a card is adjacent to another card
+     * @param arboretum
+     * @param placement
+     * @return true if a card is adjacent to another card and false otherwise
+     * Author : Sam
+     */
     public static boolean isCardAdjacentToAnotherCard(String arboretum, String placement) {
         String[] adjacentPlaces = adjacentLocations(placement);
         if (placement.substring(2).equals("C00C00")) {
@@ -375,11 +390,10 @@ public class Arboretum {
      * @param species the species that is being scored.
      * @return true if the given player has the right to score this species, false if they do not have the right.
      * TASK 9
+     * Author : Vincent
      */
     public static boolean canScore(String[][] gameState, char player, char species) {
-
         // FIXME TASK 9
-
         var handASum = 0;
         var handA = gameState[1][1].substring(1);
         var specialA = 0;
@@ -548,11 +562,12 @@ public class Arboretum {
      * @return "D" if you wish to draw from the deck, or the cardstring of the card you wish to draw from a discard
      * pile.
      * TASK 14
+     * Author : Vincent
      */
     public static String chooseDrawLocation(String[][] gameState) {
+        // FIXME TASK 14
         var player = gameState[0][0].charAt(0);
         return heuristic(gameState,player);
-        // FIXME TASK 14
     }
 
     /**
@@ -563,6 +578,7 @@ public class Arboretum {
      * @param gameState the game state array
      * @param player the given player
      * @return where to draw (deck, discardA or discardB)
+     * Author : Vincent
      */
     public static String heuristic(String[][] gameState, char player) {
         Set<String> path = new HashSet<>();
@@ -608,6 +624,7 @@ public class Arboretum {
      * considered cards are those in player's hand and arboretum
      * @param gameState the game state array
      * @return all the species available on arboretum as a string
+     * Author : Vincent
      */
     public static String allSpecies(String[][] gameState) {
         var cardsA = gameState[1][1].substring(1) + removePosition(gameState[0][1]);
@@ -636,6 +653,7 @@ public class Arboretum {
      * card at the beginning and in the end must be the same species
      * @param paths
      * @return list of cards optimal for the player
+     * Author : Vincent
      */
     public static ArrayList<String> optimalCards(Set<String> paths) {
         ArrayList<String> cards = new ArrayList<>();
@@ -668,6 +686,7 @@ public class Arboretum {
      * sort the optimal cards by species and value in descending order
      * @param cards
      * @return a sorted optimal cards to get the best path score
+     * Author : Vincent
      */
     public static ArrayList<String> sortedOptimalCards(ArrayList<String> cards) {
         if (cards.isEmpty()) {
@@ -704,10 +723,12 @@ public class Arboretum {
      * @param gameState the game state array
      * @return a valid move for this player.
      * TASK 15
+     * Author : Vincent
      */
     // optimal card is not necessary from the one drawn
     // optimal card is the one that creates the longest path or highest score
     public static String[] generateMove(String[][] gameState) {
+        // FIXME TASK 15
         String[] move = new String[2];
         var hand = gameState[1][1];
         if (gameState[0][0].equals("B")) {
@@ -722,11 +743,12 @@ public class Arboretum {
              if (optimalPlacement(gameState,card) == null) {
                  continue;
              }
+             //not the right way to score
              if (pathScore(optimalPlacement(gameState,card).get(1)) > bestScore) {
                  bestCard = card;
-                 //System.out.println(bestCard);
+                 System.out.println(bestCard);
                  bestScore = pathScore(optimalPlacement(gameState,card).get(1));
-                 //System.out.println(bestScore);
+                 System.out.println(bestScore);
 
              }
         }
@@ -736,7 +758,6 @@ public class Arboretum {
         move[1] = uselessCard(gameState,hand);
         //System.out.println(move);
         return move;
-        // FIXME TASK 15
     }
 
     /**
@@ -744,14 +765,12 @@ public class Arboretum {
      * @param gameState
      * @param card
      * @return the most optimal placement that gives the highest score and the card + placement
+     * Author : Vincent
      */
     public static ArrayList<String> optimalPlacement(String[][] gameState, String card) {
         var player = gameState[0][0].charAt(0);
         var placements = getAllValidPlacements(gameState,card);
         ArrayList<String> output = new ArrayList<>();
-        if (placements.isEmpty()) {
-            return null;
-        }
         var paths = getAllViablePaths(gameState,player,card.charAt(0));
         if (paths == null) {
             return null;
@@ -762,7 +781,7 @@ public class Arboretum {
             output.add(place[0]);
             return output;
         }
-        // working but not be optimal
+        // working but not optimal
         // assumed first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
         String bestPath = "";
@@ -797,12 +816,12 @@ public class Arboretum {
             if (temp2 > bestPathScore) {
                 best = place;
                 bestPathScore = temp2;
-                System.out.println(best);
-                System.out.println(bestPathScore);
+                //System.out.println(best);
+                //System.out.println(bestPathScore);
             }
         }
         output.add(best.substring(2));
-        output.add(bestPath);
+        output.add(best);
        //System.out.println(output);
         return output;
     }
@@ -812,6 +831,7 @@ public class Arboretum {
      * Assume that path is not empty and more than one card
      * @param path
      * @return a boolean
+     * Author : Vincent
      */
     public static boolean validPath(String path) {
         var firstSpecies = path.charAt(0);
@@ -832,6 +852,7 @@ public class Arboretum {
      * Assume that path is not empty
      * @param path
      * @return an integer score
+     * Author : Vincent
      */
     public static int pathScore(String path) {
         var score = 0;
@@ -847,6 +868,7 @@ public class Arboretum {
      * @param gameState
      * @param hand
      * @return the most useless card in hand to be discarded
+     * Author : Vincent
      */
     // haven't check for path score
     public static String uselessCard(String[][] gameState, String hand) {
@@ -868,6 +890,7 @@ public class Arboretum {
      * Convert a string of cards to a list of cards
      * @param card
      * @return a list of cards
+     * Author : Vincent
      */
     public static ArrayList<String> cardStringToList(String card) {
         ArrayList<String> cards = new ArrayList<>();
