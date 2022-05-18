@@ -746,8 +746,6 @@ public class Arboretum {
         move[0] = bestCard + optimalPlacement(gameState, bestCard).get(0);
         cards.remove(bestCard);
         hand = String.join(", ", cards);
-        //System.out.println(hand);
-        //System.out.println(uselessCard(gameState,hand));
         move[1] = uselessCard(gameState,hand);
         //System.out.println(move);
         return move;
@@ -758,50 +756,67 @@ public class Arboretum {
      * Get the best placement of a card based on the game state.
      * @param gameState
      * @param card
-     * @return the most optimal placement that gives the highest score and the path
+     * @return the most optimal placement that gives the highest score and the card + placement
      */
     public static ArrayList<String> optimalPlacement(String[][] gameState, String card) {
         var player = gameState[0][0].charAt(0);
         var placements = getAllValidPlacements(gameState,card);
         ArrayList<String> output = new ArrayList<>();
-        //System.out.println(placements);
         if (placements.isEmpty()) {
             return null;
         }
         var paths = getAllViablePaths(gameState,player,card.charAt(0));
-        System.out.println(paths);
         if (paths == null) {
             return null;
         }
         else if (paths.size() == 0) {
             var place = placements.toArray(new String[placements.size()]);
             output.add(place[0].substring(2));
-            output.add(card + place[0].substring(2));
+            output.add(place[0]);
             return output;
         }
+        // working but not be optimal wrong
+        // assumed first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
-        //System.out.println(best);
         String bestPath = "";
-        var bestPathScore = pathScore(paths.toArray(String[] :: new)[0] + card + best);
+        // save the path score temporarily
+        var temp = 0;
+        if (player == 'A') {
+            gameState[0][1] += best;
+            temp = getHighestViablePathScore(gameState,player,card.charAt(0));
+            gameState[0][1] = gameState[0][1].substring(0,gameState[0][1].length()-8);
+        }
+        else {
+            gameState[0][3] += best;
+            temp = getHighestViablePathScore(gameState,player,card.charAt(0));
+            gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
+        }
+        var bestPathScore = temp;
+        // check if new arboretum has the highest path that is better previous highest
+        // get the highest path gives the score so if higher path score save it and iterate over all the cards
         for (var place : placements) {
-            for (var path : paths) {
-                var placed = card + place + path;
-                System.out.println(path);
-                System.out.println(place);
-                System.out.println(placed);
-                if (Character.getNumericValue(card.charAt(1)) > Character.getNumericValue(path.charAt(-7))) {
-                    placed = path + card + place;
-                }
-                if (validPath(placed) && pathScore(placed) > bestPathScore) {
-                    best = place;
-                    bestPath = placed;
-                    bestPathScore = pathScore(placed);
-                }
+            var temp2 = 0;
+            if (player == 'A') {
+                gameState[0][1] += place;
+                temp2 = getHighestViablePathScore(gameState,player,card.charAt(0));
+                gameState[0][1] = gameState[0][1].substring(0,gameState[0][1].length()-8);
+            }
+            else {
+                gameState[0][3] += place;
+                temp2 = getHighestViablePathScore(gameState,player,card.charAt(0));
+                gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
+            }
+            //never go here
+            if (temp2 > bestPathScore) {
+                best = place;
+                bestPathScore = temp2;
+                System.out.println(best);
+                System.out.println(bestPathScore);
             }
         }
-        output.add(best);
+        output.add(best.substring(2));
         output.add(bestPath);
-        //System.out.println(output);
+       //System.out.println(output);
         return output;
     }
 
