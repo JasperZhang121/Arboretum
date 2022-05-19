@@ -85,7 +85,6 @@ public class Players {
         return iv;
     }
 
-
     // test getCard and putCard method
     // test toString method
     public static void main(String[] args) {

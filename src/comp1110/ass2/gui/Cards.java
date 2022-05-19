@@ -13,7 +13,8 @@ import java.util.Locale;
  *  Create cards with species and value (Constructor, setSpecies, setValue)
  *  Only allow valid species and values (getValidSpecies and getValidValue method), else throw illegalArgumentException
  *  Create get method for species and values
- *  Create getCardImage for getting the Image of the card
+ *  Create getCardImage for getting the ImageView of the card
+ *  Create getImage for getting the Image of the card
  *  Create the toString Method and make it corresponding to the gameState, so each card will be called "a1","a2" etc.
  *  Use main method for testing above things
  *  Author: Hao Zhang
@@ -82,7 +83,6 @@ public class Cards implements Serializable {
         return iv;
     }
     public Image getImage() throws URISyntaxException {
-
         String url = "images/"+species+value+".png";
         Image image = new Image(getClass().getResource(url).toURI().toString());
         return image;

@@ -22,7 +22,6 @@ public class Discard {
         this.name = name;
     }
 
-
     // Allow discard in the discard pile
     // if the discard is null, create a new object array and put the first card inside, then assign it to the discard
     // detect the first null position in the object array, then replace it, and break

@@ -96,7 +96,13 @@ public class Game extends Application {
         root.getChildren().add(Deck);
 
         /** Add empty cards on hand A, which will be the valid places for storing cards from drawing
-         *  Add drop event for hand A */
+         *  Add drop event for hand A
+         *  Draw card from deck by using DrawCardFromDeck method
+         *  (the drawCardFromDeck method will automatically delete the drawn card in the deck)
+         *  put it to the hand of player A by using the getCard method
+         *  (the method put the card drawn from deck in cards arrays of hand for player A)
+         *  Set the gameState for deck and hand.
+         *  */
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 var HandA = playerA.getEmptyCard();
@@ -115,7 +121,8 @@ public class Game extends Application {
                     public void handle(DragEvent dragEvent) {
                         var card = deck.drawCardFromDeck();
                         playerA.getCard(card);
-                        gameState[0][1]=deck.toString();
+                        gameState[1][0]=deck.toString();
+                        gameState[1][1]=playerA.toString();
                         try {
                             HandA.setImage(card.getImage());
                         } catch (URISyntaxException e) {
@@ -126,7 +133,8 @@ public class Game extends Application {
             }
         }
 
-        /** Add drag event for deck*/
+        /** Add drag event for deck
+         *  Using Drag board and Clipboard */
         Deck.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -143,7 +151,11 @@ public class Game extends Application {
             }
         });
 
-        /** Add drop event for discard A and B*/
+        /** Add drop event for discard A and B
+         *  Make both of them valid to discard
+         *  (the discard pile will use the discardCard method,to get the discard card)
+         *  (use if statement to tell whether it discards for A or B)
+         * */
         ImageView [] discard_A_B = {DiscardA,DiscardB};
         for (var discard : discard_A_B){
             discard.setOnDragOver(new EventHandler<DragEvent>() {
@@ -156,13 +168,20 @@ public class Game extends Application {
                 @Override
                 public void handle(DragEvent dragEvent) {
                     var card = deck.drawCardFromDeck();
-                    gameState[0][1]=deck.toString();
+                    if (discard==DiscardA){
+                        discardA.discardCard(card);
+                    } else {
+                        discardB.discardCard(card);
+                    }
+                    gameState[1][0]=deck.toString();
                 }
             });
         }
 
         /** Add placement ground
-         *  Add drop event for the ground
+         *  Add drop event for the ground, which is done by using dramCardFromDeck method, then set the card image on the
+         *  empty card pictures.
+         *  Set the gameState for deck.
          *  */
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 9; j++) {
@@ -181,7 +200,6 @@ public class Game extends Application {
                     @Override
                     public void handle(DragEvent dragEvent) {
                         var card = deck.drawCardFromDeck();
-                        playerA.getCard(card);
                         gameState[1][0]=deck.toString();
                         try {
                             EmptyCards.setImage(card.getImage());
