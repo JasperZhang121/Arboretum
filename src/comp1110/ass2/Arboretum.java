@@ -200,12 +200,12 @@ public class Arboretum {
     /**
      * Given a deck string, draw a random card from the deck.
      * You may assume that the deck string is well-formed.
-     *
      * @param deck the deck string.
      * @return a random cardString from the deck. If the deck is empty, return the empty string "".
      * TASK 5
      * Author : Vincent
      */
+    // get a random card from deck using their indices
     public static String drawFromDeck(String deck) {
         int deckLength = deck.length();
         if (deckLength == 0) return "";
@@ -344,7 +344,7 @@ public class Arboretum {
     }
 
     /**
-     * Remove the position of cards (i3. in arboretum) to be a string of cards
+     * Remove the position of cards (ie. in arboretum (C00C00)) to be a string of cards
      * @param card the card chosen
      * @return a string of cards without the positions
      * Author : Vincent
@@ -392,6 +392,7 @@ public class Arboretum {
      * TASK 9
      * Author : Vincent
      */
+    // compare the species score in both hands
     public static boolean canScore(String[][] gameState, char player, char species) {
         // FIXME TASK 9
         var handASum = 0;
@@ -648,7 +649,7 @@ public class Arboretum {
     }
     /**
      * get the start and end cards of each path
-     * check if there is a lower or higher card value to connect (only get 1 higher or lower but not all lower)
+     * check if there is a lower or higher card value to connect
      * card at the beginning and in the end must be the same species
      * @param paths the available paths in an arboretum
      * @return list of cards optimal for the player
@@ -745,8 +746,6 @@ public class Arboretum {
                  continue;
              }
              var score = Integer.parseInt(optimalPlacement(gameState,card).get(1));
-             System.out.println("Highest score of card " + card + " : " + score);
-             System.out.println("Current best move score: " + bestScore);
              if (score > bestScore) {
                  bestCard = card;
                  bestScore = score;
@@ -757,7 +756,6 @@ public class Arboretum {
         hand = String.join(", ", cards);
         hand = hand.replaceAll(", ","");
         move[1] = uselessCard(gameState,hand);
-        System.out.println("Final move " + move[0]);
         return move;
     }
 
@@ -791,7 +789,7 @@ public class Arboretum {
             }
             return output;
         }
-        // assumed first card is the best placement ie. a1C00C00
+        // assume first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
         var bestPathScore = 0;
         // check if new arboretum has the highest path that is better previous highest
@@ -808,9 +806,6 @@ public class Arboretum {
                 temp2 = getHighestViablePathScore(gameState,player,card.charAt(0));
                 gameState[0][3] = gameState[0][3].substring(0,gameState[0][1].length()-8);
             }
-            System.out.println("Current score " + temp2);
-            System.out.println("Placement " + place);
-            System.out.println("Current best score "+ bestPathScore);
             if (temp2 > bestPathScore) {
                 best = place;
                 bestPathScore = temp2;
@@ -818,7 +813,6 @@ public class Arboretum {
         }
         output.add(best);
         output.add(Integer.toString(bestPathScore));
-        System.out.println("Optimal: " + output);
         return output;
     }
 
@@ -856,13 +850,8 @@ public class Arboretum {
                     temp = getHighestViablePathScore(gameState, player, card.charAt(0));
                     gameState[0][3] = gameState[0][3].substring(0, gameState[0][1].length() - 8);
                 }
-                System.out.println("Worst score for card " + card + " : " + temp);
-                System.out.println("Current worst score: " + worstScore);
-                System.out.println("Card flexibility: " + flex);
-                System.out.println("Current worst flexibility: " + flexibility);
                 if (temp < worstScore || (temp == worstScore && flex < flexibility)) {
                     worstCard = card;
-                    System.out.println("Worst card: " + worstCard);
                     worstScore = temp;
                     flexibility = flex;
                 }
