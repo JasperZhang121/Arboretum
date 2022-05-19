@@ -16,6 +16,7 @@ import java.util.Locale;
  *  Create getCardImage for getting the Image of the card
  *  Create the toString Method and make it corresponding to the gameState, so each card will be called "a1","a2" etc.
  *  Use main method for testing above things
+ *  Author: Hao Zhang
  */
 
 public class Cards implements Serializable {

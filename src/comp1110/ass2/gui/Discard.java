@@ -10,6 +10,7 @@ import java.util.Arrays;
  *  Create toString method to make the Discard corresponding to the gameState
  *  Create the getBackOfCard method for getting the back image of card
  *  Use main method for testing above things
+ *  Author: Hao Zhang
  */
 
 public class Discard {

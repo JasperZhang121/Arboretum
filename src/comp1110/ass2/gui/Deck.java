@@ -18,6 +18,7 @@ import java.util.List;
  * Create the toString to make the deck corresponding to the gameState
  * Create getBackOfCard method for getting the image for the back of card
  * Use main method for testing above things
+ * Author: Hao Zhang
  */
 
 public class Deck {

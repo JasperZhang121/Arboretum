@@ -22,6 +22,10 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Author: Hao Zhang
+ */
+
 public class Game extends Application {
     /* board layout */
     private static final int BOARD_WIDTH = 1200;

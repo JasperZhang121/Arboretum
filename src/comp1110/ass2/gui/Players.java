@@ -12,6 +12,7 @@ import java.util.List;
  *  Create the toString method to make it corresponding the gameState, so it will be called like "Aa1b1c1", "Bc2","B" etc.
  *  Create the method for getting the empty card picture
  *  Use main method for testing above things
+ *  Author: Hao Zhang
  */
 
 public class Players {
