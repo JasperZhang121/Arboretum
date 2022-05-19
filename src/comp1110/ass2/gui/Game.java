@@ -110,24 +110,16 @@ public class Game extends Application {
                 HandA.setY(480+j*75);
                 root.getChildren().add(HandA);
 
-                HandA.setOnDragOver(new EventHandler<DragEvent>() {
-                    @Override
-                    public void handle(DragEvent dragEvent) {
-                        dragEvent.acceptTransferModes(TransferMode.COPY);
-                    }
-                });
-                HandA.setOnDragDropped(new EventHandler<DragEvent>() {
-                    @Override
-                    public void handle(DragEvent dragEvent) {
-                        var card = deck.drawCardFromDeck();
-                        playerA.getCard(card);
-                        gameState[1][0]=deck.toString();
-                        gameState[1][1]=playerA.toString();
-                        try {
-                            HandA.setImage(card.getImage());
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        }
+                HandA.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.COPY));
+                HandA.setOnDragDropped(dragEvent -> {
+                    var card = deck.drawCardFromDeck();
+                    playerA.getCard(card);
+                    gameState[1][0]=deck.toString();
+                    gameState[1][1]=playerA.toString();
+                    try {
+                        HandA.setImage(card.getImage());
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
                     }
                 });
             }
@@ -135,10 +127,10 @@ public class Game extends Application {
 
         /** Add drag event for deck
          *  Using Drag board and Clipboard */
-        Deck.setOnDragDetected(new EventHandler<MouseEvent>() {
+        Deck.setOnDragDetected(new EventHandler<>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Dragboard deckPng =  Deck.startDragAndDrop(TransferMode.COPY);
+                Dragboard deckPng = Deck.startDragAndDrop(TransferMode.COPY);
                 ClipboardContent content = new ClipboardContent();
                 Image image = null;
                 try {
@@ -158,23 +150,15 @@ public class Game extends Application {
          * */
         ImageView [] discard_A_B = {DiscardA,DiscardB};
         for (var discard : discard_A_B){
-            discard.setOnDragOver(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    dragEvent.acceptTransferModes(TransferMode.COPY);
+            discard.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.COPY));
+            discard.setOnDragDropped(dragEvent -> {
+                var card = deck.drawCardFromDeck();
+                if (discard==DiscardA){
+                    discardA.discardCard(card);
+                } else {
+                    discardB.discardCard(card);
                 }
-            });
-            discard.setOnDragDropped(new EventHandler<DragEvent>() {
-                @Override
-                public void handle(DragEvent dragEvent) {
-                    var card = deck.drawCardFromDeck();
-                    if (discard==DiscardA){
-                        discardA.discardCard(card);
-                    } else {
-                        discardB.discardCard(card);
-                    }
-                    gameState[1][0]=deck.toString();
-                }
+                gameState[1][0]=deck.toString();
             });
         }
 

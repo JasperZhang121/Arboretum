@@ -23,7 +23,8 @@ import java.util.Locale;
 public class Cards implements Serializable {
     private String species;
     private String value;
-
+    public double x;
+    public double y;
     public Cards(String species, String value) {
         setSpecies(species);
         setValue(value);
