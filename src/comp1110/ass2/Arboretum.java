@@ -345,7 +345,7 @@ public class Arboretum {
 
     /**
      * Remove the position of cards (i3. in arboretum) to be a string of cards
-     * @param card
+     * @param card the card chosen
      * @return a string of cards without the positions
      * Author : Vincent
      */
@@ -359,8 +359,8 @@ public class Arboretum {
 
     /**
      * check if a card is adjacent to another card
-     * @param arboretum
-     * @param placement
+     * @param arboretum the arboretum of a player
+     * @param placement the placement of a card
      * @return true if a card is adjacent to another card and false otherwise
      * Author : Sam
      */
@@ -604,7 +604,6 @@ public class Arboretum {
             path.addAll(paths);
         }
         var target = sortedOptimalCards(optimalCards(path));
-        System.out.println(target);
         for (var card : target) {
             if (discardA.equals(card) || discardB.equals(card)) {
                 return card;
@@ -651,7 +650,7 @@ public class Arboretum {
      * get the start and end cards of each path
      * check if there is a lower or higher card value to connect (only get 1 higher or lower but not all lower)
      * card at the beginning and in the end must be the same species
-     * @param paths
+     * @param paths the available paths in an arboretum
      * @return list of cards optimal for the player
      * Author : Vincent
      */
@@ -684,7 +683,7 @@ public class Arboretum {
 
     /**
      * sort the optimal cards by species and value in descending order
-     * @param cards
+     * @param cards a list of cards
      * @return a sorted optimal cards to get the best path score
      * Author : Vincent
      */
@@ -725,8 +724,10 @@ public class Arboretum {
      * TASK 15
      * Author : Vincent
      */
-    // optimal card is not necessary from the one drawn
-    // optimal card is the one that creates the longest path or highest score
+    // return the placement for the most optimal card
+    // optimal card is the one that creates the highest scoring path
+    // discard the least optimal card
+    // least optimal card is that it gives lowest scoring path and has little flexibility for future development
     public static String[] generateMove(String[][] gameState) {
         // FIXME TASK 15
         String[] move = new String[2];
@@ -744,19 +745,17 @@ public class Arboretum {
                  continue;
              }
              var score = Integer.parseInt(optimalPlacement(gameState,card).get(1));
-            System.out.println("Highest score of card " + card + " : " + score);
-            System.out.println("Current best move score: " + bestScore);
+             System.out.println("Highest score of card " + card + " : " + score);
+             System.out.println("Current best move score: " + bestScore);
              if (score > bestScore) {
                  bestCard = card;
-                 //System.out.println(bestCard);
                  bestScore = score;
-                 //System.out.println(bestScore);
-
              }
         }
         move[0] = optimalPlacement(gameState, bestCard).get(0);
         cards.remove(bestCard);
         hand = String.join(", ", cards);
+        hand = hand.replaceAll(", ","");
         move[1] = uselessCard(gameState,hand);
         System.out.println("Final move " + move[0]);
         return move;
@@ -764,8 +763,8 @@ public class Arboretum {
 
     /**
      * Get the best placement of a card based on the game state.
-     * @param gameState
-     * @param card
+     * @param gameState the game state
+     * @param card the chosen card
      * @return the most optimal placement that gives the highest score and the score
      * Author : Vincent
      */
@@ -792,12 +791,11 @@ public class Arboretum {
             }
             return output;
         }
-        // working but not optimal
         // assumed first card is the best placement ie. a1C00C00
         var best= placements.toArray(String[] :: new)[0];
         var bestPathScore = 0;
         // check if new arboretum has the highest path that is better previous highest
-        // get the highest path gives the score so if higher path score save it and iterate over all the cards
+        // get the highest path score so if it has higher path score save it and iterate over all the cards
         for (var place : placements) {
             var temp2 = 0;
             if (player == 'A') {
@@ -827,24 +825,47 @@ public class Arboretum {
     /**
      * Get the most useless card that does not create a path or gives the least value path
      * Hand must not be empty
-     * @param gameState
-     * @param hand
+     * @param gameState the game state
+     * @param hand a player's hand
      * @return the most useless card in hand to be discarded
      * Author : Vincent
      */
-    // haven't check for path score
-    // only check the number of available placements
-    // less placements mean more useless (less flexibility)
+    // Check for least path score
+    // Tiebreaker is the number of placements
+    // Less placements mean more useless (less flexibility)
     public static String uselessCard(String[][] gameState, String hand) {
         if (hand.length() == 3) {
             return hand;
         }
+        var player = gameState[0][0].charAt(0);
+        var cards = cardStringToList(hand);
+        var flexibility = 100;
         var worstCard = hand.substring(0,2);
-        var placementSize = getAllValidPlacements(gameState,worstCard).size();
-        for (int i = 0; i < hand.length()-1; i += 2) {
-            if (getAllValidPlacements(gameState,hand.substring(i,i+2)).size() < placementSize) {
-                worstCard = hand.substring(i,i+2);
-                placementSize = getAllValidPlacements(gameState,hand.substring(i,i+2)).size();
+        var worstScore = 100;
+        for (var card : cards) {
+            var placements = getAllValidPlacements(gameState, card);
+            var flex = placements.size();
+            for (var place : placements) {
+                var temp = 0;
+                if (player == 'A') {
+                    gameState[0][1] += place;
+                    temp = getHighestViablePathScore(gameState, player, card.charAt(0));
+                    gameState[0][1] = gameState[0][1].substring(0, gameState[0][1].length() - 8);
+                } else {
+                    gameState[0][3] += place;
+                    temp = getHighestViablePathScore(gameState, player, card.charAt(0));
+                    gameState[0][3] = gameState[0][3].substring(0, gameState[0][1].length() - 8);
+                }
+                System.out.println("Worst score for card " + card + " : " + temp);
+                System.out.println("Current worst score: " + worstScore);
+                System.out.println("Card flexibility: " + flex);
+                System.out.println("Current worst flexibility: " + flexibility);
+                if (temp < worstScore || (temp == worstScore && flex < flexibility)) {
+                    worstCard = card;
+                    System.out.println("Worst card: " + worstCard);
+                    worstScore = temp;
+                    flexibility = flex;
+                }
             }
         }
         return worstCard;
@@ -852,7 +873,7 @@ public class Arboretum {
 
     /**
      * Convert a string of cards to a list of cards
-     * @param card
+     * @param card a string of cards
      * @return a list of cards
      * Author : Vincent
      */
