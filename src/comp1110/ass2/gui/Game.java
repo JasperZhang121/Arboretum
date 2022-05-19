@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import com.sun.media.jfxmedia.events.NewFrameEvent;
+import comp1110.ass2.Arboretum;
 import comp1110.ass2.Player;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -37,9 +38,8 @@ public class Game extends Application {
     Players playerB = new Players(null,"B");
     Discard discardA= new Discard(null,"A");
     Discard discardB= new Discard(null,"B");
-    String ArboretumA = "";
-    String ArboretumB = "";
-
+    String ArboretumA = "A";
+    String ArboretumB = "B";
 
     // Create the start gameState, assume start with A player
     // String [sharedState][hiddenState]
@@ -48,7 +48,6 @@ public class Game extends Application {
     String[] shared = {playerA.getName(), ArboretumA, discardA.toString(), ArboretumB,discardB.toString()};
     String[] hidden = { deck.toString(), playerA.toString(), playerB.toString()};
     String[][] gameState = new String[][]{shared,hidden};
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -66,11 +65,11 @@ public class Game extends Application {
 
         /** Display basic information
          *  the text will be put on the hbox for showing information */
-        var discardText = new Text(1100,265,"Discard:");
-        var deckText = new Text(0,245,"Deck: ");
-        //var center = new Text(600,255,"Center");
-        var handText = new Text(0,475,"Player A's hand:");
-        root.getChildren().addAll(deckText,discardText,handText);
+        var discardText = new Text(1095,265,"Discard: drop here!");
+        var deckText = new Text(0,245,"Deck: draw here!");
+        var placementGround = new Text(130,20,"Placement: drop here!");
+        var handText = new Text(0,475,"Player A's hand: drop here!");
+        root.getChildren().addAll(deckText,discardText,handText,placementGround);
 
         /** Add discardA, put the back of card on scene */
         ImageView DiscardA = discardA.getBackOfCard();
@@ -163,11 +162,12 @@ public class Game extends Application {
         }
 
         /** Add placement ground
-         *  Add drop event for the ground*/
-        for (int i = 0; i < 12; i++) {
-            for (int j = 0; j < 8; j++) {
+         *  Add drop event for the ground
+         *  */
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 9; j++) {
                 var EmptyCards = playerA.getEmptyCard();
-                EmptyCards.setX(300+i*55);
+                EmptyCards.setX(250+i*55);
                 EmptyCards.setY(j * 75);
                 root.getChildren().add(EmptyCards);
 
@@ -182,7 +182,7 @@ public class Game extends Application {
                     public void handle(DragEvent dragEvent) {
                         var card = deck.drawCardFromDeck();
                         playerA.getCard(card);
-                        gameState[0][1]=deck.toString();
+                        gameState[1][0]=deck.toString();
                         try {
                             EmptyCards.setImage(card.getImage());
                         } catch (URISyntaxException e) {
@@ -192,9 +192,6 @@ public class Game extends Application {
                 });
             }
         }
-
-
-
 
         /** Add images for all cards on the scene - not useful, comment out*/
         /*for (int i = 0; i < 8; i++) {
@@ -334,9 +331,5 @@ public class Game extends Application {
                 }
             });
         }*/
-
-
-
     }
-
 }
