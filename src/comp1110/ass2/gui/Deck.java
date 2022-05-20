@@ -24,16 +24,17 @@ import java.util.List;
 public class Deck {
 
     // Initialize the deck with 48 cards inside
-    private Cards[]deck = new Cards[48];
+    public ArrayList<Cards> deck = new ArrayList<>(48);
+    public int length = 48;
 
     // put all cards into the deck by using 2 for-loop (species * value)
     public Deck() {
         List<String> species =Cards.getValidSpecies();
         List<String> values = Cards.getValidValues();
         int i =0;
-        for(var specie:species){
+        for(String specie:species){
             for (var value: values){
-                deck [i++] = new Cards(specie,value);
+                deck.add(i++, new Cards(specie,value));
             }
         }
     }
@@ -42,21 +43,19 @@ public class Deck {
     // Random choose the index of deck, set the deck[index] as the draw card
     // Make the draw card position in deck as null, then return the draw
     public Cards drawCardFromDeck(){
-        Cards draw = null;
-        while (draw==null){
-            int index = (int)(Math.random()*deck.length);
-            draw = deck[index];
-            deck[index]=null;
-        }
-        return draw;
+        if (length == 0) return null;
+        int index = (int)(Math.random()*length--);
+        Cards card = deck.get(index);
+        deck.remove(index);
+        return card;
     }
 
     // Using for loop to take the object one by one from the Cards array
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < deck.length; i++) {
-            stringBuilder.append(deck[i]);
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append(deck.get(i));
         }
         return stringBuilder.toString();
     }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.text.html.ImageView;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -186,6 +187,9 @@ public class Viewer extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    public void dragged (MouseEvent event, Cards card){
+
     }
 }
 

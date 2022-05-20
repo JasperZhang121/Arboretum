@@ -23,7 +23,8 @@ import java.util.Locale;
 public class Cards implements Serializable {
     private String species;
     private String value;
-
+    public double x;
+    public double y;
     public Cards(String species, String value) {
         setSpecies(species);
         setValue(value);
@@ -75,6 +76,8 @@ public class Cards implements Serializable {
     }
 
     // get the image of the card
+    // Images are built by my self but still used some resources on internet:
+    // here is the link: https://www.flaticon.com/free-icon/tree_502854
     public ImageView getCardImage(){
         String url = "images/"+species+value+".png";
         ImageView iv = new ImageView(this.getClass().getResource(url).toExternalForm());
