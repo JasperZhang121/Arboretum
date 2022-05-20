@@ -42,21 +42,32 @@ public class Arboretum {
      *
      * @param hiddenState the hidden state array.
      * @return true if the hiddenState array is well-formed, false if it is not well-formed.
+     * Author: Samuel Barilaro.
      * TASK 3
      */
     public static boolean isHiddenStateWellFormed(String[] hiddenState) {
+        //returns false if the hiddenState is not of the right length.
         if (hiddenState.length != 3) return false; int L1 = hiddenState[1].length(); int L2 = hiddenState[2].length();
+        //checks that the hand lengths are within the right ranges, the player ids are correct and the things that need to
+        //in alphanumeric order are in such an order,
         return (L1 >= 15 && L1 <= 19 || L1 == 1) && (L2 >= 15 && L2 <= 19 || L2 == 1) && hiddenState[1].charAt(0) == 'A'
                 && hiddenState[2].charAt(0) == 'B' && isAlphaNumeric(hiddenState[0])
                 && isAlphaNumeric(hiddenState[1].substring(1)) && isAlphaNumeric(hiddenState[2].substring(1));
     }
+    //isAlphaNumeric checks if a series of card strings are in alphanumeric order.
     public  static boolean isAlphaNumeric (String string){
         int strLength = string.length();
+        //if the string is not even then it cant be in correct alphanumeric card form and so the method returns false.
+        //if the string doesn't contain species characters where it should or doesn't contain card values where it should.
+        //the method returns false;
         if ((strLength & 1) == 1) return false;
         for (int i = 0; i < strLength; i++) {
             if ((i & 1) == 0 && !"abcdjm".contains(string.charAt(i)+"")
                     || (string.charAt(i) < '1' && string.charAt(i) > '8')) return false;
         }
+        //if a species character is greater than a later species character then the method returns false.
+        //if a card value is greater than a later card value and the preceding species character is the same
+        //the method returns false.
         for (int i = 1; i < strLength-2; i++) {
             if (string.charAt(i) > string.charAt(i + 2) && ((i & 1) == 0
                     || (string.charAt(i - 1) == string.charAt(i +1 )))) return false;
@@ -230,12 +241,16 @@ public class Arboretum {
      * @param gameState the game state array
      * @param placement the placement string of the card to be placed
      * @return false if the placement is valid, false if it is not valid.
+     * Author: Samuel Barilaro.
      * TASK 7
      */
     public static boolean isPlacementValid(String[][] gameState, String placement) {
         String a = placement.substring(0, 2); String b = placement.substring(2);
         boolean turn = gameState[0][0].equals("A");
+        //Finds the locations adjacent to the placement.
         String[] adjacentPlaces = adjacentLocations(placement);
+        //Checks that at least one adjacent location is occupied by a card in the players arboretum,
+        //returning false if one is not found.
         if (!b.equals("C00C00")){
             for (int i = 0; i < 5; i++) {
                 if (i > 3) return false;
@@ -243,26 +258,38 @@ public class Arboretum {
                         || (!turn && gameState[0][3].contains(adjacentPlaces[i]))) break;
             }
         }
+        //Returns weather or not that the card is in hand and is not being played on top of another card and the hand of
+        //the player has 9 cards in it.
         return turn && gameState[1][1].contains(a) && gameState[1][1].length() == 19 && !gameState[0][1].contains(b)
                 || !turn && gameState[1][2].contains(a) && gameState[1][2].length()==19 && !gameState[0][3].contains(b);
     }
+    //adjacentLocations finds the placement substrings adjacent to a card
     public static String[] adjacentLocations (String placement){
+        //Removes the location part of the placement substring in to halves and parses the number part of them so that
+        //so that the positions can eb shifted.
         String a = placement.substring(2, 5); String b = placement.substring(5, 8);
         int c = Integer.parseInt(placement.substring(3, 5)); int d = Integer.parseInt(placement.substring(6, 8));
         char e = placement.charAt(2); char f = placement.charAt(5);
+        //The substring parts are shifter, adjusted with adjustSubCoordinate and reformed into 4 location parts of
+        //placement substrings. These are then returned in an array.
         return new String[] {adjustSubCoordinate(e, c + 1, true) + b, adjustSubCoordinate(e, c - 1, true) + b
                 , a + adjustSubCoordinate(f, d + 1, false), a + adjustSubCoordinate(f, d - 1, false)};
     }
+    //adjustSubCoordinate takes a processed form of half of a placement substring which has be shifted and then adjusts
+    // them to be inline with the required placement substring form.
     public static String adjustSubCoordinate (char d, int l, boolean x) {
         if (l == 0) return "C00";
+        //takes the absolute value of the number part of the string.
         String str = Integer.toString(Math.abs(l));
+        //Adds another zero if the number has become single digit.
         if (l > -10 && l < 10)str = "0" + str;
+        //Adjusts the direction depending on the processed number and returns the reformed half of the placement substring.
         if (d == 'C')
             if (l > 0)
                 if (x) return "N" + str;
                 else return "E" + str;
             else if (x) return "S" + str;
-                else return "W" + str;
+            else return "W" + str;
         return d + str;
     }
 
@@ -490,10 +517,15 @@ public class Arboretum {
      * player does not have the right to score this species. If the player has no viable scoring paths (but has the
      * right to score this species), return the empty Set.
      * TASK 12
+     * Author: Samuel Barilaro
      */
     public static Set<String> getAllViablePaths(String[][] gameState, char player, char species) {
+        //Returns null if the player is unable to score the specified species.
         if (!canScore(gameState, player, species)) return null;
+        //Finds the index of the players arboretum.
         int t; if (player ==  'A') t = 1; else t = 3;
+        //Finds all of the viable paths that can be formed from each card with the desired species
+        // and adds them all to one hashSet.
         Set<String> allPaths = new HashSet<>();
         for (int i = 1; i < gameState[0][t].length(); i += 8) {
             if (gameState[0][t].charAt(i) == species) allPaths.addAll(viablePaths(gameState[0][t], gameState[0][t].
@@ -501,16 +533,24 @@ public class Arboretum {
         }
         return allPaths;
     }
+    //viablePaths recursively finds all viable paths that can be formed starting at a particular card.
     public static HashSet<String> viablePaths(
             String arboretum, String card, String path, char species, HashSet<String> validPaths) {
+        //Finds all of the possible cards that may come next in a path.
         HashSet<String> nextCards = new HashSet<>();
         for (int c = 0; c < 4; c++) {
             int i = arboretum.indexOf(adjacentLocations(card)[c]);
             if (i != -1 && arboretum.charAt(i - 1) > card.charAt(1)) nextCards.add(arboretum.substring(i - 2, i + 6));
         }
+        //Adds a path to the validPaths hashSet if the latest card is of the desired species and the path is longer
+        //than 2 cards. (It is assumed that the species given is the same as the species of the starting card.
         if (card.charAt(0) == species && path.length() > 2) validPaths.add(path);
+        //Calls the function again for all possible next cards in the path and with updated path strings.
+        //Each step of recursion that finds new valid paths adds them to the validPaths hashSet past down the recursion.
+        //the recursion ends when nextCards is empty.
         nextCards.forEach(nextCard -> validPaths.addAll(viablePaths
                 (arboretum, nextCard, path + nextCard.substring(0, 2), species, validPaths)));
+        //Returns the valid paths found.
         return validPaths;
     }
 
@@ -526,20 +566,31 @@ public class Arboretum {
      * If this player does not have the right to score this species, return -1.
      * If this player has the right to score this species but there is no viable scoring path, return 0.
      * TASK 13
+     * Author: Samuel Barilaro
      */
     public static int getHighestViablePathScore(String[][] gameState, char player, char species) {
-        if (!canScore(gameState, player, species)) return -1;
+        Set<String> availablePaths = getAllViablePaths(gameState, player, species);
+        //Returns -1 if the player is unable to score the specified species.
+        if (availablePaths == null) return -1;
+        //scores each path.
         int highestScore = 0;
-        for (String path : Objects.requireNonNull(getAllViablePaths(gameState, player, species))) {
+        for (String path : availablePaths) {
+            //+ 1 point per card.
             int score = path.length()/2;
             int scoreCopy = score;
+            //Checks if all of the cards in the path are of the same species.
             boolean sameSpecies = true;
-            for (int i = 0; i < scoreCopy * 2; i += 2) {
+            for (int i = 0; i < scoreCopy*2; i += 2) {
                 if (path.charAt(i) != species) {sameSpecies = false; break;}
             }
+            //+ 1 point per card if all of the cards are the same.
             if (path.length() >= 8 && sameSpecies) score = scoreCopy * 2;
+            //+ 2 points if the path ends with an 8.
             if (path.charAt(scoreCopy * 2 - 1) == '8') score += 2;
+            //+ 1 point if the first card is a 1.
             if (path.charAt(1) == '1') score++;
+            //updates the highest score if the path score just calculated in the step is greater
+            //than the previous highest score.
             if (score > highestScore) highestScore = score;
         }
         return highestScore;
