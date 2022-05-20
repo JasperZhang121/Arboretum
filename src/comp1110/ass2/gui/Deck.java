@@ -42,7 +42,6 @@ public class Deck {
     // Initialize the draw as null
     // Random choose the index of deck, set the deck[index] as the draw card
     // Make the draw card position in deck as null, then return the draw
-
     public Cards drawCardFromDeck(){
         if (length == 0) return null;
         int index = (int)(Math.random()*length--);

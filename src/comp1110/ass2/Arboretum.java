@@ -147,15 +147,22 @@ public class Arboretum {
      *
      * @param sharedState the shared state array.
      * @return true if the sharedState array is well-formed, false if it is not well-formed.
+     * Author: Hao Zhang
      * TASK 4
      */
     public static boolean isSharedStateWellFormed(String[] sharedState) {
+
+        // return false if the shared state is not well-formed
+        // test the length and whether right thing is put at right position
+        // use help function to test whether substrings in the shareState are well-formed
         return sharedState.length == 5       && (sharedState[0].equals("A") || sharedState[0].equals("B"))
                 && sharedState[1].charAt(0)  == 'A' && areTheyPlacementSubstrings(sharedState[1].substring(1))
                 && sharedState[2].charAt(0)  == 'A' && isCardSubstring(sharedState[2].substring(1))
                 && sharedState[3].charAt(0)  == 'B' && areTheyPlacementSubstrings(sharedState[3].substring(1))
                 && sharedState[4].charAt(0)  == 'B' && isCardSubstring(sharedState[4].substring(1));
     }
+        // return whether the card substring is well-formed, should be like "a1" or "a1a2..."
+        // only allow valid species and values
     public static boolean isCardSubstring (String string){
         int strLength = string.length();
         if ((strLength & 1) == 1) return false;
@@ -165,6 +172,9 @@ public class Arboretum {
         }
         return true;
     }
+        // delete the turn "A" or "B", return true if it satisfies to be like "a1C00C00", "a1C00E00b2C00W00"...
+        // test the length
+        // test valid species, values and positions
     public static boolean areTheyPlacementSubstrings (String string){
         int strLength = string.length();
         if (strLength%8 != 0) return false;
